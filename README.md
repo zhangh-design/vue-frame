@@ -9,6 +9,7 @@
 ---|---
 Vue.js | 2.6
 element-ui | 2.13.0
+lodash | 4.17.15
 
 frame
 
