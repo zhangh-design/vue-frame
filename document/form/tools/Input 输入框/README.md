@@ -183,6 +183,9 @@ width | — | — | Number |  —  | 组件宽度，不传递则自动适用父�
 height | — | — | Number |  40 | 组件高度
 isRender | — | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | — | Boolean |  true | 是否显示组件（v-show）
+slotType | — | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']
+slotNode | — | — | Object |  {} | 组件 `slot` 对象
+listeners | — | — | Object |  {} | 组件事件对象
 
 #### listeners事件
 
