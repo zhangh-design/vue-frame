@@ -1,0 +1,235 @@
+## Input 输入框
+
+#### 说明
+TextField（input输入框控件）扩展至饿了么 ‘Input 输入框’。
+[el-input 官方文档](https://element.eleme.cn/#/zh-CN/component/input)
+
+#### 用法
+
+```
+components: {
+    fastInput: () => import('../common/form/tools/text-field.js')
+}
+```
+
+#### 使用表单组件（模板写法）
+
+```
+<template>
+  <div>
+    <p>text-field 组件</p>
+    <fast-input ref="el-input-ref" v-model="value" :width="width" label="用户名" placeholder="请输入用户名" clearable @focus="focusHandler" @clear="clearHandler" @change="changeHandler">
+      <!--插槽 slot-->
+      <template v-slot:prepend>
+        <em>用户名：</em>
+      </template>
+    </fast-input>
+    <br/>
+    <p>Input Methods</p>
+    <button @click="_focus">设置焦点</button>&nbsp;
+    <button @click="_blur">失去焦点</button>&nbsp;
+    <button @click="_select">选中文字</button>
+  </div>
+</template>
+
+<script>
+export default {
+  components: {
+    fastInput: () => import('../common/form/tools/text-field.js')
+  },
+  data () {
+    return {
+      value: 'hello input',
+      width: 300
+    }
+  },
+  methods: {
+    focusHandler (event) {
+      console.info('获取焦点事件触发：', event)
+    },
+    blurHandler (event) {
+      console.info('失去焦点时触发：', event)
+    },
+    changeHandler (value) {
+      console.info('仅在输入框失去焦点或用户按下回车时触发：', value)
+    },
+    clearHandler () {
+      console.info('在点击由 clearable 属性生成的清空按钮时触发')
+    },
+    inputChangeHandler (value) {
+      // v-mode 事件
+      console.info('input 值发生改变时触发：', value)
+    },
+    _focus () {
+      this.$refs['el-input-ref'].focus()
+    },
+    _blur () {
+      this.$refs['el-input-ref'].blur()
+    },
+    _select () {
+      this.$refs['el-input-ref'].select()
+    }
+  }
+}
+</script>
+
+<style></style>
+
+```
+
+#### 使用表单组件（对象写法）
+
+```
+{name: 'project-name', type: 'TextField', width: 350, label: '项目名称', readonly: true, listeners: {
+    change: (value) => {
+        console.info('仅在输入框失去焦点或用户按下回车时触发：', value)
+    }
+}}
+```
+
+#### 使用表单组件（对象写法在模板中的使用）
+
+```
+<template>
+  <div>
+    <p>text-field 组件</p>
+    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
+      <!-- slot 可以使用 template 定义，也可以使用 slotNode 属性传递 -->
+      <!-- 如果 template 节点和 slotNode 属性都定义了同一个 slot 那么以 template 定义的起效 -->
+      <!-- 如果 template 节点 和 slotNode 属性都没有定义，那么使用 label 属性作为 v-slot:prepend 来渲染-->
+    </fast-input>
+    <br/>
+    <p>Input Methods</p>
+    <button @click="_focus">设置焦点</button>&nbsp;
+    <button @click="_blur">失去焦点</button>&nbsp;
+    <button @click="_select">选中文字</button>
+  </div>
+</template>
+
+<script>
+export default {
+  components: {
+    fastInput: () => import('../common/form/tools/text-field.js')
+  },
+  data () {
+    // slots
+    this.slotNode = {
+      prepend: {
+        template: '<a>名称：</a>'
+      }
+      /* append: {
+        template: '<a>后缀</a>'
+      } */
+    }
+    // listeners
+    this.listeners = {
+      focus: this.focusHandler,
+      blur: this.blurHandler,
+      change: this.changeHandler,
+      clear: this.clearHandler,
+      // v-model 由 listeners 对象传递 inputChange 属性
+      inputChange: this.inputChangeHandler
+    }
+    return {
+      value: 'hello input',
+      width: 300,
+      // v-if 在对象写法下的实现
+      isRender: true
+      // v-show 在对象写法下的实现
+      // isDisplay: true
+    }
+  },
+  methods: {
+    focusHandler (event) {
+      console.info('获取焦点事件触发：', event)
+    },
+    blurHandler (event) {
+      console.info('失去焦点时触发：', event)
+    },
+    changeHandler (value) {
+      console.info('仅在输入框失去焦点或用户按下回车时触发：', value)
+    },
+    clearHandler () {
+      console.info('在点击由 clearable 属性生成的清空按钮时触发')
+    },
+    inputChangeHandler (value) {
+      // v-mode 事件
+      console.info('input 值发生改变时触发：', value)
+    },
+    _focus () {
+      this.$refs['el-input-ref'].focus()
+    },
+    _blur () {
+      this.$refs['el-input-ref'].blur()
+    },
+    _select () {
+      this.$refs['el-input-ref'].select()
+    }
+  }
+}
+</script>
+
+<style></style>
+
+```
+
+#### 单项数据流（props）
+
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Input Attributes](https://element.eleme.cn/#/zh-CN/component/input)
+
+名称 | 必填 | 子参数 | 类型 | 默认值 | 说明
+---|---|---|---|---|---|---
+width | — | — | Number |  —  | 组件宽度，不传递则自动适用父元素
+height | — | — | Number |  40 | 组件高度
+isRender | — | — | Boolean |  true | 是否渲染组件（v-if）
+isDisplay | — | — | Boolean |  true | 是否显示组件（v-show）
+slotType | — | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']
+slotNode | — | — | Object |  {} | 组件 `slot` 对象
+listeners | — | — | Object |  {} | 组件事件对象
+
+#### listeners事件
+
+[Input Events](https://element.eleme.cn/#/zh-CN/component/input)
+
+#### 对外方法（method）
+
+[Input Methods](https://element.eleme.cn/#/zh-CN/component/input)
+
+
+#### 注意：
+
+slotType 属性只有在①和②都没有定义的时候才会起作用。
+
+```
+<fast-input label="用户名" slotType="prepend"></fast-input>
+```
+
+①不起作用：
+
+```
+<fast-input label="用户名" slotType="prepend" :slotNode="slotNode"></fast-input>
+<script>
+  export default {
+    data(){
+        return {
+            slotNode: {
+              prepend: {
+                template: '<a>名称：</a>'
+              }  
+            }
+        }
+    }
+  }
+</script>
+```
+
+
+②不起作用：
+
+```
+<fast-input label="用户名" slotType="prepend">
+    <template v-slot:prepend>
+        <em>用户名：</em>
+    </template>
+</fast-input>
+```
