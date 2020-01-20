@@ -1,14 +1,15 @@
 ## Input 输入框
 
 #### 说明
-TextField（input输入框控件）扩展至饿了么 ‘Input 输入框’。
+TextInput（input输入框控件）扩展至饿了么 ‘Input 输入框’。
 [el-input 官方文档](https://element.eleme.cn/#/zh-CN/component/input)
 
 #### 用法
 
 ```
+import FastTextInput from '../common/form/tools/text-input.js'
 components: {
-    fastInput: () => import('../common/form/tools/text-field.js')
+  FastTextInput
 }
 ```
 
@@ -18,12 +19,12 @@ components: {
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-input ref="el-input-ref" v-model="value" :width="width" label="用户名" placeholder="请输入用户名" clearable @focus="focusHandler" @clear="clearHandler" @change="changeHandler">
+    <fast-text-input ref="el-input-ref" v-model="value" :width="width" label="用户名" placeholder="请输入用户名" clearable @focus="focusHandler" @clear="clearHandler" @change="changeHandler">
       <!--插槽 slot-->
       <template v-slot:prepend>
         <em>用户名：</em>
       </template>
-    </fast-input>
+    </fast-text-input>
     <br/>
     <p>Input Methods</p>
     <button @click="_focus">设置焦点</button>&nbsp;
@@ -33,9 +34,10 @@ components: {
 </template>
 
 <script>
+import FastTextInput from '../common/form/tools/text-input.js'
 export default {
   components: {
-    fastInput: () => import('../common/form/tools/text-field.js')
+    FastTextInput
   },
   data () {
     return {
@@ -80,7 +82,13 @@ export default {
 #### 使用表单组件（对象写法）
 
 ```
-{name: 'project-name', type: 'TextField', width: 350, label: '项目名称', readonly: true, listeners: {
+{name: 'project-name', type: 'TextInput', width: 350, label: '项目名称', readonly: true,
+/*slotNode: {
+	prepend: {
+    template: '<a>名称：</a>'
+  }
+}*/,
+listeners: {
     change: (value) => {
         console.info('仅在输入框失去焦点或用户按下回车时触发：', value)
     }
@@ -93,11 +101,11 @@ export default {
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
+    <fast-text-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
       <!-- slot 可以使用 template 定义，也可以使用 slotNode 属性传递 -->
       <!-- 如果 template 节点和 slotNode 属性都定义了同一个 slot 那么以 template 定义的起效 -->
       <!-- 如果 template 节点 和 slotNode 属性都没有定义，那么使用 label 属性作为 v-slot:prepend 来渲染-->
-    </fast-input>
+    </fast-text-input>
     <br/>
     <p>Input Methods</p>
     <button @click="_focus">设置焦点</button>&nbsp;
@@ -107,9 +115,10 @@ export default {
 </template>
 
 <script>
+import FastTextInput from '../common/form/tools/text-input.js'
 export default {
   components: {
-    fastInput: () => import('../common/form/tools/text-field.js')
+    FastTextInput
   },
   data () {
     // slots
@@ -204,7 +213,7 @@ slotType 属性只有在①和②都没有定义的时候才会起作用。
 <fast-input label="用户名" slotType="prepend"></fast-input>
 ```
 
-①不起作用：
+①不起作用（设置了 slotNode 属性）：
 
 ```
 <fast-input label="用户名" slotType="prepend" :slotNode="slotNode"></fast-input>
@@ -224,7 +233,7 @@ slotType 属性只有在①和②都没有定义的时候才会起作用。
 ```
 
 
-②不起作用：
+②不起作用（增加了 template 子节点）：
 
 ```
 <fast-input label="用户名" slotType="prepend">
