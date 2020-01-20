@@ -187,7 +187,7 @@ export default {
 注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Input Attributes](https://element.eleme.cn/#/zh-CN/component/input)
 
 名称 | 必填 | 类型 | 默认值 | 说明
----|---|---|---|---|---
+---|---|---|---|---
 width | — | Number |  —  | 组件宽度，不传递则自动适用父元素
 height | — | Number |  40 | 组件高度
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
