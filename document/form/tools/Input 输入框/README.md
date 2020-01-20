@@ -186,19 +186,34 @@ export default {
 
 注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Input Attributes](https://element.eleme.cn/#/zh-CN/component/input)
 
-名称 | 必填 | 子参数 | 类型 | 默认值 | 说明
+名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---|---
-width | — | — | Number |  —  | 组件宽度，不传递则自动适用父元素
-height | — | — | Number |  40 | 组件高度
-isRender | — | — | Boolean |  true | 是否渲染组件（v-if）
-isDisplay | — | — | Boolean |  true | 是否显示组件（v-show）
-slotType | — | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']
-slotNode | — | — | Object |  {} | 组件 `slot` 对象
-listeners | — | — | Object |  {} | 组件事件对象
+width | — | Number |  —  | 组件宽度，不传递则自动适用父元素
+height | — | Number |  40 | 组件高度
+isRender | — | Boolean |  true | 是否渲染组件（v-if）
+isDisplay | — | Boolean |  true | 是否显示组件（v-show）
+slotType | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']
+slotNode | — | Object |  {} | 组件 `slot` 对象
+listeners | — | Object |  {} | 组件事件对象
 
-#### listeners事件
+#### listeners
 
-[Input Events](https://element.eleme.cn/#/zh-CN/component/input)
+事件 | 说明 | 返回值 | 示例
+---|---|---|---
+blur | 在 Input 失去焦点时触发 | (event: Event) | listeners: {blur: (event)=>{}}
+focus | 在 Input 获得焦点时触发 | (event: Event) | listeners: {focus: (event)=>{}}
+change | 仅在输入框失去焦点或用户按下回车时触发 | 	(value: string \| number) | listeners: {change: (text)=>{}}
+clear | 在点击由 `clearable` 属性生成的清空按钮时触发 | — | listeners: {clear: ()=>{}}
+input | 在 Input 值改变时触发 | (value: string \| number) | listeners: {change: (text)=>{}}
+
+#### slotNode
+
+名称 | 说明 | 示例
+---|---|---
+prefix | 输入框头部内容，只对 type="text" 有效 | slotNode: {prefix: {template: '\<a> 模板内容 \</a>'}}
+suffix | 输入框尾部内容，只对 type="text" 有效 | slotNode: {suffix: {template: '\<a> 模板内容 \</a>'}}
+prepend | 输入框前置内容，只对 type="text" 有效 | slotNode: {prepend: {template: '\<a> 模板内容 \</a>'}}
+append | 输入框后置内容，只对 type="text" 有效 | slotNode: {append: {template: '\<a> 模板内容 \</a>'}}
 
 #### 对外方法（method）
 
