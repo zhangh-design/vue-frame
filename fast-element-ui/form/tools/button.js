@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Button 按钮
  */
@@ -5,6 +6,7 @@ import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
 import _isNumber from 'lodash/isNumber'
+import _isEmpty from 'lodash/isEmpty'
 import { Button } from 'element-ui'
 
 const FastButton = {
@@ -27,6 +29,10 @@ const FastButton = {
       validator: function (value) {
         return ['left', 'right'].includes(value)
       }
+    },
+    slotNode: {
+      type: Object,
+      default: () => {}
     },
     isRender: {
       type: Boolean,
@@ -60,7 +66,14 @@ const FastButton = {
      * @method
      */
     _createChildSlotElement (h) {
-      const nodes = [h('span', this.text)]
+      const nodes = []
+      if (_isEmpty(this.slotNode) && _isEmpty(this.$slots)) {
+        nodes.push(h('span', this.text))
+      } else if (_isEmpty(this.$slots) && _isEqual(_isEmpty(this.slotNode), false)) {
+        nodes.push(h('span', { domProps: { innerHTML: this.slotNode.template } }))
+      } else if (_isEqual(_isEmpty(this.$slots), false)) {
+        nodes.push(h('span', { slot: 'default' }, this.$slots.default))
+      }
       if (this.iconPosition === 'right') {
         nodes.push(h('li', {
           class: {
