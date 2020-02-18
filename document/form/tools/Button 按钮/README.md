@@ -26,7 +26,12 @@ components: {
       :loading="loading"
       :is-display="isDisplay"
       @click="clickHandler"
-    />
+    >
+      <!-- 可以传入默认插槽 template -->
+      <!--<template v-slot:default>
+        升级
+      </template>-->
+    </fast-button>
   </div>
 </template>
 
@@ -66,7 +71,11 @@ export default {
     click: (event) => {
         console.info('按钮点击事件：', event)
     }
-}}
+},
+slotNode: {
+  template: '<em>取消</em>'    
+}
+}
 ```
 
 #### 使用表单组件（对象写法在模板中的使用）
@@ -82,6 +91,7 @@ export default {
       :loading="loading"
       :is-display="isDisplay"
       :listeners="listeners"
+      :slot-node="slotNode"
     />
   </div>
 </template>
@@ -93,16 +103,19 @@ export default {
     FastButton
   },
   data () {
-    return {
-      width: 150,
-      isDisplay: true,
-      loading: true,
-      // 主要是 listeners 对象的使用 ，其它参数没有区别
-      listeners: {
+    // 主要是 listeners 对象的使用 ，其它参数没有区别
+    this.listeners={
         click: () => {
           console.info(event);
         }
-      }
+    }
+    this.slotNode = {
+      template: '<em>取消</em>'
+    }
+    return {
+      width: 150,
+      isDisplay: true,
+      loading: true
     }
   }
 }
@@ -125,6 +138,7 @@ isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象
 iconPosition | — | String |  left | 按钮图标位置  'left/right'
+slotNode | — | Object |  {} | 组件 slot 对象
 
 #### listeners
 
@@ -134,6 +148,76 @@ click | 按钮点击事件 | (event: Event) | listeners: {click: (event)=>{}}
 
 #### 注意：
 
-在模板`template`中使用时如果同时传入`click`和`listeners: {click: ()=>{}}`那这样的话起作用的是`listeners`对象中配置的`click`事件属性。
+- 在模板`template`中使用时如果同时传入`click`和`listeners: {click: ()=>{}}`那这样的话起作用的是`listeners`对象中配置的`click`事件属性。
+
+```
+<fast-button
+      text="提交"
+      :listeners="listeners"
+      @click="clickHandler"
+    />
+data(){
+    this.listeners = {
+      click: () => {
+        // 这个事件处理函数生效
+        console.info('b', event);
+      }
+    }
+    return {}
+},
+methods: {
+    clickHandler (event) {
+      // 不生效，因为配置了 listeners 对象
+      console.info('a', event);
+    }
+}
+```
+
+
+- `text` 属性
+
+如果我们传入了`slotNode`属性或者`slot`默认插槽节点其中的一个，那么`text`属性将会失效。
+
+```
+<fast-button text="提交"/>
+```
+
+- `slotNode` 属性
+ 
+这个属性用于传递`html`结构的内容到按钮中，作用和`text`属性是一样的，只是`text`属性无法传递`html`结构的内容。
+
+如果我们的写法是 `对象写法` 的话如果要传递`html`结构的字符到控件中这样只能使用`slotNode`属性。
+
+```
+<fast-button :slot-node="slotNode"/>
+ data () {
+    // 非响应式的数据可以写在 return 上面
+    this.slotNode = {
+      template: '<em>取消</em>'
+    }
+    return {}
+  }
+```
+
+- `slot` 默认插槽
+
+如果我们在模板语法中写了默认插槽`slot`，那么`text`和`slotNode`配置的数据将都失效，起作用的是`slot`默认插槽。
+
+```
+<fast-button
+      text="提交"
+      :slot-node="slotNode"
+      type="primary"
+      icon="el-icon-edit"
+      icon-position="right"
+      :loading="loading"
+      :is-display="isDisplay"
+      @click="clickHandler"
+    >
+      <template v-slot:default>
+        升级
+      </template>
+    </fast-button>
+```
 
 
