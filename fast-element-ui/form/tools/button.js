@@ -23,7 +23,10 @@ const FastButton = {
     },
     iconPosition: {
       type: String,
-      default: 'left'
+      default: 'left',
+      validator: function (value) {
+        return ['left', 'right'].includes(value)
+      }
     },
     isRender: {
       type: Boolean,
