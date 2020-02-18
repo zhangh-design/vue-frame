@@ -131,14 +131,14 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
-text | — | String |  —  | 按钮文字
+text | — | String |  —  | 按钮文字（传html结构字符将直接输出在按钮上，可以使用默认slot和slotNode属性）
 width | — | Number |  —  | 组件宽度，不传递则自动适用父元素
 height | — | Number |  40 | 组件高度
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象
 iconPosition | — | String |  left | 按钮图标位置  'left/right'
-slotNode | — | Object |  {} | 组件 slot 对象
+slotNode | — | Object |  {} | 组件 slot 对象（用于传递html结构的字符）
 
 #### listeners
 
