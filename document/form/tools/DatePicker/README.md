@@ -67,7 +67,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'project-starttime', type: 'DateTimePicker', label: '开始日期',
+{name: 'startDate', type: 'DatePicker', label: '开始日期',
 editable: false,placeholder: '请选择开始日期',
 listeners: {
     focus: (event) => {
