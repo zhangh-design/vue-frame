@@ -81,6 +81,8 @@ export default {
 
 #### 使用表单组件（对象写法）
 
+Tips: 对象写法必须在 Form 表单控件中才有效。
+
 ```
 {name: 'project-name', type: 'TextInput', width: 350, label: '项目名称', readonly: true,
 /*slotNode: {
@@ -96,6 +98,8 @@ listeners: {
 ```
 
 #### 使用表单组件（对象写法在模板中的使用）
+
+Tips：`slotNode`和`listeners`属性的使用。
 
 ```
 <template>
