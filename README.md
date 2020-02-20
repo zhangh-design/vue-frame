@@ -1,7 +1,8 @@
 ## vue-frame
 
-- 全部使用 render 函数封装实现。
+- 使用 render 函数二次封装 UI 库实现将 模板形式（`template`） 的写法转换成 面向对象 形式。
 - 使用 extend 函数方便高效的进行二次扩展。
+- 主 UI 库使用 element-ui。
 
 版本
 
