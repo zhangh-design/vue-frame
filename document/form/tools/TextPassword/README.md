@@ -5,7 +5,7 @@ TextPassword（TextPassword 密码输入框）扩展至饿了么 ‘Input 按钮
 [el-input 官方文档](https://element.eleme.cn/#/zh-CN/component/input)
 
 #### 依赖关系
-- [Input](https://github.com/zhangh-design/vue-frame/tree/master/document/form/tools/Input%20%E8%BE%93%E5%85%A5%E6%A1%86)
+- [Input](https://github.com/zhangh-design/vue-frame/tree/master/document/form/tools/Input)
 
 #### 用法
 
