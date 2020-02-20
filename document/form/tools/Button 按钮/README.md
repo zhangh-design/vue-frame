@@ -1,4 +1,4 @@
-## Button 输入框
+## Button 按钮
 
 #### 说明
 Button（Button 按钮）扩展至饿了么 ‘Button 按钮’。
