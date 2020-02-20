@@ -135,6 +135,7 @@ const FastTextInput = {
       Reflect.has(this.listeners, 'inputChange')
       ) {
         this.listeners.inputChange(value)
+        return
       }
       // v-model
       this.$emit('inputChange', value)
