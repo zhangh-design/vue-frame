@@ -187,7 +187,6 @@ disabled | - | boolean | false | 是否隐藏
 
 ```
 <fast-radio
-      @checkboxChange="checkboxChangeEvent"
       @change="changeEvent"
       :listeners="listeners"
     />
