@@ -5,7 +5,6 @@
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
-import _isNumber from 'lodash/isNumber'
 import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
 import { Input } from 'element-ui'
@@ -18,12 +17,6 @@ const FastTextInput = {
   },
   props: {
     ...Input.props,
-    width: {
-      type: Number
-    },
-    height: {
-      type: Number
-    },
     isRender: {
       type: Boolean,
       default: true
@@ -215,12 +208,6 @@ const FastTextInput = {
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
-    }
-    if (_isEqual(_isNil(this.width), false) && _isNumber(this.width)) {
-      _set(style, 'width', `${this.width}px`)
-    }
-    if (_isEqual(_isNil(this.height), false) && _isNumber(this.height)) {
-      _set(style, 'height', `${this.height}px`)
     }
     return h(
       'el-input',
