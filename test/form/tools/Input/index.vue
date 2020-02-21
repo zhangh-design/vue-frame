@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
+    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
       <!-- slot 可以使用 template 定义，也可以使用 slotNode 属性传递-->
       <!-- 如果 template 节点和 slotNode 属性都定义了同一个 slot 那么以 template 定义的起效 -->
       <!-- 如果 template 节点 和 slotNode 属性都没有定义，那么使用 label 属性作为 v-slot:prepend -->
@@ -42,7 +42,6 @@ export default {
     }
     return {
       value: 'hello input',
-      width: 300,
       // v-if 在对象写法下的实现
       isRender: true
       // v-show 在对象写法下的实现
