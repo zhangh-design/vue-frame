@@ -30,7 +30,8 @@ export default {
   },
   methods: {
     inputChangeEvent(value) {
-      console.info(value);
+			console.info(value);
+			this.value=value
     }
   }
 };

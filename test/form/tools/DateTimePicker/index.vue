@@ -39,7 +39,8 @@ export default {
       },
       dateChange: (value) => {
 				// dateChangeEvent 方法将不会触发，会触发到这里
-        console.info('v-model ', value)
+				console.info('v-model ', value)
+				this.value = value
       }
     }
     return {
@@ -55,7 +56,8 @@ export default {
   },
   methods: {
     dateChangeEvent (value) {
-      console.info(value);
+			console.info(value);
+			this.value = value
 		}
   }
 };

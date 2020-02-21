@@ -28,7 +28,8 @@ export default {
   methods: {
     inputChangeHandler (value) {
       // v-mode 事件
-      console.info('textArea 值发生改变时触发：', value)
+			console.info('textArea 值发生改变时触发：', value)
+			this.value=value
     },
     focusEvent (event) {
       console.info(event);

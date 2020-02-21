@@ -55,7 +55,8 @@ export default {
   },
   methods: {
     dateChangeEvent (value) {
-      console.info(value);
+			console.info(value);
+			this.value = value
 		}
   }
 };
