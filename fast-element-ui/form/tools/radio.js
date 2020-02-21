@@ -1,21 +1,21 @@
 // @ts-nocheck
 /**
- * @desc Checkbox 多选框
+ * @desc  Radio 单选框
  */
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
 import _omit from 'lodash/omit'
-import { CheckboxGroup } from 'element-ui'
+import { RadioGroup } from 'element-ui'
 
-const FastCheckbox = {
+const FastRadio = {
   inheritAttrs: false,
   model: {
     prop: 'value',
-    event: 'checkboxChange'
+    event: 'radioChange'
   },
   props: {
-    ...CheckboxGroup.props,
+    ...RadioGroup.props,
     options: {
       type: Array,
       default () {
@@ -41,10 +41,10 @@ const FastCheckbox = {
     }
   },
   computed: {
-    checkboxItems () {
+    radioItems () {
       return this.options.map(option => {
         return this.$createElement(
-          'el-checkbox',
+          'el-radio',
           {
             props: {
               ..._omit(option, 'value'),
@@ -61,42 +61,42 @@ const FastCheckbox = {
       if (!_isEqual(value, oldValue) && !_isEqual(this.vValue, value)) {
         this.vValue = value
         this._changeEvent(this.vValue)
-        this._checkboxChangeEvent(this.vValue)
+        this._radioChangeEvent(this.vValue)
       }
     }
   },
   methods: {
     /**
      * @desc 当绑定值变化时触发的事件
-     * @event FastCheckbox#_changeEvent
-     * @param {Array} value - 更新后的值
+     * @event FastRadio#_changeEvent
+     * @param {string|number|boolean} value - 更新后的值
      */
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
         Reflect.has(this.listeners, 'change')
       ) {
-        this.listeners.change([...value])
+        this.listeners.change(value)
         return
       }
-      this.$emit('change', [...value])
+      this.$emit('change', value)
     },
     /**
      * @desc 当绑定值变化时触发的事件 v-model
-     * @event FastCheckbox#_checkboxChange
-     * @param {Array} value - 更新后的值
+     * @event FastRadio#_radioChangeEvent
+     * @param {string|number|boolean} value - 更新后的值
      */
-    _checkboxChangeEvent (value) {
+    _radioChangeEvent (value) {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'checkboxChange')
+        Reflect.has(this.listeners, 'radioChange')
       ) {
-        this.listeners.checkboxChange([...value])
+        this.listeners.radioChange(value)
         return
       }
       // v-model
-      this.$emit('checkboxChange', [...value])
+      this.$emit('radioChange', value)
     }
   },
   render (h) {
@@ -110,9 +110,9 @@ const FastCheckbox = {
       _set(style, 'display', 'none')
     }
     return h(
-      'el-checkbox-group',
+      'el-radio-group',
       {
-        ref: `${this._uid}-el-checkbox-group-ref`,
+        ref: `${this._uid}-el-radio-group-ref`,
         style,
         attrs: this.$attrs,
         props: {
@@ -128,12 +128,12 @@ const FastCheckbox = {
           change: this._changeEvent,
           input: value => {
             this.vValue = value
-            this._checkboxChangeEvent(this.vValue)
+            this._radioChangeEvent(this.vValue)
           }
         }
       },
-      this.checkboxItems
+      this.radioItems
     )
   }
 }
-export default FastCheckbox
+export default FastRadio
