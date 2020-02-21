@@ -112,7 +112,7 @@ const FastCheckbox = {
     return h(
       'el-checkbox-group',
       {
-        ref: `${this._uid}-checkbox-group-ref`,
+        ref: `${this._uid}-el-checkbox-group-ref`,
         style,
         attrs: this.$attrs,
         props: {
