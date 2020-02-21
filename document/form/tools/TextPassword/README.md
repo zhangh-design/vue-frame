@@ -48,6 +48,7 @@ export default {
     inputChangeEvent (value) {
       // v-model 值改变时触发
       console.info(value);
+      this.value=value
     }
   }
 }
@@ -117,6 +118,7 @@ export default {
       inputChangeHandler (value) {
       // v-mode 事件
       console.info('textPassword 值发生改变时触发：', value)
+      this.value=value
     }
   }
 }

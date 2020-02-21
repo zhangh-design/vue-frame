@@ -61,6 +61,7 @@ export default {
     inputChangeHandler (value) {
       // v-mode 事件
       console.info('input 值发生改变时触发：', value)
+      this.value=value;
     },
     _focus () {
       this.$refs['el-input-ref'].focus()
@@ -168,6 +169,7 @@ export default {
     inputChangeHandler (value) {
       // v-mode 事件
       console.info('input 值发生改变时触发：', value)
+      this.value=value;
     },
     _focus () {
       this.$refs['el-input-ref'].focus()
