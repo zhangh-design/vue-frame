@@ -55,7 +55,7 @@ const FastTextInput = {
   },
   watch: {
     value (value, oldValue) {
-      if (value !== oldValue) {
+      if (value !== oldValue && this.vValue !== value) {
         this.vValue = value
       }
     }
