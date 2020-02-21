@@ -1,16 +1,16 @@
-## Checkbox 多选框
+## Radio 单选框
 
 #### 说明
-Checkbox（Checkbox 多选框）扩展至饿了么 ‘Checkbox 多选框’。
-[Checkbox 官方文档](https://element.eleme.cn/#/zh-CN/component/checkbox)
+Radio（Radio 单选框）扩展至饿了么 ‘Radio 单选框’。
+[Radio 官方文档](https://element.eleme.cn/#/zh-CN/component/radio)
 
 
 #### 用法
 
 ```
-import FastCheckbox from '../common/form/tools/checkbox.js'
+import FastRadio from '../common/form/tools/radio.js'
 components: {
-  FastCheckbox
+  FastRadio
 }
 ```
 
@@ -19,23 +19,23 @@ components: {
 ```
 <template>
   <div>
-  <!--change和checkboxChange两个事件都是选中项发生改变时触发可以只选一个接听，或者使用v-model的形式-->
-    <fast-checkbox
-      :max="checkBox.max"
-      :value="checkBox.value"
-      :options="checkBox.options"
-      @checkboxChange="checkboxChangeEvent"
+    <fast-radio
+      :value="value"
+      :options="options"
+      @change="changeEvent"
+      @radioChange="radioChangeEvent"
       v-if="true"
     />
-    <!--v-model-->
-    <fast-checkbox
-      v-model="checkBox.value"
-      :options="checkBox.options"
+    <fast-radio
+      v-model="value"
+      :options="options"
       v-if="false"
     />
+    <br><br>
     <button @click="bbb">
       测试响应式
     </button>
+    &nbsp;&nbsp;
     <button @click="ccc">
       获取值
     </button>
@@ -43,40 +43,31 @@ components: {
 </template>
 
 <script>
-import FastCheckbox from '../common/form/tools/checkbox.js'
+import FastRadio from '../common/form/tools/radio.js'
 export default {
   components: {
-    FastCheckbox
+    FastRadio
   },
   data () {
     return {
-      checkBox: {
-        // 默认选中项
-        value: ['02', '01'],
-        // 最多勾选两个
-        max: 2,
-        // el-checkbox 选项
-        options: [
-          { label: '爬山', value: '01' },
-          { label: '美食', value: '02', disabled: false },
-          { label: '骑车', value: '03' }
-        ]
-      }
+      value: '02',
+      options: [
+        { label: '室内', value: '01' },
+        { label: '室外', value: '02', disabled: false }
+      ]
     }
   },
   methods: {
-    changeEvent (value) {
-      console.info(value);
+    changeEvent (value) {},
+    radioChangeEvent (value) {
+      console.info(value)
+      this.value = value
     },
     bbb () {
-      this.checkBox.value = ['01', '03']
+      this.value = '01'
     },
     ccc () {
-      console.info(this.checkBox.value);
-    },
-    checkboxChangeEvent (value) {
-      console.info('v-model：', value);
-      this.checkBox.value = value
+      console.info(this.value);
     }
   }
 }
@@ -91,7 +82,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'foods', type: 'Checkbox', label: '食物',value: ['02','01'],options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
+{name: 'foods', type: 'Radio', label: '食物',value: '01',options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
 listeners: {
     change: (value) => {
         console.info('change ', value)
@@ -106,25 +97,13 @@ Tips：`listeners`属性的使用。
 ```
 <template>
   <div>
-    <fast-checkbox
-      :max="checkBox.max"
-      :value="checkBox.value"
-      :options="checkBox.options"
-      @checkboxChange="checkboxChangeEvent"
+    <fast-radio
+      :value="value"
+      :options="options"
+      @change="changeEvent"
+      @radioChange="radioChangeEvent"
       :listeners="listeners"
-      v-if="true"
     />
-    <fast-checkbox
-      v-model="checkBox.value"
-      :options="checkBox.options"
-      v-if="false"
-    />
-    <button @click="bbb">
-      测试响应式
-    </button>
-    <button @click="ccc">
-      获取值
-    </button>
   </div>
 </template>
 
@@ -142,31 +121,28 @@ export default {
       }
     }
     return {
-      checkBox: {
-        value: ['02', '01'],
-        max: 2,
-        options: [
-          { label: '爬山', value: '01' },
-          { label: '美食', value: '02', disabled: false },
-          { label: '骑车', value: '03' }
-        ]
-      }
+      value: '02',
+      options: [
+        { label: '室内', value: '01' },
+        { label: '室外', value: '02', disabled: false }
+      ]
     }
   },
   mounted () {},
   methods: {
     changeEvent (value) {
+      // 会触发 listeners 对象中的 change 函数
       console.info(value);
     },
+    radioChangeEvent (value) {
+      console.info(value);
+      this.value = value
+    },
     bbb () {
-      this.checkBox.value = ['01', '03']
+      this.value = '01'
     },
     ccc () {
-      console.info(this.checkBox.value);
-    },
-    checkboxChangeEvent (value) {
-      console.info('v-model：', value);
-      this.checkBox.value = value
+      console.info(this.value);
     }
   }
 }
@@ -180,7 +156,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [checkbox](https://element.eleme.cn/#/zh-CN/component/checkbox)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Radio](https://element.eleme.cn/#/zh-CN/component/radio)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -207,11 +183,10 @@ label | Y | String\|Number | | 控件显示值
 value | Y | String\|Number | | 控件value
 disabled | - | boolean | false | 是否隐藏
 
-
 - listeners 事件对象如果传入了事件那么对应的`v-on`绑定的事件调用函数将不会触发。
 
 ```
-<fast-checkbox
+<fast-radio
       @checkboxChange="checkboxChangeEvent"
       @change="changeEvent"
       :listeners="listeners"
@@ -234,3 +209,4 @@ methods: {
     }
 }
 ```
+
