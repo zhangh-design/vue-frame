@@ -19,7 +19,7 @@
 <script>
 export default {
   components: {
-    fastInput: () => import('../common/form/tools/text-field.js')
+    fastInput: () => import('../common/form/tools/text-input.js')
   },
   data () {
     // slots
