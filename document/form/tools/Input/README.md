@@ -192,8 +192,6 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
-width | — | Number |  —  | 组件宽度，不传递则自动适用父元素
-height | — | Number |  40 | 组件高度
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 slotType | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']

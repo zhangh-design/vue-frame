@@ -154,8 +154,6 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
-width | — | Number |  —  | 组件宽度，不传递则自动适用父元素
-height | — | Number |  40 | 组件高度
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象
