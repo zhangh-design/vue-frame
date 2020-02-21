@@ -83,7 +83,7 @@ const FastCheckbox = {
     },
     /**
      * @desc 当绑定值变化时触发的事件 v-model
-     * @event FastInput#_checkboxChange
+     * @event FastCheckbox#_checkboxChange
      * @param {Array} value - 更新后的值
      */
     _checkboxChangeEvent (value) {
