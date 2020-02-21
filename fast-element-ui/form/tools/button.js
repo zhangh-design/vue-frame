@@ -5,7 +5,6 @@
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
-import _isNumber from 'lodash/isNumber'
 import _isEmpty from 'lodash/isEmpty'
 import { Button } from 'element-ui'
 
@@ -16,12 +15,6 @@ const FastButton = {
     text: {
       type: String,
       default: ''
-    },
-    width: {
-      type: Number
-    },
-    height: {
-      type: Number
     },
     iconPosition: {
       type: String,
@@ -94,12 +87,6 @@ const FastButton = {
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
-    }
-    if (_isEqual(_isNil(this.width), false) && _isNumber(this.width)) {
-      _set(style, 'width', `${this.width}px`)
-    }
-    if (_isEqual(_isNil(this.height), false) && _isNumber(this.height)) {
-      _set(style, 'height', `${this.height}px`)
     }
     return h(
       'el-button',

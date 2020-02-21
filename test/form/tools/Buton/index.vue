@@ -38,7 +38,6 @@ export default {
       template: '<em>取消</em>'
     }
     return {
-      width: 150,
       isDisplay: true,
       loading: true
     }
