@@ -183,7 +183,7 @@ data () {
 methods: {
     changeEvent (value) {
         // 不处触发
-        // 因为 listeners 中也传递了 change 事件所以 v-on 绑定的事件触发
+        // 因为 listeners 中也传递了 change 事件所以 v-on 绑定的事件不触发
     }
 }
 ```
