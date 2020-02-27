@@ -9,6 +9,8 @@
       ref="ruleForm"
       label-width="80px"
       label-position="left"
+      @validate="validateEvent"
+      size="mini"
     />
     <p />
     <button @click="doTestResponsiveMode">
@@ -19,8 +21,16 @@
       获取表单值
     </button>
     &nbsp;&nbsp;
-    <button @click="clearForm">
-      清空表单
+    <button @click="resetFields">
+      重置表单
+    </button>
+    &nbsp;&nbsp;
+    <button @click="clearValidate">
+      移除验证项
+    </button>
+    &nbsp;&nbsp;
+    <button @click="validateHandelr">
+      表单验证
     </button>
   </div>
 </template>
@@ -51,10 +61,18 @@ export default {
         { label: '饺子', value: '05' }
       ]
     }
+    // comboBox 多选
     this.multiple = true
+    // 自定义验证规则
+    this.validateNum = (rule, value, callback) => {
+      if (value > 10) {
+        return callback(new Error('人数不能超过10个'));
+      }
+      callback();
+    }
     return {
       form: {
-        name: '短途旅游',
+        name: '',
         address: '金沙湖',
         time: '2020-02-29',
         distance: '1公里',
@@ -63,7 +81,10 @@ export default {
         goods: ['01', '03', '05']
       },
       rules: {
-        address: [{ required: true, message: '请输入地点', trigger: 'blur' }]
+        address: [{ required: true, message: '请输入地点', trigger: 'blur' }],
+        num: [
+          { validator: this.validateNum, trigger: 'change' }
+        ]
       }
     }
   },
@@ -123,7 +144,8 @@ export default {
           name: 'num',
           type: 'InputNumber',
           label: '人数',
-          disabled: true
+          min: 0,
+          disabled: false
         },
         {
           span: 1,
@@ -147,8 +169,21 @@ export default {
     getFormValues () {
       console.info(this.form)
     },
-    clearForm () {
+    resetFields () {
       this.$refs['ruleForm'].resetFields()
+    },
+    clearValidate () {
+      this.$refs['ruleForm'].clearValidate(['address'])
+    },
+    validateHandelr () {
+      this.$refs['ruleForm'].validate(function () {
+        console.info('验证通过');
+      }, function () {
+        console.info('未通过');
+      })
+    },
+    validateEvent (prop, result, message) {
+      console.info(prop, result, message);
     }
   }
 }
