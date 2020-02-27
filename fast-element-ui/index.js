@@ -42,8 +42,38 @@ export default {
     }
   }
 } */
+import FastColor from './form/tools/color.js'
+import FastComboBox from './form/tools/combo-box.js'
+import FastDatePicker from './form/tools/date-picker.js'
+import FastDateTimePicker from './form/tools/date-time-picker.js'
+import FastInputNumber from './form/tools/input-number.js'
+import FastLabel from './form/tools/label.js'
+import FastRadio from './form/tools/radio.js'
+import FastSwitch from './form/tools/switch.js'
+import FastTextArea from './form/tools/text-area.js'
+import FastTextHidden from './form/tools/text-hidden.js'
+import FastTextInput from './form/tools/text-input.js'
+import FastTextPassword from './form/tools/text-password.js'
+import FastCheckbox from './form/tools/checkbox.js'
+import FastButton from './form/tools/button.js'
+
 export default {
-  install (Vue, options = {}) {
+  install (Vue, { list = [] }) {
     // 现在没有写代码，等待后期整套框架写完后应该是需要这么一个初始化接口的
+    // list 指定哪些组件加载，不指定则加载全部
+    Vue.component('fast-Color', FastColor)
+    Vue.component('fast-ComboBox', FastComboBox)
+    Vue.component('fast-DatePicker', FastDatePicker)
+    Vue.component('fast-DateTimePicker', FastDateTimePicker)
+    Vue.component('fast-InputNumber', FastInputNumber)
+    Vue.component('fast-Label', FastLabel)
+    Vue.component('fast-Radio', FastRadio)
+    Vue.component('fast-Switch', FastSwitch)
+    Vue.component('fast-TextArea', FastTextArea)
+    Vue.component('fast-TextHidden', FastTextHidden)
+    Vue.component('fast-TextInput', FastTextInput)
+    Vue.component('fast-TextPassword', FastTextPassword)
+    Vue.component('fast-Checkbox', FastCheckbox)
+    Vue.component('fast-Button', FastButton)
   }
 }
