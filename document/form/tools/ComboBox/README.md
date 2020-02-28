@@ -267,7 +267,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Select 官方文档](https://element.faas.ele.me/#/zh-CN/component/select)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Select Attributes](https://element.eleme.cn/#/zh-CN/component/select#select-attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -284,10 +284,10 @@ listeners | — | Object |  {} | 组件事件对象
 
 #### listeners
 
-[Select Events](https://element.faas.ele.me/#/zh-CN/component/select)
+[Select Events](https://element.eleme.cn/#/zh-CN/component/select#select-events)
 
 #### 对外方法（Methods）
-[Select Methods](https://element.faas.ele.me/#/zh-CN/component/select)
+[Select Methods](https://element.eleme.cn/#/zh-CN/component/select#methods)
 
 方法名 | 说明 | 参数 | 类型
 ---|---|---|---

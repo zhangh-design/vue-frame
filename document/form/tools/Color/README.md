@@ -133,7 +133,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [ColorPicker 官方文档](https://element.eleme.cn/#/zh-CN/component/color-picker)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Attributes](https://element.eleme.cn/#/zh-CN/component/color-picker#attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---

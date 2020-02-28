@@ -142,7 +142,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [InputNumber](https://element.eleme.cn/#/zh-CN/component/input-number)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [InputNumber Attributes](https://element.eleme.cn/#/zh-CN/component/input-number#attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -158,7 +158,7 @@ blur | 在 Input 失去焦点时触发 | (event: Event) | listeners: {blur: (eve
 focus | 在 Input 获得焦点时触发 | (event: Event) | listeners: {focus: (event)=>{}}
 
 #### 对外方法（method）
-[InputNumber Methods](https://element.eleme.cn/#/zh-CN/component/input-number)
+[InputNumber Methods](https://element.eleme.cn/#/zh-CN/component/input-number#methods)
 
 #### 注意：
 

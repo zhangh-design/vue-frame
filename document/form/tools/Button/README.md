@@ -130,7 +130,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Button Attributes](https://element.eleme.cn/#/zh-CN/component/button)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Button Attributes](https://element.eleme.cn/#/zh-CN/component/button#attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---

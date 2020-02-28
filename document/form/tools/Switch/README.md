@@ -135,7 +135,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Switch 官方文档](https://element.faas.ele.me/#/zh-CN/component/switch)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Switch Attributes](https://element.eleme.cn/#/zh-CN/component/switch#attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -149,7 +149,7 @@ listeners | — | Object |  {} | 组件事件对象
 change | switch 状态发生变化时的回调函数 | (value: boolean) | listeners: {change: (value)=>{}}
 
 #### 对外方法（Methods）
-[Switch Methods](https://element.faas.ele.me/#/zh-CN/component/switch)
+[Switch Methods](https://element.eleme.cn/#/zh-CN/component/switch#methods)
 
 #### 注意：
 

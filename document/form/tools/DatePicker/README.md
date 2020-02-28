@@ -153,7 +153,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [DatePicker Attributes](https://element.eleme.cn/#/zh-CN/component/date-picker)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [DatePicker Attributes](https://element.eleme.cn/#/zh-CN/component/date-picker#attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -172,7 +172,7 @@ dateChange | 仅在输入框失去焦点或用户按下回车时触发（**v-mod
 
 #### 对外方法（method）
 
-[Input Methods](https://element.eleme.cn/#/zh-CN/component/date-picker)
+[Input Methods](https://element.eleme.cn/#/zh-CN/component/date-picker#methods)
 
 #### 注意：
 

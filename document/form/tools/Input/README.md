@@ -190,7 +190,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Input Attributes](https://element.eleme.cn/#/zh-CN/component/input)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Input Attributes](https://element.eleme.cn/#/zh-CN/component/input#input-attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -221,7 +221,7 @@ append | 输入框后置内容，只对 type="text" 有效 | slotNode: {append: 
 
 #### 对外方法（method）
 
-[Input Methods](https://element.eleme.cn/#/zh-CN/component/input)
+[Input Methods](https://element.eleme.cn/#/zh-CN/component/input#input-methods)
 
 
 #### 注意：

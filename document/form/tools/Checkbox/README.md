@@ -180,7 +180,7 @@ export default {
 
 #### 单项数据流（props）
 
-注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [checkbox](https://element.eleme.cn/#/zh-CN/component/checkbox)
+注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 -> [Checkbox Attributes](https://element.eleme.cn/#/zh-CN/component/checkbox#checkbox-attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
@@ -190,6 +190,9 @@ isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象
 
 #### listeners
+
+[Checkbox Events](https://element.eleme.cn/#/zh-CN/component/checkbox#checkbox-events)
+
 事件 | 说明 | 返回值 | 示例
 ---|---|---|---
 change | 当绑定值变化时触发的事件 | (value: Array) | listeners: {change: (value)=>{}}
@@ -199,7 +202,7 @@ change | 当绑定值变化时触发的事件 | (value: Array) | listeners: {cha
 
 #### 注意：
 
-- options 中子项的参数（`label`、`value`、`disabled`），`value`参数是作为唯一值（id）来使用的是框架自身的属性，详细参数请看到 [Checkbox-button Attributes](https://element.eleme.cn/#/zh-CN/component/checkbox)
+- options 中子项的参数（`label`、`value`、`disabled`），`value`参数是作为唯一值（id）来使用的是框架自身的属性，详细参数请看到 [Checkbox-button Attributes](https://element.eleme.cn/#/zh-CN/component/checkbox#checkbox-button-attributes)
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
