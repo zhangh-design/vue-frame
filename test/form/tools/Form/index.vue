@@ -81,7 +81,8 @@ export default {
         distance: '1公里',
         fruit: ['02', '01'],
         num: 6,
-        goods: ['01', '03', '05']
+        goods: ['01', '03', '05'],
+        isGo: false
       },
       rules: {
         address: [{ required: true, message: '请输入地点', trigger: 'blur' }],
@@ -172,6 +173,18 @@ export default {
           valueField: 'value',
           type: 'ComboBox',
           label: '食物'
+        },
+        {
+          span: 1,
+          name: 'isGo',
+          type: 'Switch',
+          label: '出发',
+          listeners: {
+            change (value) {
+              // 定义事件
+              console.info(value);
+            }
+          }
         }
       ]
     },
