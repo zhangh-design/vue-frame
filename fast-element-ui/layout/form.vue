@@ -29,6 +29,13 @@
               v-html="col.labelHtml+colonText"
             />
           </template>
+          <template
+            v-slot:error="{error}"
+            v-if="_isRenderErrorSlot(col)"
+          >
+            {{ _renderErrorHtml(col.slotNode.error, error) }}
+            <slot />
+          </template>
           <component
             v-model="model[col.name]"
             :is="getComponent(col.type)"
@@ -41,6 +48,8 @@
 </template>
 
 <script>
+import _isNil from 'lodash/isNil'
+import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 
 export default {
@@ -108,6 +117,22 @@ export default {
     }
   },
   methods: {
+    /**
+     * @desc 判断是否需要渲染-自定义表单校验信息的插槽slot
+     * @param {Object} col={} - 表单字段的配置
+     * @return {Boolean} - 是否渲染 true渲染，flase不渲染
+     */
+    _isRenderErrorSlot (col = {}) {
+      return !_isNil(_get(col, 'slotNode.error'))
+    },
+    /**
+     * @desc 自定义表单校验信息
+     * @param {function} callback=function(){} - 外部传入的回调函数用于返回 render函数生成的节点
+     * @param {String} error='' - rules中定义的当前控件的验证 message 信息
+     */
+    _renderErrorHtml (callback = function () {}, error = '') {
+      this.$slots[ 'default' ] = callback(this.$createElement, error)
+    },
     /**
      * @desc 获取指定的全局表单控件
      * @param {String} type - form表单控件类型
