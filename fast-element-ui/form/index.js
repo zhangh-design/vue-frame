@@ -13,7 +13,6 @@ const FastForm = {
   inheritAttrs: false,
   props: {
     ...Form.props,
-    // 是否需要在 label 文字后面自动添加冒号`：`
     colon: {
       type: Boolean,
       default: false
@@ -21,19 +20,6 @@ const FastForm = {
     columns: {
       type: Number,
       default: 2
-    },
-    buttonPosition: {
-      type: String,
-      default: 'bottom',
-      validator (value) {
-        return ['top', 'bottom'].includes(value)
-      }
-    },
-    button: {
-      type: Array,
-      default () {
-        return []
-      }
     },
     detail: {
       type: Array,
@@ -141,8 +127,6 @@ const FastForm = {
           ..._omit(this.$props, [
             'colon',
             'columns',
-            'button',
-            'buttonPosition',
             'detail',
             'isRender',
             'isDisplay'
