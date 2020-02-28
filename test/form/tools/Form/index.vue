@@ -63,7 +63,10 @@ export default {
     }
     // comboBox 多选
     this.multiple = true
-    // 自定义验证规则
+    /**
+     * 自定义验证规则
+     * 自定义校验 callback 必须被调用。
+     */
     this.validateNum = (rule, value, callback) => {
       if (value > 10) {
         return callback(new Error('人数不能超过10个'));
@@ -101,7 +104,19 @@ export default {
           type: 'TextInput',
           placeholder: '活动',
           clearable: true,
-          rules: [{ required: true, message: '请输入活动', trigger: 'blur' }]
+          inlineMessage: false,
+          rules: [{ required: true, message: '请输入活动', trigger: 'blur' }],
+          slotNode: {
+            /**
+             * @desc 自定义表单校验信息的显示方式
+             * @param {Object} h - el-form-item 控件的 render 渲染函数对象
+             * @param {String} error - 错误提示 比如：`请输入活动`
+             * @returns {Object} - render 函数创建的虚拟节点
+             */
+            error: function (h, error) {
+              return h('div', { class: 'el-form-item__error', domProps: { innerHTML: `<span style="color: green;">${error}</span>` } })
+            }
+          }
         },
         {
           span: 1,
