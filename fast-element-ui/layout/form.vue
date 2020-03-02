@@ -62,10 +62,6 @@ export default {
       type: Number,
       default: 4
     },
-    border: {
-      type: Boolean,
-      default: true
-    },
     detail: {
       type: Array,
       default () {
