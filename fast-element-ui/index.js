@@ -57,6 +57,9 @@ import FastTextPassword from './form/tools/text-password.js'
 import FastCheckbox from './form/tools/checkbox.js'
 import FastButton from './form/tools/button.js'
 
+// 布局组件
+import { border, fit } from './layout/index.js'
+
 export default {
   install (Vue, { list = [] }) {
     // 现在没有写代码，等待后期整套框架写完后应该是需要这么一个初始化接口的
@@ -75,5 +78,9 @@ export default {
     Vue.component('fast-TextPassword', FastTextPassword)
     Vue.component('fast-Checkbox', FastCheckbox)
     Vue.component('fast-Button', FastButton)
+
+    // 布局组件
+    Vue.component('fast-border', border)
+    Vue.component('fast-fit', fit)
   }
 }
