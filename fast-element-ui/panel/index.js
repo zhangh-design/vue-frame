@@ -44,10 +44,6 @@ const FastPanel = {
     return {
     }
   },
-  mounted () {
-    console.info('aaaaaa ', this.layout)
-    console.info('slot.north', this.$slots)
-  },
   methods: {
     /**
      * @desc 添加 content 内容面板
