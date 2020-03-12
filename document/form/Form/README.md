@@ -261,6 +261,7 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+labelWidth | — | String | 60px | 表单域标签的宽度
 colon | — | String | false | 是否需要在 label 文字后面自动添加冒号`：`
 columns | — | Number | 2 | 表单一行分多少列
 detail | — | Array | [] | 表单详情数据
