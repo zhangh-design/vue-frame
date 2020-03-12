@@ -13,6 +13,10 @@ const FastForm = {
   inheritAttrs: false,
   props: {
     ...Form.props,
+    labelWidth: {
+      type: String,
+      default: '60px'
+    },
     colon: {
       type: Boolean,
       default: false
