@@ -2,6 +2,7 @@
 /**
  * Button 按钮
  */
+import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
@@ -15,6 +16,22 @@ const FastButton = {
     text: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: 'auto'
+    },
+    ctStyle: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    ctCls: {
+      type: Object,
+      default () {
+        return {}
+      }
     },
     iconPosition: {
       type: String,
@@ -83,7 +100,7 @@ const FastButton = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = {}
+    const style = { ..._get(this.$props, 'ctStyle', {}), width: this.width }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -92,6 +109,7 @@ const FastButton = {
       'el-button',
       {
         ref: `${this._uid}-el-button-ref`,
+        class: _get(this.$props, 'ctCls', {}),
         style,
         attrs: this.$attrs,
         props: { ...this.$props, icon: (this.iconPosition === 'right') ? null : this.icon },

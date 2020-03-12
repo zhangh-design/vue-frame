@@ -2,6 +2,7 @@
 /**
  * InputNumber 计数器
  */
+import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
@@ -15,6 +16,22 @@ const FastInputNumber = {
   },
   props: {
     ...InputNumber.props,
+    width: {
+      type: String,
+      default: '100%'
+    },
+    ctStyle: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    ctCls: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     isRender: {
       type: Boolean,
       default: true
@@ -123,13 +140,14 @@ const FastInputNumber = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = {}
+    const style = { ..._get(this.$props, 'ctStyle', {}), width: this.width }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
     }
     return h('el-input-number', {
       ref: `${this._uid}-el-input-number-ref`,
+      class: _get(this.$props, 'ctCls', {}),
       style,
       attrs: this.$attrs,
       props: { ...this.$props, value: this.vValue },

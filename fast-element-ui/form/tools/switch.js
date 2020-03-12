@@ -2,6 +2,7 @@
 /**
  * @desc Switch 开关选择按钮
  */
+import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isEqual from 'lodash/isEqual'
 import _isNil from 'lodash/isNil'
@@ -16,6 +17,18 @@ const FastSwitch = {
   },
   props: {
     ...Switch.props,
+    ctStyle: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    ctCls: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     isRender: {
       type: Boolean,
       default: true
@@ -87,13 +100,14 @@ const FastSwitch = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = {}
+    const style = { ..._get(this.$props, 'ctStyle', {}) }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
     }
     return h('el-switch', {
       ref: `${this._uid}-el-switch-ref`,
+      class: _get(this.$props, 'ctCls', {}),
       style,
       attrs: this.$attrs,
       props: { ...this.$props, value: this.vValue },

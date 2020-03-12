@@ -2,6 +2,7 @@
 /**
  * @desc Checkbox 多选框
  */
+import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
@@ -16,6 +17,18 @@ const FastCheckbox = {
   },
   props: {
     ...CheckboxGroup.props,
+    ctStyle: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    ctCls: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     options: {
       type: Array,
       default () {
@@ -104,7 +117,7 @@ const FastCheckbox = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = {}
+    const style = { ..._get(this.$props, 'ctStyle', {}), width: this.width }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -113,11 +126,13 @@ const FastCheckbox = {
       'el-checkbox-group',
       {
         ref: `${this._uid}-el-checkbox-group-ref`,
+        class: _get(this.$props, 'ctCls', {}),
         style,
         attrs: this.$attrs,
         props: {
           ..._omit(this.$props, [
             'options',
+            'returnTypeSep',
             'isRender',
             'isDisplay',
             'listeners'
