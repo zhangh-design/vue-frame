@@ -8,6 +8,9 @@
       :value-field="valueField"
       :options="options"
       :slot-node="slotNode"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      :width="width"
       @selectChange="_selectChangeEvent"
       @remove-tag="removeTagEvent"
       :listeners="listeners"
@@ -42,13 +45,20 @@ export default {
     // slots
     this.slotNode = {
       prefix: {
-				// 前缀
+        // 前缀
         template: '<em style="line-height: 40px;">f:</em>'
       },
       empty: {
         template: '<div style="text-align: center;padding: 5px 0 5px 0">没有水果了</div>'
       }
     }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-combo-box': true
+    }
+    this.width = '200px'
     return {
       // 静态数据-多选
       multiple: true,

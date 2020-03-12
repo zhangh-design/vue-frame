@@ -8,6 +8,8 @@
     /> -->
     <fast-switch
       v-model="value1"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :listeners="listeners"
     />
     <p>{{ value1 }}</p>
@@ -29,6 +31,12 @@ export default {
     this.listeners = {
       change: this.changeEvent
     }
+    this.ctCls = {
+      'fats-switch': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
     return {
       value1: true
     }
@@ -48,4 +56,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .fats-switch{
+    border: 1px solid yellow;
+  }
+</style>

@@ -6,12 +6,16 @@
       type="primary"
       icon="el-icon-edit"
       icon-position="right"
+      size="small"
+      :width="width"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :loading="loading"
       :is-display="isDisplay"
       :listeners="listeners"
       @click="clickHandler"
     >
-		  <!-- 配置插槽的话 text和slot-node都将失效 -->
+      <!-- 配置插槽的话 text和slot-node都将失效 -->
       <template v-slot:default>
         升级
       </template>
@@ -27,16 +31,23 @@ export default {
     FastButton
   },
   data () {
-		// 事件 （配置了 listeners 对象那模板中的@click=''事件将失效）
+    // 事件 （配置了 listeners 对象那模板中的@click=''事件将失效）
     this.listeners = {
       click: () => {
         console.info('bb', event);
       }
-		}
-		// 按钮文件内容，可以传递 html 结构的字符
+    }
+    // 按钮文件内容，可以传递 html 结构的字符
     this.slotNode = {
       template: '<em>取消</em>'
     }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-button': true
+    }
+    this.width = '100px'
     return {
       isDisplay: true,
       loading: true

@@ -2,6 +2,8 @@
   <div>
     <fast-color
       v-model="color"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
       @active-change="activeChange"
     />
@@ -21,6 +23,12 @@ export default {
     FastColor
   },
   data () {
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-color': true
+    }
     return {
       color: '#68BE8E'
     }

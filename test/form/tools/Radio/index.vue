@@ -1,17 +1,21 @@
 <template>
   <div>
-		<!--change和radioChange两个事件都是选中项发生改变时触发可以只选一个接听，或者使用v-model的形式-->
+    <!--change和radioChange两个事件都是选中项发生改变时触发可以只选一个接听，或者使用v-model的形式-->
     <fast-radio
       :value="value"
       :options="options"
-			@change="changeEvent"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      @change="changeEvent"
       @radioChange="radioChangeEvent"
       v-if="true"
     />
-		<!--v-model-->
+    <!--v-model-->
     <fast-radio
       v-model="value"
       :options="options"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       v-if="false"
     />
     <br><br>
@@ -33,11 +37,17 @@ export default {
     FastRadio
   },
   data () {
-		this.listeners = {
+    this.listeners = {
       change: (value) => {
-				// 触发
+        // 触发
         console.info(value);
       }
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-radio': true
     }
     return {
       value: '02',
@@ -49,10 +59,10 @@ export default {
   },
   mounted () {},
   methods: {
-		changeEvent (value) {
-			// 不触发
-			// 会触发 listeners 对象中的 change 函数
-		},
+    changeEvent (value) {
+      // 不触发
+      // 会触发 listeners 对象中的 change 函数
+    },
     radioChangeEvent (value) {
       console.info(value);
       this.value = value
@@ -67,4 +77,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.fast-radio{
+  border: 1px solid yellow;
+}
+</style>

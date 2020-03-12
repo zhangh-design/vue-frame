@@ -5,6 +5,9 @@
       v-model="value"
       :min="min"
       :size="size"
+      :width="width"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
     />
     <p>{{ value }}</p>
@@ -26,6 +29,13 @@ export default {
     FastInputNumber
   },
   data () {
+    this.ctCls = {
+      'fast-input-number': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.width = '200px'
     return {
       value: 10,
       min: 0,

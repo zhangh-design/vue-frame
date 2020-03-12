@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
+    <fast-input ref="el-input-ref" :isRender="isRender" :value="value" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners" :ct-style="ctStyle" :ct-cls="ctCls">
       <!-- slot 可以使用 template 定义，也可以使用 slotNode 属性传递-->
       <!-- 如果 template 节点和 slotNode 属性都定义了同一个 slot 那么以 template 定义的起效 -->
       <!-- 如果 template 节点 和 slotNode 属性都没有定义，那么使用 label 属性作为 v-slot:prepend -->
@@ -39,6 +39,13 @@ export default {
       clear: this.clearHandler,
       // v-model 由 listeners 对象传递 inputChange 属性
       inputChange: this.inputChangeHandler
+		}
+		// 一个可选添加的CSS样式类，加入到组件的元素上
+		this.ctCls = {
+      bbb: true
+    }
+    this.ctStyle = {
+      color: 'red'
     }
     return {
       value: 'hello input',
@@ -82,4 +89,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+   .bbb{
+    border: 1px solid red;
+  }
+</style>
