@@ -27,6 +27,8 @@ components: {
     /> -->
     <fast-switch
       v-model="value1"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
     />
     <p>{{ value1 }}</p>
@@ -45,6 +47,12 @@ export default {
     FastColor
   },
   data () {
+		this.ctCls = {
+      'fats-switch': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
     return {
       value1: true
     }
@@ -65,7 +73,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .fats-switch{
+    border: 1px solid yellow;
+  }
+</style>
 
 
 ```
@@ -75,7 +87,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'isGo',value: false,label: '即时出发',type: 'Switch',width: 170,listeners: {
+{name: 'isGo',value: false,label: '即时出发',type: 'Switch',ctCls: {'fast-input': true}, ctStyle: {'background-color': 'red'},listeners: {
     change: (value)=>{}
 }}
 ```
@@ -89,6 +101,8 @@ Tips：`listeners`属性的使用。
   <div>
     <fast-switch
       v-model="value1"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :listeners="listeners"
     />
     <p>{{ value1 }}</p>
@@ -107,6 +121,12 @@ export default {
     FastColor
   },
   data () {
+    this.ctCls = {
+      'fats-switch': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
     this.listeners = {
       change: this.changeEvent
     }
@@ -126,7 +146,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .fats-switch{
+    border: 1px solid yellow;
+  }
+</style>
 
 
 ```
@@ -139,6 +163,9 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+width | — | String |  100% | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象

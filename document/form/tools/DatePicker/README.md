@@ -26,6 +26,9 @@ components: {
       :placeholder="placeholder"
       :type="type"
       :align="align"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      :width="width"
       :is-render="isRender"
       @dateChange="dateChangeEvent"
     />
@@ -39,6 +42,13 @@ export default {
     FastDatePicker
   },
   data () {
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-date-picker': true
+    }
+    this.width = '200px'
     return {
         value: new Date(),
         editable: false,
@@ -68,8 +78,9 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'startDate', type: 'DatePicker', label: '开始日期',
+{name: 'startDate', type: 'DatePicker', label: '开始日期', width: '200px'
 editable: false,placeholder: '请选择开始日期',
+ctStyle: {'background-color': 'red'}, ctCls: {'fast-date-picker': true},
 listeners: {
     focus: (event) => {
         console.info('focus ', event);
@@ -98,6 +109,9 @@ Tips：`listeners`属性的使用。
       :placeholder="placeholder"
       :type="type"
       :align="align"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      :width="width"
       :is-render="isRender"
       @dateChange="dateChangeEvent"
       :listeners="listeners"
@@ -126,6 +140,13 @@ export default {
 				this.value=value
       }
     }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-date-picker': true
+    }
+    this.width = '200px'
     return {
         value: new Date(),
         editable: false,
@@ -157,6 +178,9 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+width | — | String |  100% | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象

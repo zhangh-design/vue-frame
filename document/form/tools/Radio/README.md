@@ -22,12 +22,16 @@ components: {
     <fast-radio
       :value="value"
       :options="options"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
       @radioChange="radioChangeEvent"
       v-if="true"
     />
     <fast-radio
       v-model="value"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :options="options"
       v-if="false"
     />
@@ -49,6 +53,12 @@ export default {
     FastRadio
   },
   data () {
+		this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-radio': true
+    }
     return {
       value: '02',
       options: [
@@ -73,7 +83,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.fast-radio{
+  border: 1px solid yellow;
+}
+</style>
 
 ```
 
@@ -83,6 +97,7 @@ Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
 {name: 'foods', type: 'Radio', label: '食物',value: '01',options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
+ctStyle: {'background-color': 'red'}, ctCls: {'fast-radio': true}, 
 listeners: {
     change: (value) => {
         console.info('change ', value)
@@ -100,6 +115,8 @@ Tips：`listeners`属性的使用。
     <fast-radio
       :value="value"
       :options="options"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
       @radioChange="radioChangeEvent"
       :listeners="listeners"
@@ -119,6 +136,12 @@ export default {
       change: (value) => {
         console.info(value);
       }
+    }
+		this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-radio': true
     }
     return {
       value: '02',
@@ -148,7 +171,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.fast-radio{
+  border: 1px solid yellow;
+}
+</style>
 
 ```
 
@@ -160,6 +187,8 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 options | — | Object |  {}  | 外部传入的子项列表 [{label: '爬山', value: '01'},{label: '美食', value: '02', disabled: false}]
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）

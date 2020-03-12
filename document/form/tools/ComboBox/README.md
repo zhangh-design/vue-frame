@@ -29,6 +29,9 @@ components: {
       :value-field="valueField"
       :options="options"
       :slot-node="slotNode"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      :width="width"
       @selectChange="_selectChangeEvent"
       @remove-tag="removeTagEvent"
       :listeners="listeners"
@@ -71,6 +74,13 @@ export default {
         template: '<div style="text-align: center;padding: 5px 0 5px 0">没有水果了</div>'
       }
     }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-combo-box': true
+    }
+    this.width = '200px'
     return {
       // 静态数据-多选
       multiple: true,
@@ -123,6 +133,9 @@ export default {
       :value-field="valueField"
       :api="api"
       :slot-node="slotNode"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
+      :width="width"
       @selectChange="_selectChangeEvent"
       @remove-tag="removeTagEvent"
       :listeners="listeners"
@@ -162,6 +175,13 @@ export default {
         template: '<div style="text-align: center;padding: 5px 0 5px 0">没有水果了</div>'
       }
     }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-combo-box': true
+    }
+    this.width = '200px'
     return {
       // 远程请求数据-多选
       multiple: true,
@@ -211,7 +231,7 @@ Tips: 对象写法必须在 Form 表单控件中才有效
 （静态数据）
 
 ```
-{name: 'goods',value: ['02','05'],label: '物品',type: 'ComboBox',width: 170,multiple: true,displayField:'label',valueField:'value',options: [{value:'01',label:'苹果'},{value:'02',label:'香梨'},{value:'03',label:'西瓜'},{value:'04',label:'桃子'},{value:'05',label:'猕猴桃'}],listeners: {
+{name: 'goods',value: ['02','05'],label: '物品',type: 'ComboBox',width: 170,ctStyle: {'background-color': 'red'},ctCls: {'fast-combo-box': true},multiple: true,displayField:'label',valueField:'value',options: [{value:'01',label:'苹果'},{value:'02',label:'香梨'},{value:'03',label:'西瓜'},{value:'04',label:'桃子'},{value:'05',label:'猕猴桃'}],listeners: {
     change: (value)=>{},
     clear: ()=>{}
 }}
@@ -220,7 +240,7 @@ Tips: 对象写法必须在 Form 表单控件中才有效
 （服务器端请求）
 
 ```
-{name: 'goods',value: ['02','05'],label: '物品',api: 'user/getUserInfo',queryParams: {id: '1001'},type: 'ComboBox',width: 170,multiple: true,displayField:'label',valueField:'value',listeners: {
+{name: 'goods',value: ['02','05'],label: '物品',ctStyle: {'background-color': 'red'},ctCls: {'fast-combo-box': true}, api: 'user/getUserInfo',queryParams: {id: '1001'},type: 'ComboBox',width: 170,multiple: true,displayField:'label',valueField:'value',listeners: {
     change: (value)=>{},
     clear: ()=>{}
 }}
@@ -274,6 +294,9 @@ export default {
 api | — | String |  | 服务器访问模块地址（需要引入自定义的ajax请求插件）
 queryParams | — | Object | {} | 初始化查询参数
 options | — | Array | [] | 静态数据源
+width | — | String |  100% | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 loadFilter | — | Function | null | 服务器请求数据处理函数
 displayField | — | String | name | 数据源中哪个字段用作显示值
 valueField | — | String | id | 数据源中哪个字段用作隐藏值

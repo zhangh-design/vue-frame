@@ -23,6 +23,8 @@ components: {
     <fast-checkbox
       :max="checkBox.max"
       :value="checkBox.value"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :options="checkBox.options"
       @checkboxChange="checkboxChangeEvent"
       v-if="true"
@@ -33,9 +35,11 @@ components: {
       :options="checkBox.options"
       v-if="false"
     />
+		<p />
     <button @click="bbb">
       测试响应式
     </button>
+		&nbsp;&nbsp;
     <button @click="ccc">
       获取值
     </button>
@@ -49,6 +53,12 @@ export default {
     FastCheckbox
   },
   data () {
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-checkbox': true
+    }
     return {
       checkBox: {
         // 默认选中项
@@ -91,7 +101,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'foods', type: 'Checkbox', label: '食物',value: ['02','01'],options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
+{name: 'foods', type: 'Checkbox', label: '食物',ctStyle: {'background-color': 'red'},ctCls: {'fast-checkbox': true},value: ['02','01'],options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
 listeners: {
     change: (value) => {
         console.info('change ', value)
@@ -184,6 +194,8 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 options | — | Object |  {}  | 外部传入的子项列表 [{label: '爬山', value: '01'},{label: '美食', value: '02', disabled: false}]
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）

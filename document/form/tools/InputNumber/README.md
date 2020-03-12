@@ -24,6 +24,9 @@ components: {
       v-model="value"
       :min="min"
       :size="size"
+      :width="width"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
     />
     <p>{{ value }}</p>
@@ -44,6 +47,13 @@ export default {
     FastInputNumber
   },
   data () {
+		this.ctCls = {
+      'fast-input-number': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.width = '200px'
     return {
       value: 10,
       min: 0,
@@ -74,7 +84,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'num',value: 10,label: '统计',type: 'InputNumber',width: 170,listeners: {
+{name: 'num',value: 10,label: '统计',type: 'InputNumber',width: 170,ctStyle: {'background-color': 'red'},ctCls: {'fast-input-number': true},listeners: {
     change: (value)=>{}
 }}
 ```
@@ -91,6 +101,9 @@ Tips：`listeners`属性的使用。
       v-model="value"
       :min="min"
       :size="size"
+      :width="width"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       :listeners="listeners"
     />
     <p>{{ value }}</p>
@@ -117,6 +130,13 @@ export default {
         console.info(value)
       }
     }
+		this.ctCls = {
+      'fast-input-number': true
+    }
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.width = '200px'
     return {
       value: 10,
       min: 0,
@@ -146,6 +166,9 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+width | — | String |  100% | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象

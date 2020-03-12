@@ -25,6 +25,9 @@ components: {
       icon-position="right"
       :loading="loading"
       :is-display="isDisplay"
+      :width="width"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @click="clickHandler"
     >
       <!-- 可以传入默认插槽 template -->
@@ -42,6 +45,13 @@ export default {
     FastButton
   },
   data () {
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-button': true
+    }
+    this.width = '100px'
     return {
       isDisplay: true,
       loading: true
@@ -69,7 +79,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效。
 
 ```
-{name: 'submit-btn', type: 'Button', width: 150, text: '提交', type: 'primary', icon: "el-icon-edit", 'icon-position': 'right', listeners: {
+{name: 'submit-btn', type: 'Button', width: 150, ctStyle: {'background-color': 'red'},ctCls: {'fast-button': true}, text: '提交', type: 'primary', icon: "el-icon-edit", 'icon-position': 'right', listeners: {
     click: (event) => {
         console.info('按钮点击事件：', event)
     }
@@ -134,6 +144,9 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+width | — | String |  auto | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 text | — | String |  —  | 按钮文字（传html结构字符将直接输出在按钮上，可以使用默认slot和slotNode属性）
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）

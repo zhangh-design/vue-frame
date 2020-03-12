@@ -21,6 +21,8 @@ components: {
   <div>
     <fast-color
       v-model="color"
+      :ct-style="ctStyle"
+      :ct-cls="ctCls"
       @change="changeEvent"
       @active-change="activeChange"
     />
@@ -40,6 +42,12 @@ export default {
     FastColor
   },
   data () {
+    this.ctStyle = {
+      'background-color': 'red'
+    }
+    this.ctCls = {
+      'fast-color': true
+    }
     return {
       color: '#68BE8E'
     }
@@ -69,7 +77,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
-{name: 'user-color',value: '#4A8AF4',label: '主题',type: 'Color',width: 170,listeners: {
+{name: 'user-color',value: '#4A8AF4',label: '主题',type: 'Color',width: 170,ctStyle: {'background-color': 'red'},ctCls: {'fast-color': true},listeners: {
     change: (value)=>{}
 }}
 ```
@@ -137,6 +145,8 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 listeners | — | Object |  {} | 组件事件对象

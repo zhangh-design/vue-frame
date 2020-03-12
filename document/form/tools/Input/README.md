@@ -19,7 +19,7 @@ components: {
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-text-input ref="el-input-ref" v-model="value" :width="width" label="用户名" placeholder="请输入用户名" clearable @focus="focusHandler" @clear="clearHandler" @change="changeHandler">
+    <fast-text-input ref="el-input-ref" v-model="value" :width="width" label="用户名" placeholder="请输入用户名" :ct-style="ctStyle" :ct-cls="ctCls" clearable @focus="focusHandler" @clear="clearHandler" @change="changeHandler">
       <!--插槽 slot-->
       <template v-slot:prepend>
         <em>用户名：</em>
@@ -40,6 +40,12 @@ export default {
     FastTextInput
   },
   data () {
+    this.ctCls = {
+      bbb: true
+    }
+    this.ctStyle = {
+      color: 'red'
+    }
     return {
       value: 'hello input',
       width: 300
@@ -76,7 +82,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .bbb{
+    border: 1px solid red;
+  }
+</style>
 
 ```
 
@@ -85,7 +95,7 @@ export default {
 Tips: 对象写法必须在 Form 表单控件中才有效。
 
 ```
-{name: 'project-name', type: 'TextInput', width: 350, label: '项目名称', readonly: true,
+{name: 'project-name', type: 'TextInput', width: 350, ctCls: {'fast-input': true}, ctStyle: {color: 'red'}, label: '项目名称', readonly: true,
 /*slotNode: {
 	prepend: {
     template: '<a>名称：</a>'
@@ -106,7 +116,7 @@ Tips：`slotNode`和`listeners`属性的使用。
 <template>
   <div>
     <p>text-field 组件</p>
-    <fast-text-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" clearable :slotNode="slotNode" :listeners="listeners">
+    <fast-text-input ref="el-input-ref" :isRender="isRender" :value="value" :width="width" label="用户名" placeholder="请输入用户名" :ct-style="ctStyle" :ct-cls="ctCls" clearable :slotNode="slotNode" :listeners="listeners">
       <!-- slot 可以使用 template 定义，也可以使用 slotNode 属性传递 -->
       <!-- 如果 template 节点和 slotNode 属性都定义了同一个 slot 那么以 template 定义的起效 -->
       <!-- 如果 template 节点 和 slotNode 属性都没有定义，那么使用 label 属性作为 v-slot:prepend 来渲染-->
@@ -143,6 +153,12 @@ export default {
       clear: this.clearHandler,
       // v-model 由 listeners 对象传递 inputChange 属性
       inputChange: this.inputChangeHandler
+    }
+		this.ctCls = {
+      bbb: true
+    }
+    this.ctStyle = {
+      color: 'red'
     }
     return {
       value: 'hello input',
@@ -184,7 +200,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .bbb{
+    border: 1px solid red;
+  }
+</style>
 
 ```
 
@@ -194,6 +214,9 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
+width | — | String |  100% | 组件宽度
+ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
+ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
 isDisplay | — | Boolean |  true | 是否显示组件（v-show）
 slotType | — | String |  prepend | 组件 `slot` 显示位置和`label`结合使用，可选值有： ['prefix', 'suffix', 'prepend', 'append']
