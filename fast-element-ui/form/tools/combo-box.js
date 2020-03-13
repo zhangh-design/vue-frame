@@ -36,7 +36,7 @@ const FastComboBox = {
     },
     width: {
       type: String,
-      default: '100%'
+      default: 'auto'
     },
     ctStyle: {
       type: Object,

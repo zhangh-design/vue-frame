@@ -117,7 +117,7 @@ const FastCheckbox = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}), width: this.width }
+    const style = { ..._get(this.$props, 'ctStyle', {}) }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
