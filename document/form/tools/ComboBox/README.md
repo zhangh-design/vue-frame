@@ -294,7 +294,7 @@ export default {
 api | — | String |  | 服务器访问模块地址（需要引入自定义的ajax请求插件）
 queryParams | — | Object | {} | 初始化查询参数
 options | — | Array | [] | 静态数据源
-width | — | String |  100% | 组件宽度
+width | — | String |  auto | 组件宽度
 ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
 ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 loadFilter | — | Function | null | 服务器请求数据处理函数

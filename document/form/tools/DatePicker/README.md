@@ -178,7 +178,7 @@ export default {
 
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
-width | — | String |  100% | 组件宽度
+width | — | String |  auto | 组件宽度
 ctStyle | — | Object |   | 一个可选添加的Style内联样式类，加入到组件的元素上
 ctCls | — | Object |   | 一个可选添加的CSS样式类，加入到组件的元素上
 isRender | — | Boolean |  true | 是否渲染组件（v-if）
