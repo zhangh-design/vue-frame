@@ -57,6 +57,10 @@ const FastButton = {
       default: () => {}
     }
   },
+  data () {
+    this.events = { afterClickHandler: 'afterClickHandler' }
+    return {}
+  },
   methods: {
     /**
      * @desc 原生点击事件
@@ -66,9 +70,10 @@ const FastButton = {
     _nativeClickEvent (event) {
       if (_isEqual(_isNil(this.listeners), false) && Reflect.has(this.listeners, 'click')) {
         this.listeners.click(event)
-        return
+      } else {
+        this.$emit('click', event)
       }
-      this.$emit('click', event)
+      this.$emit(this.events.afterClickHandler, event)
     },
     /**
      * @desc 创建 el-button 控件的 slot 插槽
@@ -86,7 +91,7 @@ const FastButton = {
       }
       if (this.iconPosition === 'right') {
         nodes.push(h('li', {
-          class: {
+          'class': {
             [this.icon]: true,
             'el-icon--right': true
           }
