@@ -2,46 +2,8 @@
 /**
  * @desc fastElementUI 框架插件初始化入口
  */
-/* import _set from 'lodash/set'
-// import _get from 'lodash/get'
-// import _cloneDeep from 'lodash/cloneDeep'
-import { extend } from './helper/extend.js'
-
-const namespace = function () {
-  var a = arguments; var o = null; var i; var j; var d;
-  for (i = 0; i < a.length; i = i + 1) {
-    d = a[i].split('.');
-    o = window;
-    for (j = 0; j < d.length; j = j + 1) {
-      o[d[j]] = o[d[j]] || {};
-      o = o[d[j]];
-    }
-  }
-  return o;
-}
-// 命名空间
-window.$ns = namespace
-window.$ns('fastUI')
-// 基类 （用于继承的顶层对象）
-const baseFnName = 'fastUI.js.base'
-window.$ns(baseFnName)
-_set(window, `${baseFnName}.fn`, function () {})
-_set(window, `${baseFnName}.fn.prototype.initComponent`, function () {})
-// 继承类
-fastUI.extend = extend
-export default {
-  install (Vue, options = {}) {
-    // 设置命名空间
-    // console.info(Object.keys(options));
-    let elem;
-    const _hasOwnProperty = Object.prototype.hasOwnProperty;
-    for (elem of Object.keys(options).values()) {
-      if (_hasOwnProperty.call(options[elem], 'props')) {
-        _set(window.fastUI, `${elem}.props`, _cloneDeep(_get(options, `${elem}.props`)))
-      }
-    }
-  }
-} */
+import _merge from 'lodash/merge'
+// Form表单子控件
 import FastColor from './form/tools/color.js'
 import FastComboBox from './form/tools/combo-box.js'
 import FastDatePicker from './form/tools/date-picker.js'
@@ -60,9 +22,21 @@ import FastButton from './form/tools/button.js'
 // 布局组件
 import { border, fit } from './layout/index.js'
 
+// 数据表格组件
+import FastGrid from './grid/index.js'
+
+// 面板
+import FastPanel from './panel/index.js'
+
 export default {
-  install (Vue, { list = [] }) {
-    // 现在没有写代码，等待后期整套框架写完后应该是需要这么一个初始化接口的
+  /**
+   *
+   * @param {Object} Vue
+   * @param {*} param1
+   * globalOptions 框架全局配置对象
+   */
+  install (Vue, { list = [], globalOptions = {} }) {
+    // 表单组件
     // list 指定哪些组件加载，不指定则加载全部
     Vue.component('fast-Color', FastColor)
     Vue.component('fast-ComboBox', FastComboBox)
@@ -82,5 +56,24 @@ export default {
     // 布局组件
     Vue.component('fast-border', border)
     Vue.component('fast-fit', fit)
+
+    // 面板
+    Vue.component('fast-panel', FastPanel)
+
+    // 数据表格组件
+    Vue.component('fast-grid', FastGrid)
+
+    // 全局配置参数
+    const defaultGlobalOptions = {
+      grid: {
+        page: 'page',
+        size: 'size',
+        total: 'total',
+        data: 'data'
+      }
+    }
+    Object.defineProperty(Vue.prototype, '$fast-global-options', {
+      value: _merge({}, defaultGlobalOptions, globalOptions)
+    })
   }
 }
