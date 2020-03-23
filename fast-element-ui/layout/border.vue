@@ -54,7 +54,7 @@ export default {
     },
     northHeight: {
       type: String,
-      default: '60px'
+      default: 'auto'
     },
     westWidth: {
       type: String,
@@ -66,7 +66,7 @@ export default {
     },
     southHeight: {
       type: String,
-      default: '60px'
+      default: 'auto'
     }
   },
   data () {
