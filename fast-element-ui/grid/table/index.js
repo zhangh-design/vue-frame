@@ -3,6 +3,7 @@
  * Table 表格组件
  */
 import { Table } from 'element-ui'
+import FastMenu from '../../menu/index.js'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -12,7 +13,7 @@ import _isEmpty from 'lodash/isEmpty'
 import _some from 'lodash/some'
 import _find from 'lodash/find'
 import _isNil from 'lodash/isNil'
-import _isEqual from 'lodash/isEqual'
+import _assign from 'lodash/assign'
 
 const FastGridTable = {
   inject: ['getFastGrid'],
@@ -27,6 +28,11 @@ const FastGridTable = {
       default () {
         return {}
       }
+    },
+    // 过滤返回数据（该函数带一个参数'data'用来指向源数据）
+    loadFilter: {
+      type: Function,
+      default: (data) => data
     },
     columns: {
       type: Array,
@@ -74,31 +80,25 @@ const FastGridTable = {
         return {}
       }
     },
-    // 事件
-    listeners: {
-      type: Object,
+    // 行右键菜单栏
+    menu: {
+      type: Array,
       default () {
-        return {}
+        return []
       }
     }
   },
   data () {
-    this.curQueryParams = { ...this.queryParams }
+    this.curQueryParams = {}
     this.loading = null
-    this.currentRow = {} // 当前选中行
     this.currentRows = [] // 当前选中行集
+    this.ctxMenu = null // 右键菜单menu
     return {
+      currentRow: {}, // 当前选中行
       tableData: []
     }
   },
   computed: {
-    // 页数和条目个数的查询参数
-    pageParams () {
-      return {
-        page: this.getFastGrid.currentPage - 1,
-        size: this.getFastGrid.pageSize
-      }
-    },
     // 构建列 el-table-column
     tableColumnNodes () {
       return _map(this.columns, elem => {
@@ -178,29 +178,50 @@ const FastGridTable = {
     }
   },
   watch: {
+    // 更新选中行
+    currentRow (val) {
+      this.getFastGrid.updateCurrentRow(val)
+    },
     // 监测数据源
     tableData (val) {
       if (this.isSelectedFirstRow && !_isEmpty(val)) {
         setTimeout(() => {
           if (this.selectMode) {
-            this.$refs[`${this._uid}-fast-table`].toggleRowSelection(this.tableData[0])
+            this.$refs[`${this._uid}-fast-table`].toggleRowSelection(
+              this.tableData[0]
+            )
           } else {
             this.currentRow = this.tableData[0]
-            this.$refs[`${this._uid}-fast-table`].setCurrentRow(this.tableData[0])
+            this.$refs[`${this._uid}-fast-table`].setCurrentRow(
+              this.tableData[0]
+            )
           }
-        }, 0);
+        }, 0)
       }
       if (_isEmpty(val)) {
         this.currentRow = {}
         this.currentRows = []
       }
       // 数据加载完成
-      this.getFastGrid.afterDataLoad(val)
+      this.getFastGrid.onLoadSuccess(val)
     }
   },
   mounted () {
-    this.init()
+    if (_has(this.getFastGrid.$listeners, 'onBeforeLoad')) {
+      let result = this.getFastGrid.$listeners.onBeforeLoad()
+      if (result !== false) {
+        this.init()
+      }
+    } else {
+      this.init()
+    }
     this.getFastGrid.setTableEl(this)
+  },
+  beforeDestroy () {
+    if (this.ctxMenu != null) {
+      this.ctxMenu.removeMenuNode()
+      this.ctxMenu = null
+    }
   },
   methods: {
     /**
@@ -211,12 +232,10 @@ const FastGridTable = {
      * @param {*} event - 点击事件对象
      */
     _rowDblclickEvent (row, column, event) {
-      console.info('row-dblclick');
-      if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'row-dblclick')
-      ) {
-        this.listeners['row-dblclick'](row, column, event)
+      if (_has(this.getFastGrid.$listeners, 'row-dblclick')) {
+        this.getFastGrid.$emit('row-dblclick', row, column, event)
+      } else {
+        // 默认 el-dialog 打开弹框详情页
       }
     },
     /**
@@ -226,6 +245,9 @@ const FastGridTable = {
      */
     _selectionChangeEvent (selection) {
       this.currentRows = selection
+      if (_has(this.getFastGrid.$listeners, 'selection-change')) {
+        this.getFastGrid.$emit('selection-change', selection)
+      }
     },
     /**
      * @desc 当某一行被鼠标右键点击时会触发该事件（右键添加菜单栏）
@@ -235,9 +257,19 @@ const FastGridTable = {
      * @param {*} event - 点击事件对象
      */
     _rowContextmenuEvent (row, column, event) {
-      console.info('row-contextmenu');
-      event.preventDefault()
-      event.stopPropagation()
+      if (_has(this.getFastGrid.$listeners, 'row-contextmenu')) {
+        this.getFastGrid.$emit('row-contextmenu', row, column, event)
+      } else {
+        if (!_isEmpty(this.menu)) {
+          if (_isNil(this.ctxMenu)) {
+            this.ctxMenu = new FastMenu()
+          }
+          this.ctxMenu.add(this.menu)
+          this.ctxMenu.showAt(event.pageX, event.pageY)
+        }
+        event.preventDefault()
+        event.stopPropagation()
+      }
     },
     /**
      * @desc 当某一行被点击时会触发该事件
@@ -247,8 +279,14 @@ const FastGridTable = {
      * @param {*} event - 点击事件对象
      */
     _rowClickEvent (row, column, event) {
+      if (!_isNil(this.ctxMenu)) {
+        this.clearContextmenu()
+      }
       if (!this.selectMode) {
         this.currentRow = row
+      }
+      if (_has(this.getFastGrid.$listeners, 'row-click')) {
+        this.getFastGrid.$emit('row-click', row, column, event)
       }
     },
     /**
@@ -267,21 +305,36 @@ const FastGridTable = {
         return
       }
       this.loadMask()
-      let pageParams = { 'page': this.getFastGrid.currentPage - 1, 'size': this.getFastGrid.pageSize }
-      this.$api[this.api]({ params: pageParams }).then((response) => {
-        this.getFastGrid.setTotal(response.total)
-        this.tableData = response.data
-      }).catch(error => {
-        throw new Error(error)
-      }).finally(() => {
-        this.loading.close()
-      })
+      let params = _assign(
+        {},
+        {
+          [_get(this['$fast-global-options'], 'grid.page', 'page')]: this.getFastGrid.currentPage - 1,
+          [_get(this['$fast-global-options'], 'grid.size', 'size')]: this.getFastGrid.pageSize
+        },
+        this.queryParams,
+        this.curQueryParams
+      )
+      this.$api[this.api]({ params })
+        .then(response => {
+          this.getFastGrid.setTotal(response[_get(this['$fast-global-options'], 'grid.total', 'total')] || 0)
+          this.tableData = this.loadFilter(response[_get(this['$fast-global-options'], 'grid.data', 'data')])
+        })
+        .catch(error => {
+          this.getFastGrid.onLoadError()
+          throw new Error(error)
+        })
+        .finally(() => {
+          this.loading.close()
+        })
     },
     /**
      * @desc 设置查询参数
      * @param {Object} params
      */
-    setQueryParams (params = {}) {},
+    setQueryParams (params = {}) {
+      this.curQueryParams = {}
+      return Object.assign(this.curQueryParams, params)
+    },
     /**
      * @desc 获取 el-table 组件
      * @method
@@ -300,13 +353,6 @@ const FastGridTable = {
       })
     },
     /**
-     * @desc 用于多选表格，清空用户的选择
-     * @method
-     */
-    clearSelection () {
-      this.$refs[`${this._uid}-fast-table`].clearSelection()
-    },
-    /**
      * @desc 用于多选表格，切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否（selected 为 true 则选中）
      * @param {Array} field=[] - 行选中的配置数组对象
      * @type {Object}
@@ -315,7 +361,7 @@ const FastGridTable = {
      * @property {Boolean} selected=true - 是否选中（未实现）
      * @method
      * @example
-     * 选中数据data数组中键为id和值等于100的行
+     * // 选中数据data数组中键为id和值等于100的行
      * toggleRowSelection([{field: 'id', value: '100', selected: true}])
      */
     toggleRowSelection (rows = []) {
@@ -354,6 +400,9 @@ const FastGridTable = {
      * setCurrentRow({ field: 'id', value: 2 })
      */
     setCurrentRow (row = {}) {
+      if (this.selectMode) {
+        return
+      }
       const selectRow = _find(this.tableData, item => {
         return item[row.field || 'id'] === row.value
       })
@@ -365,13 +414,6 @@ const FastGridTable = {
           this.$refs[`${this._uid}-fast-table`].setCurrentRow(selectRow)
         }
       }
-    },
-    /**
-     * @desc 用于清空排序条件，数据会恢复成未排序的状态
-     * @method
-     */
-    clearSort () {
-      this.$refs[`${this._uid}-fast-table`].clearSort()
     },
     /**
      * @desc 不传入参数时用于清空所有过滤条件，数据会恢复成未过滤的状态，也可传入由columnKey组成的数组以清除指定列的过滤条件
@@ -388,20 +430,16 @@ const FastGridTable = {
       }
     },
     /**
-     * @desc 对 Table 进行重新布局。当 Table 或其祖先元素由隐藏切换为显示时，可能需要调用此方法
+     * @desc 清除右键添加的菜单栏
      * @method
      */
-    doLayout () {
-      this.$refs[`${this._uid}-fast-table`].doLayout()
-    },
-    /**
-     * @desc 手动对 Table 进行排序。参数prop属性指定排序列，order指定排序顺序。
-     * @param {String} prop - 排序列
-     * @param {String} order - 排序顺序
-     * @method
-     */
-    sort (prop, order) {
-      this.$refs[`${this._uid}-fast-table`].sort(prop, order)
+    clearContextmenu () {
+      if (this.ctxMenu != null) {
+        this.ctxMenu.removeMenuNode()
+        setTimeout(() => {
+          this.ctxMenu = null
+        }, 0);
+      }
     },
     /**
      * @desc 清空表单
@@ -409,7 +447,6 @@ const FastGridTable = {
      */
     clearTable () {
       this.tableData = []
-      this.$forceUpdate()
     },
     /**
      * @desc 获取当前选中行
@@ -442,16 +479,14 @@ const FastGridTable = {
             'column',
             'ctStyle',
             'ctCls',
-            'slotNode',
-            'listeners'
+            'slotNode'
           ]),
           height: '100%', // 实现固定表头的表格，数据可滚动
           highlightCurrentRow: this._highlightCurrentRow,
           data: this.tableData
         },
-        // on: this.listeners
         on: {
-          ..._omit(this.listeners, [
+          ..._omit(this.getFastGrid.$listeners, [
             'selection-change',
             'row-contextmenu',
             'row-dblclick',
