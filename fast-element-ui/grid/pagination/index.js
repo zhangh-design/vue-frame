@@ -36,6 +36,9 @@ const FastGridPagination = {
   data () {
     return {}
   },
+  created () {
+    this.getFastGrid.setPaginationEl(this)
+  },
   methods: {
     /**
      * @desc 自定义内容，需要在 layout 中列出 slot
@@ -59,12 +62,18 @@ const FastGridPagination = {
       return nodes
     },
     /**
+     * @desc 修改分页 current-page 参数
+     * @param {Number} page 页数
+     */
+    updateCurrentPage (page) {
+      this.currentPage = page
+    },
+    /**
      * @desc pageSize 改变时会触发
      * @param {number} pageSize - 每页条数
      * @event
      */
     _sizeChangeEvent (pageSize) {
-      console.info(this.pageSize)
       this.getFastGrid.onSizeChange(pageSize)
     },
     /**
@@ -96,8 +105,8 @@ const FastGridPagination = {
         style,
         props: {
           ...this.$props,
-          currentPage: this.getFastGrid.currentPage,
-          pageSize: this.getFastGrid.pageSize
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
         },
         on: {
           'size-change': this._sizeChangeEvent,
