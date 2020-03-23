@@ -4,10 +4,13 @@
  */
 import FastTable from './table/index.js'
 import FastGridSearch from './search/index.js'
+import FastTbar from './tbar/index.js'
 import FastGridPagination from './pagination/index.js'
 import _isEqual from 'lodash/isEqual'
 import _has from 'lodash/has'
+import _get from 'lodash/get'
 import _set from 'lodash/set'
+import _omit from 'lodash/omit'
 
 const FastGrid = {
   provide () {
@@ -18,36 +21,28 @@ const FastGrid = {
   components: {
     FastTable,
     FastGridSearch,
-    FastGridPagination
+    FastGridPagination,
+    FastTbar
   },
   props: {
     api: {
       type: String,
       default: '',
-      required: false
+      required: true
     },
     queryParams: {
       type: Object,
       default () {
-        return {}
+        return { }
       }
+    },
+    // 过滤返回数据（该函数带一个参数'data'用来指向源数据）
+    loadFilter: {
+      type: Function,
+      default: (data) => data
     },
     // 列 el-table-column 的配置
     columns: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    // 查询栏详情配置
-    searchDetail: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    // 工具栏详情配置
-    tBarDetail: {
       type: Array,
       default () {
         return []
@@ -74,6 +69,16 @@ const FastGrid = {
         return []
       }
     },
+    // 是否多选
+    selectMode: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示index下标列
+    isShowIndex: {
+      type: Boolean,
+      default: false
+    },
     // 默认选择第一行
     isSelectedFirstRow: {
       type: Boolean,
@@ -81,6 +86,11 @@ const FastGrid = {
     },
     // 第一次载入时是否自动刷新列表数据
     isReloadGrid: {
+      type: Boolean,
+      default: true
+    },
+    // 是否显示分页数量选择器
+    isShowPagination: {
       type: Boolean,
       default: true
     },
@@ -96,12 +106,17 @@ const FastGrid = {
   data () {
     this.layout = 'border' // 布局
     this.fastGridTable = null // table 组件实例
-    this.pageSize = 30 // 每页显示条目个数
-    this.currentPage = 1 // 当前页数
+    this.paginationInstance = null // Pagination 分页 组件实例
     this.events = {
-      afterDataLoad: 'afterDataLoad' // 数据加载完成之后
+      onLoadSuccess: 'onLoadSuccess', // 在数据加载成功的时候触发
+      onLoadError: 'onLoadError', // 在载入远程数据产生错误的时候触发
+      onBeforeLoad: 'onBeforeLoad', // 在载入请求数据之前触发，如果返回false可终止载入数据操作（验证参数）
+      onChangeRowEvent: 'onChangeRowEvent' // 选中行事件-单选
     }
     return {
+      currentRow: {}, // 当前选中行
+      currentPage: _get(this.paginationAttributes, 'currentPage', 1), // 当前页数
+      pageSize: _get(this.paginationAttributes, 'pageSize', 30), // 每页显示条目个数
       total: 0 // 总条目数
     }
   },
@@ -117,11 +132,6 @@ const FastGrid = {
       },
       immediate: true
     }
-  },
-  created () {
-    /* setTimeout(() => {
-      this.total = 100
-    }, 2000); */
   },
   methods: {
     /** Table 表格组件 */
@@ -139,6 +149,13 @@ const FastGrid = {
      */
     setTableEl (tableInstance) {
       this.fastGridTable = tableInstance
+    },
+    /**
+     * @desc 设置查询参数
+     * @param {Object} params - 查询对象参数
+     */
+    setQueryParams (params = {}) {
+      this.getTable().setQueryParams(params)
     },
     /**
      * @desc 获取 FastGridTable 组件实例
@@ -173,6 +190,57 @@ const FastGrid = {
       return Math.ceil(this.total / this.pageSize)
     },
     /**
+     * @desc 返回加载完毕后的数据
+     * @method
+     * @returns {Array}
+     */
+    getData () {
+      return this.getTable().tableData
+    },
+    /**
+     * @desc 返回单选选中的行-单选
+     * @method
+     * @returns {Object}
+     */
+    getSelected () {
+      return this.getTable().getSelectedRow()
+    },
+    /**
+     * @desc 返回复选时所有被选中的行-多选
+     * @method
+     * @returns {Array}
+     */
+    getSelections () {
+      return this.getTable().getSelectedRows()
+    },
+    /**
+     * @desc 选中一行
+     * @method
+     */
+    selectRow (row = {}) {
+      this.getTable().setCurrentRow(row)
+    },
+    /**
+     * @desc 选择多行
+     * @method
+     */
+    selectRows (rows = []) {
+      this.getTable().toggleRowSelection(rows)
+    },
+    /**
+     * @desc 选择当前页中所有的行
+     */
+    selectAll () {
+      this.getTable().toggleAllSelection()
+    },
+    /**
+     * @desc 用于多选表格，清空用户的选择
+     * @method
+     */
+    clearSelections () {
+      this.getElTable().clearSelection()
+    },
+    /**
      * @desc 清空表格
      * @method
      */
@@ -181,18 +249,11 @@ const FastGrid = {
       this.getTable().clearTable()
     },
     /**
-     * @desc 设置查询参数
-     * @param {Object} params - 查询对象参数
-     */
-    setQueryParams (params = {}) {
-      this.getTable().setQueryParams(params)
-    },
-    /**
      * @desc 刷新table组件，会回到第一页
      * @method
      */
     reloadGrid () {
-      this.getTable().setQueryParams({})
+      this.currentPage = 1
       this.getTable().loadData()
     },
     /**
@@ -204,12 +265,19 @@ const FastGrid = {
     },
     /** Pagination 分页组件 */
     /**
+     * @desc 设置 FastGridPagination 组件实例
+     * @method
+     * @param {Object} paginationInstance - 组件实例对象 this
+     */
+    setPaginationEl (paginationInstance) {
+      this.paginationInstance = paginationInstance
+    },
+    /**
      * @desc pageSize 改变时会触发
      * @param {number} pageSize - 每页条数
      * @method
      */
     onSizeChange (pageSize) {
-      console.info('pageSize 改变时会触发 ', pageSize)
       this.pageSize = pageSize
       if (this.currentPage === 1 || this.currentPage * pageSize <= this.total) {
         this.loadGrid()
@@ -223,16 +291,32 @@ const FastGrid = {
      * @method
      */
     onCurrentChange (page) {
-      console.info('currentPage：', page)
       this.currentPage = page
       this.loadGrid()
     },
     /**
-     * @desc 数据加载完成
+     * @desc 在数据加载成功的时候触发
      * @param {Array} table
+     * @method
      */
-    afterDataLoad (table) {
-      this.$emit(this.events.afterDataLoad, table)
+    onLoadSuccess (table) {
+      this.$emit(this.events.onLoadSuccess, table)
+    },
+    /**
+     * @desc 在载入远程数据产生错误的时候触发
+     * @method
+     */
+    onLoadError () {
+      this.$emit(this.events.onLoadError)
+    },
+    /**
+     * @desc 更新选中行
+     * @param {Object} row - 选中行（如果是复选也只会是当前点击的这行）
+     * @method
+     */
+    updateCurrentRow (row) {
+      this.currentRow = row
+      this.$emit(this.events.onChangeRowEvent, row)
     }
   },
   render (h) {
@@ -251,17 +335,46 @@ const FastGrid = {
         ref: `${this._uid}-fast-grid`,
         props: {
           border: true
+        },
+        nativeOn: {
+          click: () => {
+            this.getTable().clearContextmenu()
+          }
         }
       },
       [
-        h(
-          FastGridSearch,
-          {
-            slot: 'north',
-            props: { detail: this.searchDetail }
-          },
-          [h('template', { slot: 'default' }, this.$slots.search)]
-        ),
+        h('fast-border', { slot: 'north' }, [
+          h(
+            FastGridSearch,
+            {
+              slot: 'north',
+              scopedSlots: {
+                searchScope: props => {
+                  if (_has(this.$scopedSlots, 'searchScope')) {
+                    return this.$scopedSlots.searchScope(this.currentRow)
+                  }
+                  return h()
+                }
+              }
+            },
+            [h('template', { slot: 'default' }, this.$slots.search)]
+          ),
+          h(
+            FastTbar,
+            {
+              slot: 'south',
+              scopedSlots: {
+                tbarScope: props => {
+                  if (_has(this.$scopedSlots, 'tbarScope')) {
+                    return this.$scopedSlots.tbarScope(this.currentRow)
+                  }
+                  return h()
+                }
+              }
+            },
+            [h('template', { slot: 'default' }, this.$slots.tbar)]
+          )
+        ]),
         h(FastTable, {
           slot: 'center',
           props: {
@@ -270,14 +383,21 @@ const FastGrid = {
             columns: this.columns,
             isReloadGrid: this.isReloadGrid,
             isSelectedFirstRow: this.isSelectedFirstRow,
+            menu: this.menu,
+            isShowIndex: this.isShowIndex,
+            selectMode: this.selectMode,
+            loadFilter: this.loadFilter,
             ...this.tableAttributes
           }
         }),
         h(FastGridPagination, {
           slot: 'south',
           props: {
-            ...this.paginationAttributes,
-            total: this.total
+            currentPage: this.currentPage,
+            pageSize: this.pageSize,
+            ..._omit(this.paginationAttributes, ['currentPage', 'pageSize', 'isShowPagination']),
+            total: this.total,
+            isShowPagination: this.isShowPagination
           }
         })
       ]
