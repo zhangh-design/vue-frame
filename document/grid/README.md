@@ -361,7 +361,7 @@ slotNode | — | Object |   | 插入至表格最后一行之后的内容，如�
 名称 | 必填 | 类型 | 默认值 | 说明
 ---|---|---|---|---
 layout | — | String | prev, pager, next, jumper, sizes, slot, ->, total | 组件布局，子组件名用逗号分隔（原生的属性，这里只是把默认值修改了）
-pagingItems | — | | 可拓展按钮 （必须要在 `layout` 参数中设置`slot`值，Grid控件默认已经设置`slot`）（请看附录4）
+pagingItems | — | Array | | 可拓展按钮 （必须要在 `layout` 参数中设置`slot`值，Grid控件默认已经设置`slot`）（请看附录4）
 
 #### 右键菜单栏 menuAttributes（props）
 
