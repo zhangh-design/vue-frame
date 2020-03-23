@@ -17,6 +17,10 @@ const FastForm = {
       type: String,
       default: '60px'
     },
+    border: {
+      type: Boolean,
+      default: false
+    },
     colon: {
       type: Boolean,
       default: false
@@ -116,7 +120,7 @@ const FastForm = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = {}
+    const style = { }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
