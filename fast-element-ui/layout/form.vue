@@ -4,11 +4,13 @@
       v-for="(row, index) in rowsData"
       :key="index"
       :gutter="gutter"
+      :style="border ? (rowsData.length-1 === index) ? 'border: 1px solid #E0E0E0;':'border: 1px solid #E0E0E0;border-bottom: 0px;' : ''"
     >
       <el-col
-        v-for="col in row"
+        v-for="(col, colIndex) in row"
         :key="col.name"
         :span="(baseSpanNum/columns)*col.span"
+        :style="border ? (row.length >1 && row.length-1 !== colIndex)? 'border-right: 1px solid #E0E0E0;': '':''"
       >
         <el-form-item
           :label="col.label+colonText"
@@ -61,6 +63,10 @@ export default {
     columns: {
       type: Number,
       default: 4
+    },
+    border: {
+      type: Boolean,
+      default: true
     },
     detail: {
       type: Array,
