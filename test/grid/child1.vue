@@ -45,10 +45,10 @@
       获取多选行
     </button>&nbsp;&nbsp;
     <button @click="selectRow">
-      获取单选行
+      选中单选行
     </button>&nbsp;&nbsp;
     <button @click="selectRows">
-      获取多选行
+      选中多选行
     </button>
   </div>
 </template>
