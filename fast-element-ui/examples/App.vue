@@ -4,7 +4,6 @@
     <HelloWorld msg="Welcome to Your Vue.js App" v-if="false" />
     <fast-button text="测试-按钮" v-if="false" />
     <span v-if="false">{{value}}</span>
-    <bdfsd v-if="false"></bdfsd>
     <fast-panel v-if="false" />
   </div>
 </template>
@@ -12,12 +11,10 @@
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 import FastPanel from "./components/panel.vue";
-import bdfsd from "./components/htllo.vue";
 
 export default {
   name: "App",
   components: {
-    bdfsd,
     HelloWorld,
     FastPanel
   },
