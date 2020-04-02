@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  name: 'FastFitLayout',
   props: {
     padding: {
       type: String,
@@ -22,12 +23,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.fit-layout-container {
-  height: 100%;
-}
-.fit-layout-container .el-main > div {
-  height: 100%;
-}
-</style>

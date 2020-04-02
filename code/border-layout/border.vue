@@ -3,6 +3,7 @@
     class="fast-border-container"
     :style="{border: drawBorder}"
   >
+  <p>测试vue文件gulp的watch函数</p>
     <el-header
       :height="northHeight"
       :style="{padding}"
@@ -39,6 +40,7 @@
 
 <script>
 export default {
+  name: 'FastBorderLayout',
   props: {
     border: {
       type: Boolean,
@@ -80,21 +82,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.fast-border-container {
-  height: 100%;
-}
-.fast-border-container .el-header > div{
-  height: 100%;
-}
-.fast-border-container .el-footer > div{
-  height: 100%;
-}
-.fast-border-container .el-aside > div{
-  height: 100%;
-}
-.fast-border-container .el-main > div{
-  height: 100%;
-}
-</style>

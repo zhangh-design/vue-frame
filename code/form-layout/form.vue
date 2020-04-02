@@ -55,6 +55,7 @@ import _get from 'lodash/get'
 import _omit from 'lodash/omit'
 
 export default {
+  name: 'FastFormLayout',
   props: {
     colon: {
       type: Boolean,
@@ -160,7 +161,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
