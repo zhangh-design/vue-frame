@@ -24,7 +24,7 @@ export default {
   },
   data () {
     this.ctStyle = {
-      'background-color': 'red'
+      // 'background-color': 'red'
     }
     this.ctCls = {
       'fast-color': true
