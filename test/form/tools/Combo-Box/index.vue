@@ -89,7 +89,11 @@ export default {
       this.comboBoxValue = value
     },
     doTestResponsiveMode () {
-      this.comboBoxValue = ['1']
+      if (this.multiple) {
+        this.comboBoxValue = ['01']
+      } else {
+        this.comboBoxValue = '01'
+      }
     },
     reloadHandler () {
       // 传递一个查询参数
