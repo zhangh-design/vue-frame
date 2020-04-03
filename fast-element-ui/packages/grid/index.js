@@ -396,7 +396,7 @@ const FastGrid = {
           props: {
             currentPage: this.currentPage,
             pageSize: this.pageSize,
-            ..._omit(this.paginationAttributes, ['currentPage', 'pageSize', 'isShowPagination']),
+            paginationAttributes: _omit(this.paginationAttributes, ['currentPage', 'pageSize', 'isShowPagination']),
             total: this.total,
             isShowPagination: this.isShowPagination
           }
