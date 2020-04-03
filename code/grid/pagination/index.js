@@ -41,6 +41,13 @@ const FastGridPagination = {
           }},{text: '刷新'}] */
         return []
       }
+    },
+    // Pagination Attributes
+    paginationAttributes: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -114,7 +121,7 @@ const FastGridPagination = {
       {
         style,
         props: {
-          ...this.$attrs,
+          ...this.paginationAttributes,
           layout: this.layout,
           total: this.total,
           currentPage: this.currentPage,
