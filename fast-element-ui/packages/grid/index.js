@@ -90,6 +90,11 @@ const FastGrid = {
       type: Boolean,
       default: true
     },
+    // 边框
+    border: {
+      type: Boolean,
+      default: true
+    },
     // 是否显示分页数量选择器
     isShowPagination: {
       type: Boolean,
@@ -335,7 +340,7 @@ const FastGrid = {
       {
         ref: `${this._uid}-fast-grid`,
         props: {
-          border: true
+          border: this.border
         },
         nativeOn: {
           click: () => {
