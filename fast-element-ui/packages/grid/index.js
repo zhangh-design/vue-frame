@@ -388,7 +388,7 @@ const FastGrid = {
             isShowIndex: this.isShowIndex,
             selectMode: this.selectMode,
             loadFilter: this.loadFilter,
-            ...this.tableAttributes
+            tableAttributes: this.tableAttributes
           }
         }),
         h(FastGridPagination, {
