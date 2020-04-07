@@ -85,6 +85,13 @@ const FastGridTable = {
       default () {
         return []
       }
+    },
+    // Table Attributes
+    tableAttributes: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -109,14 +116,14 @@ const FastGridTable = {
         }
         if (_has(elem, 'filters') && !_has(elem, 'filter-method')) {
           filterMethod = function (value, row, column) {
-            const property = column['property']
+            const property = column.property
             return row[property] === value
           }
         }
         return this.$createElement('el-table-column', {
           props: {
             ..._omit(elem, ['name', 'render', 'renderHeader', 'prop']),
-            prop: elem['name'],
+            prop: elem.name,
             'filter-method': filterMethod
           },
           scopedSlots: {
@@ -207,7 +214,7 @@ const FastGridTable = {
   },
   mounted () {
     if (_has(this.getFastGrid.$listeners, 'onBeforeLoad')) {
-      let result = this.getFastGrid.$listeners.onBeforeLoad()
+      const result = this.getFastGrid.$listeners.onBeforeLoad()
       if (result !== false) {
         this.init()
       }
@@ -304,7 +311,7 @@ const FastGridTable = {
         return
       }
       this.loadMask()
-      let params = _assign(
+      const params = _assign(
         {},
         {
           [_get(this['$fast-global-options'], 'grid.page', 'page')]: this.getFastGrid.currentPage - 1,
@@ -374,7 +381,7 @@ const FastGridTable = {
         })
       })
       if (!_isEmpty(selectRows)) {
-        for (let selectRow of selectRows.values()) {
+        for (const selectRow of selectRows.values()) {
           this.$refs[`${this._uid}-fast-table`].toggleRowSelection(selectRow)
         }
       }
@@ -422,7 +429,7 @@ const FastGridTable = {
      */
     clearFilter (columnKey = []) {
       if (!_isEmpty(columnKey)) {
-        for (let elem of columnKey.values()) {
+        for (const elem of columnKey.values()) {
           this.$refs[`${this._uid}-fast-table`].clearFilter(elem)
         }
       } else {
@@ -473,7 +480,7 @@ const FastGridTable = {
         class: _get(this.$props, 'ctCls', {}),
         style: { ..._get(this.$props, 'ctStyle', {}), width: '100%' },
         props: {
-          ...this.$attrs,
+          ...this.tableAttributes,
           height: '100%', // 实现固定表头的表格，数据可滚动
           highlightCurrentRow: this._highlightCurrentRow,
           data: this.tableData
