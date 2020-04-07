@@ -322,7 +322,7 @@ const FastGridTable = {
       )
       this.$api[this.api]({ params })
         .then(response => {
-          this.getFastGrid.setTotal(response[_get(this['$fast-global-options'], 'grid.total', 'total')] || 0)
+          this.getFastGrid.setTotal(_get(response, _get(this['$fast-global-options'], 'grid.total', 'total'), 0))
           const data = response[_get(this['$fast-global-options'], 'grid.data', 'data')]
           this.tableData = _isNil(this.loadFilter) ? data : this.loadFilter(data)
         })
