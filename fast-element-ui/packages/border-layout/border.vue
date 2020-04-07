@@ -48,7 +48,7 @@ export default {
     },
     borderStyle: {
       type: String,
-      default: '1px solid #81ADF7'
+      default: '1px solid #EBEBEB'
     },
     padding: {
       type: String,
