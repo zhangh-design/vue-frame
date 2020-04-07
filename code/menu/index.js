@@ -34,9 +34,10 @@ class FastMenu {
     }
     this.removeMenuNode()
     setTimeout(() => {
-      this.createMenuNode(menu)
+      this.createMenuNode()
     }, 0);
   }
+
   /**
    * @desc 增加菜单项
    * @param {Array} menu - 菜单配置对象
@@ -46,15 +47,17 @@ class FastMenu {
   add (menu = []) {
     this.currentMenu = menu
   }
+
   /**
    * @desc 创建menu的展示节点
    */
   createMenuNode () {
-    let b = document.createElement('div')
+    const b = document.createElement('div')
     b.setAttribute('id', this.menuId)
     b.setAttribute('style', 'position:absolute;top:0px;left:0px;z-index:100;')
     document.body.appendChild(b)
   }
+
   /**
    * @desc 移除节点
    */
@@ -65,15 +68,17 @@ class FastMenu {
       document.body.removeChild(document.getElementById(this.menuId))
     }
   }
+
   /**
    * @dec 触发事件
    * @param {String} event - 事件名称
    */
   fire (event) {
     _find(this.handler, item => {
-      (item['event'] === event) && item['handler']()
+      (item.event === event) && item.handler()
     })
   }
+
   /**
    * @desc 添加事件
    * @param {String} event - 事件名称
@@ -82,6 +87,7 @@ class FastMenu {
   on (event, handler) {
     this.handler.push({ event, handler })
   }
+
   /**
    * @desc 生成菜单
    * @param {Number} x - 菜单栏 div 生成的 x 轴坐标值
@@ -92,10 +98,11 @@ class FastMenu {
       this.createMenu(x, y)
     }, 0)
   }
+
   // 创建菜单栏
   createMenu (x = 0, y = 0) {
-    let _this = this
-    let UserMenu = Vue.extend({
+    const _this = this
+    const UserMenu = Vue.extend({
       data () {
         return {
           menuId: _this.menuId
@@ -108,7 +115,7 @@ class FastMenu {
       },
       methods: {
         createChildNode (h) {
-          let lis = []
+          const lis = []
           _this.currentMenu.forEach((li, index) => {
             lis.push(h('li', {
               style: {
@@ -124,7 +131,7 @@ class FastMenu {
                 afterClickHandler: () => {
                   _this.removeMenuNode()
                   setTimeout(() => {
-                    _this.createMenuNode([])
+                    _this.createMenuNode()
                   }, 0);
                 }
               }
@@ -132,7 +139,7 @@ class FastMenu {
             )
             )
           });
-          let ul = h('div',
+          const ul = h('div',
             {
               style: {
                 padding: '2px',
