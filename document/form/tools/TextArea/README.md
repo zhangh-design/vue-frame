@@ -9,12 +9,7 @@ TextArea（TextArea 文本域输入控件）扩展至饿了么 ‘Input 按钮�
 
 #### 用法
 
-```
-import FastTextArea from '../common/form/tools/text-area.js'
-components: {
-  FastTextArea
-}
-```
+全局组件 `fast-text-area`
 
 #### 使用表单组件（模板写法）
 
@@ -30,11 +25,8 @@ components: {
 </template>
 
 <script>
-import FastTextArea from '../common/form/tools/text-area.js'
+
 export default {
-  components: {
-    FastTextArea
-  },
   data () {
     return {
       value: `hello input-${Math.ceil(Math.random() * 1000)}`,
@@ -45,7 +37,7 @@ export default {
     focusEvent (event) {
       // 获取焦点
       console.info(event);
-    }  
+    }
   }
 }
 </script>
@@ -88,11 +80,8 @@ Tips: `listeners`属性的使用
 </template>
 
 <script>
-import FastTextArea from '../common/form/tools/text-area.js'
+
 export default {
-  components: {
-    FastTextArea
-  },
   data () {
     this.listeners = {
       inputChange: this.inputChangeHandler
@@ -129,7 +118,7 @@ export default {
 比如：
 
 - TextArea 不支持`Input Slots`设置，即：
-  
+
 ```
 <fast-text-area
     :value="value"

@@ -7,12 +7,7 @@ ComboBox（ComboBox 选择器）扩展至饿了么 ‘Select 选择器’。
 
 #### 用法
 
-```
-import FastComboBox from '../common/form/tools/combo-box.js'
-components: {
-  FastComboBox
-}
-```
+全局组件 `fast-combo-box`
 
 #### 使用表单组件（模板写法）
 
@@ -51,12 +46,8 @@ components: {
 </template>
 
 <script>
-import FastComboBox from '../common/form/tools/combo-box.js'
 
 export default {
-  components: {
-    FastComboBox
-  },
   data () {
     // 静态数据-不做响应式监听
     this.options = [{ value: '01', label: '苹果' }, { value: '02', label: '香梨' }, { value: '03', label: '西瓜' }, { value: '04', label: '桃子' }, { value: '05', label: '猕猴桃' }]
@@ -155,12 +146,8 @@ export default {
 </template>
 
 <script>
-import FastComboBox from '../common/form/tools/combo-box.js'
 
 export default {
-  components: {
-    FastComboBox
-  },
   data () {
     // listeners
     this.listeners = {
@@ -269,7 +256,7 @@ export default {
       clear: ()=>{}
     }
     return {
-          
+
     }
   },
   methods: {
@@ -280,7 +267,7 @@ export default {
         // 多选模式下移除tag时触发
     }
   }
-    
+
 }
 ```
 
@@ -345,7 +332,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

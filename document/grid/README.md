@@ -22,11 +22,6 @@ cnpm install axios-api-query --save
 #### 用法
 
 ```
-// 局部组件
-import FastGrid from '../common/grid/index.js'
-components: {
-  FastGrid
-}
 // 全局组件
 <fast-grid />
 ```
@@ -112,13 +107,11 @@ components: {
 </template>
 
 <script>
-// import FastGrid from '../common/grid/index.js'
 import searchPanel from './search.vue'
 import tbarPanel from './tbar.vue'
 
 export default {
   components: {
-    // FastGrid
     searchPanel,
     tbarPanel
   },
@@ -316,19 +309,19 @@ onChangeRowEvent | 选中行事件 | row
 方法名 | 说明 | 参数 | 类型
 ---|---|---|---
 setQueryParams | 设置查询参数（在reloadGrid和loadGrid调用之前需要先设置） | params | Object
-getElTable | 获取 el-table 组件实例（用于直接操作 element-ui的el-table组件的方法） |  |  | 
-getTotal | 获取查询总数 |  | 
-getTotalPages | 获取总页数 |  | 
-getData | 返回加载完毕后的数据（当前页） |  | 
-getSelected | 返回单选选中的行-单选 |  | 
-getSelections | 返回复选时所有被选中的行-多选 |  | 
+getElTable | 获取 el-table 组件实例（用于直接操作 element-ui的el-table组件的方法） |  |  |
+getTotal | 获取查询总数 |  |
+getTotalPages | 获取总页数 |  |
+getData | 返回加载完毕后的数据（当前页） |  |
+getSelected | 返回单选选中的行-单选 |  |
+getSelections | 返回复选时所有被选中的行-多选 |  |
 selectRow | 选中一行（请看附录6） | row | Object
 selectRows | 选择多行（请看附录6） | rows | Array
-selectAll | 选择当前页中所有的行 |  | 
-clearSelections | 用于多选表格，清空用户的选择 |  | 
-clearGrid | 清空表格 |  | 
-reloadGrid | 刷新Grid组件，会回到第一页 |  | 
-loadGrid | 刷新table组件，保留在当前页 |  | 
+selectAll | 选择当前页中所有的行 |  |
+clearSelections | 用于多选表格，清空用户的选择 |  |
+clearGrid | 清空表格 |  |
+reloadGrid | 刷新Grid组件，会回到第一页 |  |
+loadGrid | 刷新table组件，保留在当前页 |  |
 
 #### Grid Slot
 
@@ -532,8 +525,8 @@ this.columns = [
 
 **2.**
 
- 该函数带一个参数'data'用来指向源数据（即：获取的数据源，比如Json对象）。你可以改变源数据的标准数据格式。这个函数必须返回包含'total'和'size'属性的标准数据对象或者是你在`$fast-global-options`全局变量中设置的`total`和`size`的别名。  
- 
+ 该函数带一个参数'data'用来指向源数据（即：获取的数据源，比如Json对象）。你可以改变源数据的标准数据格式。这个函数必须返回包含'total'和'size'属性的标准数据对象或者是你在`$fast-global-options`全局变量中设置的`total`和`size`的别名。
+
 ```
 <fast-grid
   ref="fast-grid"

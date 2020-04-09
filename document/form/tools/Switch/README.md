@@ -7,12 +7,7 @@ Switch（Switch 开关选择按钮）扩展至饿了么 ‘Switch 开关’。
 
 #### 用法
 
-```
-import FastSwitch from '../common/form/tools/switch.js'
-components: {
-  FastSwitch
-}
-```
+全局组件 `fast-switch`
 
 #### 使用表单组件（模板写法）
 
@@ -40,12 +35,8 @@ components: {
 </template>
 
 <script>
-import FastColor from '../common/form/tools/color.js'
 
 export default {
-  components: {
-    FastColor
-  },
   data () {
 		this.ctCls = {
       'fats-switch': true
@@ -114,12 +105,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastColor from '../common/form/tools/color.js'
 
 export default {
-  components: {
-    FastColor
-  },
   data () {
     this.ctCls = {
       'fats-switch': true
@@ -194,7 +181,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

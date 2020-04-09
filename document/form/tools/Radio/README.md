@@ -7,12 +7,7 @@ Radio（Radio 单选框）扩展至饿了么 ‘Radio 单选框’。
 
 #### 用法
 
-```
-import FastRadio from '../common/form/tools/radio.js'
-components: {
-  FastRadio
-}
-```
+全局组件 `fast-radio`
 
 #### 使用表单组件（模板写法）
 
@@ -47,11 +42,8 @@ components: {
 </template>
 
 <script>
-import FastRadio from '../common/form/tools/radio.js'
+
 export default {
-  components: {
-    FastRadio
-  },
   data () {
 		this.ctStyle = {
       'background-color': 'red'
@@ -97,7 +89,7 @@ Tips: 对象写法必须在 Form 表单控件中才有效
 
 ```
 {name: 'foods', type: 'Radio', label: '食物',value: '01',options: [{ label: '苹果', value: '01' },{ label: '香蕉', value: '02', disabled: false },{ label: '梨', value: '03' }],
-ctStyle: {'background-color': 'red'}, ctCls: {'fast-radio': true}, 
+ctStyle: {'background-color': 'red'}, ctCls: {'fast-radio': true},
 listeners: {
     change: (value) => {
         console.info('change ', value)
@@ -125,12 +117,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastCheckbox from '../common/form/tools/checkbox.js'
 
 export default {
-  components: {
-    FastCheckbox
-  },
   data () {
     this.listeners = {
       change: (value) => {
@@ -227,7 +215,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

@@ -7,12 +7,7 @@ InputNumber（InputNumber 计数器）扩展至饿了么 ‘InputNumber 计数�
 
 #### 用法
 
-```
-import FastInputNumber from '../common/form/tools/input-number.js'
-components: {
-  FastInputNumber
-}
-```
+全局组件 `fast-input-number`
 
 #### 使用表单组件（模板写法）
 
@@ -41,11 +36,8 @@ components: {
 </template>
 
 <script>
-import FastInputNumber from '../common/form/tools/input-number.js'
+
 export default {
-  components: {
-    FastInputNumber
-  },
   data () {
 		this.ctCls = {
       'fast-input-number': true
@@ -118,11 +110,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastInputNumber from '../common/form/tools/input-number.js'
+
 export default {
-  components: {
-    FastInputNumber
-  },
   data () {
     this.listeners = {
       change: (value) => {
@@ -200,7 +189,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

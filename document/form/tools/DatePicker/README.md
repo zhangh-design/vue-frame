@@ -6,12 +6,7 @@ DatePicker（DatePicker 日期选择器）扩展至饿了么 ‘ DatePicker 日�
 
 #### 用法
 
-```
-import FastDatePicker from '../common/form/tools/date-picker.js'
-components: {
-  FastDatePicker
-}
-```
+全局组件 `fast-date-picker`
 
 #### 使用表单组件（模板写法）
 
@@ -36,11 +31,8 @@ components: {
 </template>
 
 <script>
-import FastDatePicker from '../common/form/tools/date-picker.js'
+
 export default {
-  components: {
-    FastDatePicker
-  },
   data () {
     this.ctStyle = {
       'background-color': 'red'
@@ -120,11 +112,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastDatePicker from '../common/form/tools/date-picker.js'
+
 export default {
-  components: {
-    FastDatePicker
-  },
   data () {
     // listeners
     this.listeners = {
@@ -214,7 +203,7 @@ dateChange | 仅在输入框失去焦点或用户按下回车时触发（**v-mod
 import FastDatePicker from '../common/form/tools/date-picker.js'
 export default {
   components: {
-    FastDatePicker  
+    FastDatePicker
   },
   data () {
       return {
@@ -223,7 +212,7 @@ export default {
   },
   methods: {
     dateChangeEvent (value) {
-       // v-model 
+       // v-model
        console.info(value);
     }
   }

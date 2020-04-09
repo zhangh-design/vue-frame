@@ -9,12 +9,7 @@ DateTimePicker（DateTimePicker 日期时间选择器）扩展至饿了么 ‘ D
 
 #### 用法
 
-```
-import FastDateTimePicker from '../common/form/tools/date-time-picker.js'
-components: {
-  FastDateTimePicker
-}
-```
+全局组件 `fast-date-time-picker`
 
 #### 使用表单组件（模板写法）
 
@@ -36,11 +31,8 @@ components: {
 </template>
 
 <script>
-import FastDateTimePicker from '../common/form/tools/date-time-picker.js'
+
 export default {
-  components: {
-    FastDateTimePicker
-  },
   data () {
     return {
         value: new Date(),
@@ -108,11 +100,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastDateTimePicker from '../common/form/tools/date-time-picker.js'
+
 export default {
-  components: {
-    FastDateTimePicker
-  },
   data () {
     // listeners
     this.listeners = {

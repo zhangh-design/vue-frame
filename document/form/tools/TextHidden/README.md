@@ -9,12 +9,7 @@ TextHidden（TextHidden 密码输入框）扩展至饿了么 ‘Input 按钮’�
 
 #### 用法
 
-```
-import FastTextHidden from '../common/form/tools/text-hidden.js'
-components: {
-  FastTextHidden
-}
-```
+全局组件 `fast-text-hidden`
 
 #### 使用表单组件（模板写法）
 
@@ -28,11 +23,8 @@ components: {
 </template>
 
 <script>
-import FastTextHidden from '../common/form/tools/text-hidden.js'
+
 export default {
-  components: {
-    FastTextHidden
-  },
   data () {
     return {
       value: '1001'

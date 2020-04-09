@@ -6,12 +6,7 @@ TextInput（input输入框控件）扩展至饿了么 ‘Input 输入框’。
 
 #### 用法
 
-```
-import FastTextInput from '../common/form/tools/text-input.js'
-components: {
-  FastTextInput
-}
-```
+全局组件 `fast-text-input`
 
 #### 使用表单组件（模板写法）
 
@@ -34,11 +29,8 @@ components: {
 </template>
 
 <script>
-import FastTextInput from '../common/form/tools/text-input.js'
+
 export default {
-  components: {
-    FastTextInput
-  },
   data () {
     this.ctCls = {
       bbb: true
@@ -130,11 +122,8 @@ Tips：`slotNode`和`listeners`属性的使用。
 </template>
 
 <script>
-import FastTextInput from '../common/form/tools/text-input.js'
+
 export default {
-  components: {
-    FastTextInput
-  },
   data () {
     // slots
     this.slotNode = {
@@ -266,7 +255,7 @@ slotType 属性只有在①和②都没有定义的时候才会起作用。
             slotNode: {
               prepend: {
                 template: '<a>名称：</a>'
-              }  
+              }
             }
         }
     }

@@ -7,12 +7,7 @@ Checkbox（Checkbox 多选框）扩展至饿了么 ‘Checkbox 多选框’。
 
 #### 用法
 
-```
-import FastCheckbox from '../common/form/tools/checkbox.js'
-components: {
-  FastCheckbox
-}
-```
+全局组件 `fast-checkbox`
 
 #### 使用表单组件（模板写法）
 
@@ -47,11 +42,7 @@ components: {
 </template>
 
 <script>
-import FastCheckbox from '../common/form/tools/checkbox.js'
 export default {
-  components: {
-    FastCheckbox
-  },
   data () {
     this.ctStyle = {
       'background-color': 'red'
@@ -139,12 +130,7 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastCheckbox from '../common/form/tools/checkbox.js'
-
 export default {
-  components: {
-    FastCheckbox
-  },
   data () {
     this.listeners = {
       change: (value) => {
@@ -239,7 +225,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

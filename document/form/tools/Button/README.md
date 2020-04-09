@@ -6,12 +6,7 @@ Button（Button 按钮）扩展至饿了么 ‘Button 按钮’。
 
 #### 用法
 
-```
-import FastButton from '../common/form/tools/button.js'
-components: {
-  FastButton
-}
-```
+全局组件`fast-button`
 
 #### 使用表单组件（模板写法）
 
@@ -39,11 +34,7 @@ components: {
 </template>
 
 <script>
-import FastButton from '../common/form/tools/button.js'
 export default {
-  components: {
-    FastButton
-  },
   data () {
     this.ctStyle = {
       'background-color': 'red'
@@ -85,7 +76,7 @@ Tips: 对象写法必须在 Form 表单控件中才有效。
     }
 },
 slotNode: {
-  template: '<em>取消</em>'    
+  template: '<em>取消</em>'
 }
 }
 ```
@@ -111,11 +102,7 @@ Tips: `slotNode`和`listeners`属性的使用。
 </template>
 
 <script>
-import FastButton from '../common/form/tools/button.js'
 export default {
-  components: {
-    FastButton
-  },
   data () {
     // 主要是 listeners 对象的使用 ，其它参数没有区别
     this.listeners={
@@ -197,7 +184,7 @@ methods: {
 ```
 
 - `slotNode` 属性
- 
+
 这个属性用于传递`html`结构的内容到按钮中，作用和`text`属性是一样的，只是`text`属性无法传递`html`结构的内容。
 
 如果我们的写法是 `对象写法` 的话如果要传递`html`结构的字符到控件中这样只能使用`slotNode`属性。

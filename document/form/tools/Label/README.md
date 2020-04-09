@@ -5,12 +5,7 @@ Label（Label 普通文本标签）。
 
 #### 用法
 
-```
-import FastLabel from '../common/form/tools/label.js'
-components: {
-  FastLabel
-}
-```
+全局组件 `fast-label`
 
 #### 使用表单组件（模板写法）
 
@@ -28,11 +23,8 @@ components: {
 </template>
 
 <script>
-import FastLabel from '../common/form/tools/label.js'
+
 export default {
-  components: {
-    FastLabel
-  },
   data () {
     return {
       isRender: true,
@@ -87,11 +79,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastLabel from '../common/form/tools/label.js'
+
 export default {
-  components: {
-    FastLabel
-  },
   data () {
     // listeners
     this.listeners = {

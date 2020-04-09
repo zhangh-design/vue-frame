@@ -7,12 +7,7 @@ ColorPicker（ColorPicker 颜色选择器）扩展至饿了么 ‘ColorPicker �
 
 #### 用法
 
-```
-import FastColor from '../common/form/tools/color.js'
-components: {
-  FastColor
-}
-```
+全局组件 `fast-color`
 
 #### 使用表单组件（模板写法）
 
@@ -35,12 +30,7 @@ components: {
 </template>
 
 <script>
-import FastColor from '../common/form/tools/color.js'
-
 export default {
-  components: {
-    FastColor
-  },
   data () {
     this.ctStyle = {
       'background-color': 'red'
@@ -102,12 +92,8 @@ Tips：`listeners`属性的使用。
 </template>
 
 <script>
-import FastColor from '../common/form/tools/color.js'
 
 export default {
-  components: {
-    FastColor
-  },
   data () {
     this.listeners = {
       change: this.changeEvent,
@@ -182,7 +168,7 @@ data () {
       }
     }
     return {
-        
+
     }
 },
 methods: {

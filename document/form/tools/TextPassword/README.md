@@ -9,12 +9,7 @@ TextPassword（TextPassword 密码输入框）扩展至饿了么 ‘Input 按钮
 
 #### 用法
 
-```
-import FastTextPassword from '../common/form/tools/text-password.js'
-components: {
-  FastTextPassword
-}
-```
+全局组件 `fast-text-password`
 
 #### 使用表单组件（模板写法）
 
@@ -34,11 +29,8 @@ components: {
 </template>
 
 <script>
-import FastTextPassword from '../common/form/tools/text-password.js'
+
 export default {
-  components: {
-    FastTextPassword
-  },
   data () {
     return {
       value: '123456'
@@ -94,11 +86,8 @@ Tips：`slotNode`和`listeners`属性的使用。
 </template>
 
 <script>
-import FastTextPassword from '../common/form/tools/text-password.js'
+
 export default {
-  components: {
-    FastTextPassword
-  },
   data () {
     // slots
     this.slotNode = {
