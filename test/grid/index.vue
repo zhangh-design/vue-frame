@@ -36,8 +36,8 @@
         <tbar-panel :row="row" />
       </template>
       <!-- 详情面板 -->
-      <template v-slot:detail>
-        <span>详情面板</span>
+      <template v-slot:detailScope="row">
+        <detail-panel :row="row" />
       </template>
     </fast-grid>
     <p />
@@ -54,15 +54,15 @@
 </template>
 
 <script>
-// import FastGrid from '../common/grid/index.js'
 import searchPanel from './search.vue'
 import tbarPanel from './tbar.vue'
+import detailPanel from './detail.vue'
 
 export default {
   components: {
-    // FastGrid
     searchPanel,
-    tbarPanel
+    tbarPanel,
+    detailPanel
   },
   data () {
     this.api = 'user/readPage'
