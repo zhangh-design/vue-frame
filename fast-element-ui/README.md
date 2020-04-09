@@ -2,7 +2,7 @@
 
 **说明：**
 
-`fast-element-ui`组件库框架项目使用 gulp+webpack 构建，gulp负责打包组件库中的主题样式文件，webpack负责打包各个js、vue结尾的组件文件（目前组件库只有这两种文件，并且打包也只支持这两种后缀的文件如果有其它后缀的文件引入请扩展 gulpfile.js和webpack的loader）。
+`fast-element-ui`组件库框架项目使用 gulp+webpack 构建，gulp负责打包组件库中的主题样式文件，webpack负责打包各个js、vue结尾的组件文件（目前组件库只有这两种文件，并且打包也只支持这两种后缀的文件如果有其它后缀的文件引入请扩展 gulpfile.js 和 webpack 的 loader ）。
 
 **使用：**
 
@@ -10,7 +10,7 @@
 
 **npm指令：**
 
-启动开发模式下的编译，由webpack-dev-server启动运行项目
+启动开发模式下的编译，由 webpack-dev-server 启动运行项目
 
 ```
 npm run dev
@@ -28,7 +28,7 @@ npm run build
 npm run build:theme
 ```
 
-启动开发模式下的编译，由browsersync启动运行项目
+启动开发模式下的编译，由 browsersync 启动运行项目
 
 ```
 npm run gulp-dev
