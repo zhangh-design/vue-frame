@@ -3,7 +3,6 @@
     class="fast-border-container"
     :style="{border: drawBorder}"
   >
-  <p>测试vue文件gulp的watch函数</p>
     <el-header
       :height="northHeight"
       :style="{padding}"
