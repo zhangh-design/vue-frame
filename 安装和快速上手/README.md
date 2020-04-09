@@ -68,4 +68,11 @@ new Vue({
 注意：
 
 - element-ui 请使用[->官网](https://element.eleme.cn/#/zh-CN/component/quickstart#an-xu-yin-ru)上的按需引入方式。
-- fast-element-ui 暂时不支持按需引入。
+- fast-element-ui 支持按需引入。
+
+以 按钮组件 `fast-button` 为例说明按需引入方式：
+
+```
+import { FastButton } from 'fast-element-ui'
+import 'fast-element-ui/lib/theme-default/fast-button.css'
+```
