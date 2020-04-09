@@ -50,6 +50,14 @@ cnpm install axios-api-query --save
 }
 ```
 
+使用示例：
+
+**注意：**
+
+`fast-grid`的所有子组件都可以通过 `inject` 属性注入 名为 `getFastGrid` 的Grid组件实例对象（包括我们通过插槽定义的 查询栏、工具栏、详情面板）。
+
+详情面板插槽子组件还可以通过`inject` 属性注入 名为 `getFastElDialog` 的弹框组件实例对象。
+
 ```
 <template>
   <div style="height: 500px;">
@@ -89,8 +97,8 @@ cnpm install axios-api-query --save
         <tbar-panel :row="row" />
       </template>
       <!-- 详情面板 -->
-      <template v-slot:detail>
-        <span>详情面板</span>
+      <template v-slot:detailScope="row">
+        <detail-panel :row="row" />
       </template>
     </fast-grid>
     <p />
@@ -109,11 +117,13 @@ cnpm install axios-api-query --save
 <script>
 import searchPanel from './search.vue'
 import tbarPanel from './tbar.vue'
+import detailPanel from './detail.vue'
 
 export default {
   components: {
     searchPanel,
-    tbarPanel
+    tbarPanel,
+    detailPanel
   },
   data () {
     this.api = 'user/readPage'
@@ -325,19 +335,28 @@ loadGrid | 刷新table组件，保留在当前页 |  |
 
 #### Grid Slot
 
+**注意：**
+
+插槽内的组件可以通过 `inject` 输入注入 名为 `getFastGrid`的 Grid 列表组件的实例对象。
+
 name | 说明
 ---|---
 search | 查询栏 位于表格数据的上面
 tbar | 工具栏 位于查询栏下面和数据表格上面
-detail | 双击详情页插槽，会以`el-dialog`弹框的形式展示
 
 #### Grid Scoped Slot
+
+**注意：**
+
+插槽内的组件可以通过 `inject` 输入注入 名为 `getFastGrid`的 Grid 列表组件的实例对象。
+
+详情面板插槽子组件还可以通过`inject` 属性注入 名为 `getFastElDialog` 的弹框组件实例对象。
 
 name | 参数 | 说明
 ---|---|---
 searchScope | row | 查询栏 位于表格数据的上面
 tbarScope | row | 工具栏 位于查询栏下面和数据表格上面
-detailScope | row | 双击详情页插槽，会以`el-dialog`弹框的形式展示
+detailScope | row | 双击详情页插槽，会以`el-dialog`弹框的形式展示（请看附录 7）
 
 #### 单项数据流 tableAttributes（props）
 注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 [->Table Attributes](https://element.eleme.cn/#/zh-CN/component/table#table-attributes)
@@ -686,3 +705,88 @@ methods: {
     }
 }
 ```
+
+**7.**
+
+详情面板，作用域插槽`detailScope`的使用方式：
+
+##### Methods
+
+这里提供的方法需要使用 `inject` 注入的 `getFastElDialog` 属性来进行操作，修改的是弹出框组件。
+
+方法名 | 说明 | 参数 | 类型
+---|---|---|---
+setTitle | 修改标题 | title | String
+setProps | [修改弹框组件`el-dialog`的props属性参数](https://element.eleme.cn/#/zh-CN/component/dialog#attributes) | coverProps | Object
+close | 关闭弹框 |  |
+
+使用示例：
+
+父组件 （Grid 列表）
+
+```
+<fast-grid
+    ref="fast-grid"
+    :is-show-index="true"
+    :select-mode="false"
+    :is-show-pagination="true"
+    :api="api"
+>
+    <!-- 详情面板 -->
+    <template v-slot:detailScope="row">
+      <detail-panel :row="row" />
+    </template>
+</fast-grid>
+
+<script>
+export default {
+    // ...
+}
+</script>
+```
+
+detail.vue （详情面板）
+
+```
+<template>
+  <div>
+    {{ row }}
+  </div>
+</template>
+
+<script>
+
+export default {
+  inject: ['getFastGrid', 'getFastElDialog'],
+  props: {
+    row: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  watch: {
+    'row.name': {
+      handler () {
+        // 修改弹框的标题
+        console.log('row.name ', this.row.name);
+        this.getFastElDialog.setTitle(this.row.name)
+      },
+      immediate: true
+    }
+  },
+  data () {
+    return {
+    }
+  },
+  created () {},
+  methods: {}
+}
+</script>
+
+<style></style>
+
+```
+
+
