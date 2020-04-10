@@ -34,6 +34,7 @@
     >
       <slot name="south" />
     </el-footer>
+    <slot name="default" />
   </el-container>
 </template>
 
@@ -47,7 +48,7 @@ export default {
     },
     borderStyle: {
       type: String,
-      default: '1px solid #EBEBEB'
+      default: '1px solid #81ADF7'
     },
     padding: {
       type: String,
