@@ -2,8 +2,6 @@
 /**
  * Table 表格组件
  */
-import Vue from 'vue'
-import FastMenu from '../../menu/index.js'
 import _omit from 'lodash/omit'
 import _map from 'lodash/map'
 import _get from 'lodash/get'
@@ -80,13 +78,6 @@ const FastGridTable = {
         return {}
       }
     },
-    // 行右键菜单栏
-    menu: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
     // Table Attributes
     tableAttributes: {
       type: Object,
@@ -99,7 +90,6 @@ const FastGridTable = {
     this.curQueryParams = {}
     this.loading = null
     this.currentRows = [] // 当前选中行集
-    this.ctxMenu = null // 右键菜单menu
     this.DetailVNode = null // 详情窗口
     return {
       currentRow: {}, // 当前选中行
@@ -226,10 +216,6 @@ const FastGridTable = {
     this.getFastGrid.setTableEl(this)
   },
   beforeDestroy () {
-    if (this.ctxMenu != null) {
-      this.ctxMenu.removeMenuNode()
-      this.ctxMenu = null
-    }
     if (this.DetailVNode != null) {
       this.$emit('destroyDialog')
     }
@@ -246,95 +232,9 @@ const FastGridTable = {
       if (_has(this.getFastGrid.$listeners, 'row-dblclick')) {
         this.getFastGrid.$emit('row-dblclick', row, column, event)
       } else {
-        // 默认 el-dialog 打开弹框详情页
-        if (this.DetailVNode === null && !_isNil(this.getFastGrid.$scopedSlots.detailScope)) {
-          const dialogContainer = document.createElement('div')
-          dialogContainer.setAttribute('id', `fast-grid-dialog-container-${this.getFastGrid._uid}`)
-          this.getFastGrid.$el.appendChild(dialogContainer)
-
-          const me = this
-          const DialogVNode = Vue.extend({
-            provide () {
-              return {
-                getFastGrid: me.getFastGrid,
-                getFastElDialog: this
-              }
-            },
-            data () {
-              return {
-                title: '详情',
-                render: true,
-                visible: true,
-                coverDialogProps: {}
-              }
-            },
-            created () {
-              me.$on('destroyDialog', () => {
-                this.render = false
-                setTimeout(() => {
-                  this.$destroy()
-                }, 0)
-              })
-            },
-            destroyed () {
-              me.DetailVNode = null
-            },
-            methods: {
-              /**
-               * @desc 修改弹框的标题
-               * @param {String} title - 标题
-               */
-              setTitle (title = '') {
-                this.title = title
-              },
-              /**
-               * @desc 修改弹框组件`el-dialog`的props属性参数
-               * @param {*} coverProps
-               */
-              setProps (coverProps = {}) {
-                for (const [key, value] of Object.entries(coverProps)) {
-                  this.$set(this.coverDialogProps, key, value)
-                }
-              },
-              /**
-               * @desc 关闭弹框
-               */
-              close () {
-                this.visible = false
-              }
-            },
-            render (h) {
-              if (!this.render) {
-                return h()
-              }
-              return h(
-                'el-dialog',
-                {
-                  class: {
-                    [`fast-grid-el-dialog-${me.getFastGrid._uid}`]: true
-                  },
-                  props: {
-                    title: this.title,
-                    visible: this.visible,
-                    modal: true,
-                    center: false,
-                    ...this.coverDialogProps
-                  },
-                  on: {
-                    'update:visible': () => {
-                      this.visible = false
-                    }
-                  }
-                },
-                [me.getFastGrid.$scopedSlots.detailScope(me.currentRow)]
-              )
-            }
-          })
-          this.DetailVNode = new DialogVNode()
-          this.DetailVNode.$mount(dialogContainer)
-        } else if (this.DetailVNode !== null && !_isNil(this.getFastGrid.$scopedSlots.detailScope)) {
-          this.DetailVNode.$data.visible = true
-        }
+        // 其它可能需要扩展的逻辑
+        // 显示详情弹框
+        this.getFastGrid.$emit('update:dialogVisible', true)
       }
     },
     /**
@@ -359,13 +259,10 @@ const FastGridTable = {
       if (_has(this.getFastGrid.$listeners, 'row-contextmenu')) {
         this.getFastGrid.$emit('row-contextmenu', row, column, event)
       } else {
-        if (!_isEmpty(this.menu)) {
-          if (_isNil(this.ctxMenu)) {
-            this.ctxMenu = new FastMenu()
-          }
-          this.ctxMenu.add(this.menu)
-          this.ctxMenu.showAt(event.pageX, event.pageY)
-        }
+        this.getFastGrid.updateContextMenuSelectedRecord(row, column)
+        const contentMenuEl = this.getFastGrid.$refs[`context-menu-container-${this.getFastGrid._uid}`];
+        contentMenuEl.setAttribute('style', 'display: block;position:absolute;top:' + event.pageY + 'px;left:' + event.pageX + 'px;z-index:100;')
+        // this.getFastGrid.$children[0].$slots.default[0].data.scopedSlots.bbb(row)
         event.preventDefault()
         event.stopPropagation()
       }
@@ -378,9 +275,7 @@ const FastGridTable = {
      * @param {*} event - 点击事件对象
      */
     _rowClickEvent (row, column, event) {
-      if (!_isNil(this.ctxMenu)) {
-        this.clearContextmenu()
-      }
+      this.clearContextmenu()
       if (!this.selectMode) {
         this.currentRow = row
       }
@@ -534,11 +429,10 @@ const FastGridTable = {
      * @method
      */
     clearContextmenu () {
-      if (this.ctxMenu != null) {
-        this.ctxMenu.removeMenuNode()
-        setTimeout(() => {
-          this.ctxMenu = null
-        }, 0);
+      const contentMenuEl = this.getFastGrid.$refs[`context-menu-container-${this.getFastGrid._uid}`]
+      if (contentMenuEl.style.display !== 'none') {
+        contentMenuEl.setAttribute('style', 'display: none;')
+        this.getFastGrid.updateContextMenuSelectedRecord()
       }
     },
     /**
