@@ -107,6 +107,11 @@ const FastGrid = {
     isDisplay: {
       type: Boolean,
       default: true
+    },
+    // 控制详情页窗口 显示/隐藏
+    dialogVisible: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -121,6 +126,8 @@ const FastGrid = {
     }
     return {
       currentRow: {}, // 当前选中行
+      contextMenuRow: {}, // 右键点击行
+      contextMenuColumn: {}, // 右键点击列
       currentPage: _get(this.paginationAttributes, 'currentPage', 1), // 当前页数
       pageSize: _get(this.paginationAttributes, 'pageSize', 30), // 每页显示条目个数
       total: 0 // 总条目数
@@ -323,6 +330,16 @@ const FastGrid = {
     updateCurrentRow (row) {
       this.currentRow = row
       this.$emit(this.events.onChangeRowEvent, row)
+    },
+    /**
+     * @desc 更新右键选中记录 行和列
+     * @param {Object} row - 选中行
+     * @param {Object} column - 选中列
+     * @method
+     */
+    updateContextMenuSelectedRecord (row = {}, column = {}) {
+      this.contextMenuRow = row
+      this.contextMenuColumn = column
     }
   },
   render (h) {
@@ -393,6 +410,7 @@ const FastGrid = {
             isShowIndex: this.isShowIndex,
             selectMode: this.selectMode,
             loadFilter: this.loadFilter,
+            dialogVisible: this.dialogVisible,
             tableAttributes: this.tableAttributes
           }
         }),
@@ -401,11 +419,44 @@ const FastGrid = {
           props: {
             currentPage: this.currentPage,
             pageSize: this.pageSize,
-            paginationAttributes: _omit(this.paginationAttributes, ['currentPage', 'pageSize', 'isShowPagination']),
+            paginationAttributes: _omit(this.paginationAttributes, [
+              'currentPage',
+              'pageSize',
+              'isShowPagination'
+            ]),
             total: this.total,
             isShowPagination: this.isShowPagination
           }
-        })
+        }),
+        h(
+          'div',
+          {
+            ref: `fast-grid-expand-container-${this._uid}`,
+            class: { [`fast-grid-expand-container-${this._uid}`]: true },
+            slot: 'default'
+          },
+          [
+            h(
+              'div',
+              {
+                ref: `context-menu-container-${this._uid}`,
+                style: {
+                  display: 'none'
+                }
+              },
+              [
+                this.$scopedSlots.contextMenuScope({
+                  row: this.contextMenuRow,
+                  column: this.contextMenuColumn
+                })
+              ]
+            ),
+            h(
+              'div',
+              [this.$scopedSlots.detailScope(this.currentRow)]
+            )
+          ]
+        )
       ]
     )
   }
