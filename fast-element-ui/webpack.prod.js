@@ -4,18 +4,18 @@
 /**
  * @file 生产环境打包
  */
-const webpack = require("webpack");
+const webpack = require('webpack');
 // const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const path = require("path");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const path = require('path');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const LodashWebpackPlugin = require('lodash-webpack-plugin')
 const Glob = require('glob')
 
 /**
  * @desc 读取 packages 目录中所有组件文件拼装成多入口 entry
  */
-const setMPA = function(){
+const setMPA = function () {
   const entry = {}
   const entryFiles = Glob.sync('./packages/*/index.js')
   Object.keys(entryFiles).map((index) => {
@@ -29,33 +29,33 @@ const setMPA = function(){
 const { entry } = setMPA();
 
 module.exports = {
-  context: path.resolve(__dirname, "./"),
-  mode: "production",
+  context: path.resolve(__dirname, './'),
+  mode: 'production',
   performance: {
     hints: false
   },
   entry: {
-    "fast-element-ui.common": "./packages/index.js",
+    'fast-element-ui.common': './packages/index.js',
     ...entry
   },
   output: {
-    filename: "[name].js",
-    chunkFilename: "[name].chunk.js",
-    path: path.resolve(__dirname, "./lib"),
-    library: "FastElementUI", //指定库的全局变量
-    libraryExport: "default", //默认即使用LoaderApiLibrary为插件的全局变量名
-    libraryTarget: "umd" //支持库引入的方式 AMD、CJS、EM module、CDN
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
+    path: path.resolve(__dirname, './lib'),
+    library: 'FastElementUI', // 指定库的全局变量
+    libraryExport: 'default', // 默认即使用LoaderApiLibrary为插件的全局变量名
+    libraryTarget: 'umd' // 支持库引入的方式 AMD、CJS、EM module、CDN
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: "vue-loader"
+        loader: 'vue-loader'
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       }
     ]
   },
@@ -74,4 +74,3 @@ module.exports = {
     }) */
   ]
 };
-

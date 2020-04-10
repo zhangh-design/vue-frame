@@ -7,18 +7,18 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const LodashWebpackPlugin = require('lodash-webpack-plugin')
 
 module.exports = {
-  context: path.resolve(__dirname, "../"),
+  context: path.resolve(__dirname, '../'),
   mode: 'production',
   entry: {
-    "fast-element-ui.common": "./packages/index.js"
+    'fast-element-ui.common': './packages/index.js'
   },
   output: {
     // path: path.resolve(__dirname, "../lib-src/vendor/FastElementUI/"),
-    path: path.resolve(__dirname, "../lib-src/"),
-    filename: "[name].js",
+    path: path.resolve(__dirname, '../lib-src/'),
+    filename: '[name].js',
     library: 'FastElementUI',
     libraryExport: 'default',
-    libraryTarget: "umd"
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
@@ -28,6 +28,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader'
       },
       {
@@ -40,10 +41,10 @@ module.exports = {
       {
         test: /\.(jpg|png|gif|jpeg)$/,
         use: {
-          loader: "url-loader",
+          loader: 'url-loader',
           options: {
-            name: "[name]-[hash:8].[ext]",
-            outputPath: "images/",
+            name: '[name]-[hash:8].[ext]',
+            outputPath: 'images/',
             limit: 10000,
             esModule: false
           }
