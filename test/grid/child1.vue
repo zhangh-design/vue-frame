@@ -2,6 +2,7 @@
   <div style="height: 500px;">
     <fast-grid
       ref="fast-grid"
+      v-if="gridIf"
       :is-show-index="true"
       :select-mode="false"
       :is-show-pagination="true"
@@ -9,6 +10,8 @@
       :columns="columns"
       :table-attributes="tableAttributes"
       :pagination-attributes="paginationAttributes"
+      :load-filter="loadFilter"
+      :dialog-visible.sync="dialogVisible"
       @onLoadSuccess="onLoadSuccess"
       @onLoadError="onLoadError"
       @onBeforeLoad="onBeforeLoad"
@@ -37,7 +40,17 @@
       </template>
       <!-- 详情面板 -->
       <template v-slot:detailScope="row">
-        <detail-panel :row="row" />
+        <el-dialog
+          :title="row.name"
+          :visible.sync="dialogVisible"
+        >
+          <detail-panel :row="row" />
+        </el-dialog>
+      </template>
+      <!--右键菜单-->
+      <template v-slot:contextMenuScope="{row, column}">
+        <fast-button :text="row.name" />
+        <!--<span>{{ row }}</span>-->
       </template>
     </fast-grid>
     <p />
@@ -159,25 +172,9 @@ export default {
         }
       ]
     }
-    this.menu = [
-      {
-        text: '分析',
-        listeners: {
-          click: event => {
-            console.info('分析')
-          }
-        }
-      },
-      {
-        text: '同步',
-        listeners: {
-          click: event => {
-            console.info('同步')
-          }
-        }
-      }
-    ]
-    return {}
+    return {
+      dialogVisible: false,
+    }
   },
   created () {},
   methods: {
