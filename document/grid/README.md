@@ -70,6 +70,7 @@ cnpm install axios-api-query --save
       :columns="columns"
       :table-attributes="tableAttributes"
       :pagination-attributes="paginationAttributes"
+      :dialog-visible.sync="dialogVisible"
       @onLoadSuccess="onLoadSuccess"
       @onLoadError="onLoadError"
       @onBeforeLoad="onBeforeLoad"
@@ -98,7 +99,17 @@ cnpm install axios-api-query --save
       </template>
       <!-- 详情面板 -->
       <template v-slot:detailScope="row">
-        <detail-panel :row="row" />
+        <el-dialog
+          :title="row.name"
+          :visible.sync="dialogVisible"
+        >
+          <detail-panel :row="row" />
+        </el-dialog>
+      </template>
+      <!--右键菜单-->
+      <template v-slot:contextMenuScope="{row, column}">
+        <fast-button :text="row.name" />
+        <!--<span>{{ row }}</span>-->
       </template>
     </fast-grid>
     <p />
@@ -220,25 +231,9 @@ export default {
         }
       ]
     }
-    this.menu = [
-      {
-        text: '分析',
-        listeners: {
-          click: event => {
-            console.info('分析')
-          }
-        }
-      },
-      {
-        text: '同步',
-        listeners: {
-          click: event => {
-            console.info('同步')
-          }
-        }
-      }
-    ]
-    return {}
+    return {
+      dialogVisible: false
+    }
   },
   created () {},
   methods: {
@@ -301,6 +296,7 @@ isReloadGrid | — | Boolean | true | 第一次载入时是否自动刷新列表
 isShowPagination | — | Boolean | true | 显示分页数量选择器
 isRender | — | Boolean | true | 渲染组件（v-if）
 isDisplay | — | Boolean | true | 显示组件（v-show）
+dialogVisible | — | Boolean | false | 控制详情页窗口显示/隐藏，支持 .sync 修饰符
 
 #### Grid Events
 注意：这里只展示了自定义扩展后的 事件，Grid控件的原生事件继承于`Table Events`例如：`select`、`row-dblclick`等，更多原生事件请查看 [->
@@ -356,7 +352,8 @@ name | 参数 | 说明
 ---|---|---
 searchScope | row | 查询栏 位于表格数据的上面
 tbarScope | row | 工具栏 位于查询栏下面和数据表格上面
-detailScope | row | 双击详情页插槽，会以`el-dialog`弹框的形式展示（请看附录 7）
+contextMenuScope | row, column | 行上右键在鼠标指针右侧显示的面板
+detailScope | row | 双击详情页插槽（请看附录 7）
 
 #### 单项数据流 tableAttributes（props）
 注意：这里只展示了自定义扩展后的 `prop` 属性，更多原有属性请查看 [->Table Attributes](https://element.eleme.cn/#/zh-CN/component/table#table-attributes)
@@ -710,37 +707,75 @@ methods: {
 
 详情面板，作用域插槽`detailScope`的使用方式：
 
-##### Methods
+注意：
 
-这里提供的方法需要使用 `inject` 注入的 `getFastElDialog` 属性来进行操作，修改的是弹出框组件。
-
-方法名 | 说明 | 参数 | 类型
----|---|---|---
-setTitle | 修改标题 | title | String
-setProps | [修改弹框组件`el-dialog`的props属性参数](https://element.eleme.cn/#/zh-CN/component/dialog#attributes) | coverProps | Object
-close | 关闭弹框 |  |
+- 如果在Grid列表组件中传入了自定义的`row-dblclick`事件处理那么弹框的默认显示和隐藏将会无效。
+- `dialog-visible` 属性必须，并且必须以`.sync`形式，否则无法在 Grid 组件中控制弹框的显示和隐藏。
 
 使用示例：
 
 父组件 （Grid 列表）
 
 ```
-<fast-grid
-    ref="fast-grid"
-    :is-show-index="true"
-    :select-mode="false"
-    :is-show-pagination="true"
-    :api="api"
->
-    <!-- 详情面板 -->
-    <template v-slot:detailScope="row">
-      <detail-panel :row="row" />
-    </template>
-</fast-grid>
+<template>
+  <div>
+    <fast-grid
+        ref="fast-grid"
+        :is-show-index="true"
+        :select-mode="false"
+        :is-show-pagination="true"
+        :api="api"
+        :dialog-visible.sync="dialogVisible"
+    >
+        <!-- 详情面板 -->
+        <template v-slot:detailScope="row">
+            <el-dialog
+              :title="row.name"
+              :visible.sync="dialogVisible"
+            >
+              <detail-panel :row="row" />
+            </el-dialog>
+        </template>
+    </fast-grid>
+
+    <!--如果自定义了 row-dbclick 事件，那么 就要自己在处理函数中控制 dialogVisible 的值，dialog-visible 属性也不用在传递-->
+    <fast-grid
+        ref="fast-grid"
+        :is-show-index="true"
+        :select-mode="false"
+        :is-show-pagination="true"
+        :api="api"
+        @row-dblclick="onRowDblclick"
+        v-if="gridIf"
+    >
+        <!-- 详情面板 -->
+        <template v-slot:detailScope="row">
+            <el-dialog
+              :title="row.name"
+              :visible.sync="dialogVisible_1"
+            >
+              <detail-panel :row="row" />
+            </el-dialog>
+        </template>
+    </fast-grid>
+  </div>
+</template>
 
 <script>
 export default {
     // ...
+    data(){
+      return {
+        dialogVisible: false,
+        dialogVisible_1: false,
+        gridIf: false
+      }
+    },
+    methods: {
+        onRowDblclick(){
+            this.dialogVisible_1 = true;
+        }
+    }
 }
 </script>
 ```
@@ -757,7 +792,7 @@ detail.vue （详情面板）
 <script>
 
 export default {
-  inject: ['getFastGrid', 'getFastElDialog'],
+  inject: ['getFastGrid'],
   props: {
     row: {
       type: Object,
@@ -766,27 +801,12 @@ export default {
       }
     }
   },
-  watch: {
-    'row.name': {
-      handler () {
-        // 修改弹框的标题
-        console.log('row.name ', this.row.name);
-        this.getFastElDialog.setTitle(this.row.name)
-      },
-      immediate: true
-    }
-  },
   data () {
-    return {
-    }
-  },
-  created () {},
-  methods: {}
+    return {}
+  }
 }
 </script>
 
 <style></style>
 
 ```
-
-
