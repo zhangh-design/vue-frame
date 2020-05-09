@@ -247,7 +247,9 @@ const FastTextInput = {
         class: _get(this.$props, 'ctCls', {}),
         style,
         attrs: {
-          id: this.$attrs.id
+          id: this.$attrs.id,
+          autofocus: this.$attrs.autofocus,
+          placeholder: this.$attrs.placeholder
         },
         props: {
           ...this.$attrs,

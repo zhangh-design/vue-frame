@@ -193,7 +193,7 @@ const FastTextInput = {
     _createChildSlotElement (h) {
       const nodes = []
       const appendSlotNode = function (b) {
-        for (let [key, elem] of Object.entries(b)) {
+        for (const [key, elem] of Object.entries(b)) {
           nodes.push(
             h('template', { slot: key }, [
               h('div', { domProps: { innerHTML: elem.template } })
@@ -202,7 +202,7 @@ const FastTextInput = {
         }
       }
       const appendSlot = function (b) {
-        for (let [key, vNode] of Object.entries(b)) {
+        for (const [key, vNode] of Object.entries(b)) {
           nodes.push(h('template', { slot: key }, vNode))
         }
       }
@@ -247,7 +247,9 @@ const FastTextInput = {
         class: _get(this.$props, 'ctCls', {}),
         style,
         attrs: {
-          id: this.$attrs.id
+          id: this.$attrs.id,
+          autofocus: this.$attrs.autofocus,
+          placeholder: this.$attrs.placeholder
         },
         props: {
           ...this.$attrs,
