@@ -119,9 +119,14 @@ const FastPanel = {
     )
   }
 }
-FastPanel.install = function (Vue) {
+FastPanel.install = function (Vue, ElComponents) {
   // 用于按需加载的时候独立使用
   devConsole(FastPanel.name + '----install----')
+  if (ElComponents) {
+    for (let i = 0; i < ElComponents.length; i++) {
+      Vue.use(ElComponents[i])
+    }
+  }
   Vue.component(FastPanel.name, FastPanel)
 }
 export default FastPanel
