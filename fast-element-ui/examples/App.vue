@@ -1,31 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" v-if="true" />
-    <HelloWorld msg="Welcome to Your Vue.js App" v-if="false" />
-    <fast-button text="测试-按钮" v-if="false" />
-    <span v-if="false">{{value}}</span>
+    <img
+      alt="Vue logo"
+      src="./assets/logo.png"
+      v-if="true"
+    >
+    <HelloWorld
+      msg="Welcome to Your Vue.js App"
+      v-if="false"
+    />
+    <fast-button
+      text="测试-按钮"
+      v-if="false"
+    />
+    <span v-if="false">{{ value }}</span>
     <fast-panel v-if="false" />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import FastPanel from "./components/panel.vue";
+import HelloWorld from './components/HelloWorld.vue';
+import FastPanel from './components/panel.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     HelloWorld,
     FastPanel
   },
-  data() {
+  data () {
     return {
       value: 1
     }
   },
-  mounted() {
-    console.log('process.env.NODE_ENV ',process.env.NODE_ENV);
-    console.log('process.env.BASE_URL ',process.env.BASE_URL);
+  mounted () {
+    console.log('process.env.NODE_ENV ', process.env.NODE_ENV);
+    console.log('process.env.BASE_URL ', process.env.BASE_URL);
   }
 };
 </script>

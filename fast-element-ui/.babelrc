@@ -12,6 +12,13 @@
         "useESModules": false,
         "version": "^7.9.0"
       }
+    ],
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
     ]
   ]
 }

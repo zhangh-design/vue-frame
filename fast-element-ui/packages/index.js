@@ -6,6 +6,7 @@
  */
 import _get from 'lodash/get'
 import _merge from 'lodash/merge'
+import _assign from 'lodash/assign'
 import { devConsole } from './helper/util.js'
 // Form表单子控件
 import FastColor from './color/index.js'
@@ -66,11 +67,11 @@ const allComponents = {
  * @param {Object} Vue
  * @param {options} [options={globalOptions: {}}] - 选项配置
  */
-function install(Vue, options = { globalOptions: {} }) {
+function install (Vue, options = { globalOptions: {} }) {
   // 组件
-  for (const [key, value] of Object.entries(allComponents)) {
-    devConsole('all import '+key)
-    Vue.component(key, value)
+  for (const key in allComponents) {
+    devConsole('all import ' + key)
+    Vue.component(key, allComponents[key])
   }
 
   // 全局配置参数
@@ -87,9 +88,10 @@ function install(Vue, options = { globalOptions: {} }) {
   })
 }
 
-export const exportComponent = { install, ...allComponents }
+export const exportComponent = _assign({}, install, allComponents) // { install, ...allComponents }
 
-export default {
+export default _assign({}, install, allComponents)
+/* {
   install,
   ...allComponents
-}
+} */

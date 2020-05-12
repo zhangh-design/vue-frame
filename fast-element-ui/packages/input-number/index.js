@@ -7,6 +7,8 @@ import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastInputNumber = {
   name: 'FastInputNumber',
@@ -70,7 +72,7 @@ const FastInputNumber = {
     _blurEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'blur')
+        _has(this.listeners, 'blur')
       ) {
         this.listeners.blur(event)
         return
@@ -85,7 +87,7 @@ const FastInputNumber = {
     _focusEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'focus')
+        _has(this.listeners, 'focus')
       ) {
         this.listeners.focus(event)
         return
@@ -100,7 +102,7 @@ const FastInputNumber = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -116,7 +118,7 @@ const FastInputNumber = {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'inputNumberChange')
+        _has(this.listeners, 'inputNumberChange')
       ) {
         this.listeners.inputNumberChange(value)
         return
@@ -144,7 +146,7 @@ const FastInputNumber = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {}))
     if (this.width !== 'auto') {
       style.width = this.width
     }
@@ -159,7 +161,7 @@ const FastInputNumber = {
       attrs: {
         id: this.$attrs.id
       },
-      props: { ...this.$attrs, value: this.vValue },
+      props: _assign({}, this.$attrs, { value: this.vValue }),
       on: {
         blur: this._blurEvent,
         focus: this._focusEvent,
@@ -173,9 +175,12 @@ const FastInputNumber = {
     })
   }
 }
-FastInputNumber.install = function (Vue) {
+FastInputNumber.install = function (Vue, ELInputNumber) {
   // 用于按需加载的时候独立使用
   devConsole(FastInputNumber.name + '----install----')
+  if (ELInputNumber) {
+    Vue.use(ELInputNumber)
+  }
   Vue.component(FastInputNumber.name, FastInputNumber)
 }
 export default FastInputNumber

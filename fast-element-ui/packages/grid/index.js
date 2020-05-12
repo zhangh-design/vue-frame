@@ -7,7 +7,6 @@ import FastTable from './table/index.js'
 import FastGridSearch from './search/index.js'
 import FastTbar from './tbar/index.js'
 import FastGridPagination from './pagination/index.js'
-import _isEqual from 'lodash/isEqual'
 import _has from 'lodash/has'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
@@ -344,12 +343,12 @@ const FastGrid = {
   },
   render (h) {
     // v-if
-    if (_isEqual(this.isRender, false)) {
+    if (!this.isRender) {
       return h()
     }
     const style = {}
     // v-show
-    if (_isEqual(this.isDisplay, false)) {
+    if (!this.isDisplay) {
       _set(style, 'display', 'none')
     }
     return h(
@@ -461,9 +460,15 @@ const FastGrid = {
     )
   }
 }
-FastGrid.install = function (Vue) {
+FastGrid.install = function (Vue, ELComponents = []) {
+  // TableColumn，Table，Pagination
   // 用于按需加载的时候独立使用
   devConsole(FastGrid.name + '----install----')
+  if (ELComponents && ELComponents.length > 0) {
+    for (let i = 0; i < ELComponents.length; i++) {
+      Vue.use(ELComponents[i])
+    }
+  }
   Vue.component(FastGrid.name, FastGrid)
 }
 export default FastGrid

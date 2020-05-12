@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 /**
  * @desc 生产模式打包
  */

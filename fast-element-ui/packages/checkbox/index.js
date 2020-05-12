@@ -8,6 +8,8 @@ import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
 import _omit from 'lodash/omit'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastCheckbox = {
   name: 'FastCheckbox',
@@ -61,18 +63,26 @@ const FastCheckbox = {
   },
   computed: {
     checkboxItems () {
-      return this.options.map(option => {
+      var nodes = []
+      for (let i = 0; i < this.options.length; i++) {
+        const option = this.options[i]
+        nodes.push(this.$createElement(
+          'el-checkbox',
+          {
+            props: _assign({}, _omit(option, 'value'), { label: option.value })
+          },
+          [option.label]
+        ))
+      }
+      /* return this.options.map(option => {
         return this.$createElement(
           'el-checkbox',
           {
-            props: {
-              ..._omit(option, 'value'),
-              label: option['value']
-            }
+            props: _assign({}, _omit(option, 'value'), { label: option.value })
           },
-          [option['label']]
+          [option.label]
         )
-      })
+      }) */
     }
   },
   watch: {
@@ -93,12 +103,12 @@ const FastCheckbox = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
-        this.listeners.change([...value])
+        this.listeners.change(_assign([], value))
         return
       }
-      this.$emit('change', [...value])
+      this.$emit('change', _assign([], value))
     },
     /**
      * @desc 当绑定值变化时触发的事件 v-model
@@ -109,13 +119,13 @@ const FastCheckbox = {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'checkboxChange')
+        _has(this.listeners, 'checkboxChange')
       ) {
-        this.listeners.checkboxChange([...value])
+        this.listeners.checkboxChange(_assign([], value))
         return
       }
       // v-model
-      this.$emit('checkboxChange', [...value])
+      this.$emit('checkboxChange', _assign([], value)) // [...value]
     }
   },
   render (h) {
@@ -123,7 +133,7 @@ const FastCheckbox = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {})) // { ..._get(this.$props, 'ctStyle', {}) }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -137,10 +147,7 @@ const FastCheckbox = {
         attrs: {
           id: this.$attrs.id
         },
-        props: {
-          ...this.$attrs,
-          value: this.vValue
-        },
+        props: _assign({}, this.$attrs, { value: this.vValue }),
         on: {
           change: this._changeEvent,
           input: value => {
@@ -154,9 +161,12 @@ const FastCheckbox = {
   }
 }
 
-FastCheckbox.install = function (Vue) {
+FastCheckbox.install = function (Vue, ELCheckbox) {
   // 用于按需加载的时候独立使用
   devConsole(FastCheckbox.name + '----install----')
+  if (ELCheckbox) {
+    Vue.use(ELCheckbox)
+  }
   Vue.component(FastCheckbox.name, FastCheckbox)
 }
 

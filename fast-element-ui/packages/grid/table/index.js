@@ -3,7 +3,7 @@
  * Table 表格组件
  */
 import _omit from 'lodash/omit'
-import _map from 'lodash/map'
+// import _map from 'lodash/map'
 import _get from 'lodash/get'
 import _has from 'lodash/has'
 import _filter from 'lodash/filter'
@@ -99,7 +99,60 @@ const FastGridTable = {
   computed: {
     // 构建列 el-table-column
     tableColumnNodes () {
-      return _map(this.columns, elem => {
+      const nodes = []
+      for (let i = 0; i < this.columns.length; i++) {
+        const elem = this.columns[i]
+        let filterMethod = null
+        if (_has(elem, 'filters') && _has(elem, 'filter-method')) {
+          filterMethod = function (value, row, column) {
+            return elem['filter-method'](value, row, column)
+          }
+        }
+        if (_has(elem, 'filters') && !_has(elem, 'filter-method')) {
+          filterMethod = function (value, row, column) {
+            const property = column.property
+            return row[property] === value
+          }
+        }
+        const node = this.$createElement('el-table-column', {
+          props: _assign({}, _omit(elem, ['name', 'render', 'renderHeader', 'prop']), { prop: elem.name, 'filter-method': filterMethod }),
+          scopedSlots: {
+            default: ({ row, column, $index }) => {
+              // 自定义列的内容
+              if (_has(elem, 'render')) {
+                return elem.render(
+                  this.$createElement,
+                  row,
+                  column.property,
+                  $index
+                )
+              } else if (_has(elem, 'slotNode')) {
+                const renders = []
+                for (let m = 0; m < elem.slotNode.length; m++) {
+                  const render = elem.slotNode[m]
+                  renders.push(render)
+                }
+                return renders
+                /* return _map(elem.slotNode, ({ render }) => {
+                  return render(this.$createElement)
+                }) */
+              } else {
+                return row[column.property]
+              }
+            },
+            header: ({ column, $index }) => {
+              // 自定义表头的内容 不能和属性 `render-header`一起使用否则起效的是`render-header`
+              if (_has(elem, 'renderHeader')) {
+                return elem.renderHeader(this.$createElement, column, $index)
+              } else {
+                return column.label
+              }
+            }
+          }
+        })
+        nodes.push(node)
+      }
+      /* return _map(this.columns, elem => {
         let filterMethod = null
         if (_has(elem, 'filters') && _has(elem, 'filter-method')) {
           filterMethod = function (value, row, column) {
@@ -146,7 +199,7 @@ const FastGridTable = {
             }
           }
         })
-      })
+      }) */
     },
     // Table Slot
     appendNode () {
@@ -369,9 +422,13 @@ const FastGridTable = {
         })
       })
       if (!_isEmpty(selectRows)) {
-        for (const selectRow of selectRows.values()) {
+        for (const key in selectRows) {
+          const selectRow = selectRows[key]
           this.$refs[`${this._uid}-fast-table`].toggleRowSelection(selectRow)
         }
+        /* for (const selectRow of selectRows.values()) {
+          this.$refs[`${this._uid}-fast-table`].toggleRowSelection(selectRow)
+        } */
       }
     },
     /**
@@ -417,9 +474,13 @@ const FastGridTable = {
      */
     clearFilter (columnKey = []) {
       if (!_isEmpty(columnKey)) {
-        for (const elem of columnKey.values()) {
+        for (const key in columnKey) {
+          const elem = columnKey[key]
           this.$refs[`${this._uid}-fast-table`].clearFilter(elem)
         }
+        /* for (const elem of columnKey.values()) {
+          this.$refs[`${this._uid}-fast-table`].clearFilter(elem)
+        } */
       } else {
         this.$refs[`${this._uid}-fast-table`].clearFilter()
       }
@@ -465,14 +526,28 @@ const FastGridTable = {
       {
         ref: `${this._uid}-fast-table`,
         class: _get(this.$props, 'ctCls', {}),
-        style: { ..._get(this.$props, 'ctStyle', {}), width: '100%' },
-        props: {
-          ...this.tableAttributes,
+        style: _assign({}, _get(this.$props, 'ctStyle', {}), { width: '100%' }),
+        props: _assign({}, this.tableAttributes, {
           height: '100%', // 实现固定表头的表格，数据可滚动
           highlightCurrentRow: this._highlightCurrentRow,
           data: this.tableData
-        },
-        on: {
+        }),
+        on: _assign(
+          {},
+          _omit(this.getFastGrid.$listeners, [
+            'selection-change',
+            'row-contextmenu',
+            'row-dblclick',
+            'row-click'
+          ]),
+          {
+            'selection-change': this._selectionChangeEvent,
+            'row-contextmenu': this._rowContextmenuEvent,
+            'row-dblclick': this._rowDblclickEvent,
+            'row-click': this._rowClickEvent
+          }
+        )
+        /* on: {
           ..._omit(this.getFastGrid.$listeners, [
             'selection-change',
             'row-contextmenu',
@@ -483,7 +558,7 @@ const FastGridTable = {
           'row-contextmenu': this._rowContextmenuEvent,
           'row-dblclick': this._rowDblclickEvent,
           'row-click': this._rowClickEvent
-        }
+        } */
       },
       [
         this.indexColumn,
@@ -491,7 +566,7 @@ const FastGridTable = {
         this.tableColumnNodes,
         h('template', { slot: 'append' }, this.appendNode)
       ]
-    )
+    );
   }
 }
 export default FastGridTable

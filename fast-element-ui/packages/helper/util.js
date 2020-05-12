@@ -7,3 +7,11 @@ export const devConsole = function (message) {
     console.info(message);
   }
 };
+
+export const _isEmpty = function (obj) {
+  // eslint-disable-next-line prefer-const
+  for (let key in obj) {
+    return false
+  }
+  return true
+}

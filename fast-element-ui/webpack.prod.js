@@ -12,6 +12,10 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const LodashWebpackPlugin = require('lodash-webpack-plugin')
 const Glob = require('glob')
 
+function resolve (dir) {
+  return path.join(__dirname, '.', dir)
+}
+
 /**
  * @desc 读取 packages 目录中所有组件文件拼装成多入口 entry
  */
@@ -46,6 +50,14 @@ module.exports = {
     libraryExport: 'default', // 默认即使用LoaderApiLibrary为插件的全局变量名
     libraryTarget: 'umd' // 支持库引入的方式 AMD、CJS、EM module、CDN
   },
+  resolve: {
+    extensions: ['.js', '.vue', '.css', '.less'],
+    alias: {
+      '@element-ui': resolve('./element-ui'),
+      'element-ui': resolve('./element-ui')
+    }
+  },
+  externals: { vue: 'vue' },
   module: {
     rules: [
       {

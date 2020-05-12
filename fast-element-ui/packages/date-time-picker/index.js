@@ -18,9 +18,12 @@ const FastDateTimePicker = {
     }
   }
 }
-FastDateTimePicker.install = function (Vue) {
+FastDateTimePicker.install = function (Vue, ELDatePicker) {
   // 用于按需加载的时候独立使用
   devConsole(FastDateTimePicker.name + '----install----')
+  if (ELDatePicker) {
+    Vue.use(ELDatePicker)
+  }
   Vue.component(FastDateTimePicker.name, FastDateTimePicker)
 }
 export default FastDateTimePicker
