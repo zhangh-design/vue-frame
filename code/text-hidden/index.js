@@ -14,9 +14,12 @@ const FastTextHidden = {
     }
   }
 }
-FastTextHidden.install = function (Vue) {
+FastTextHidden.install = function (Vue, ElInput) {
   // 用于按需加载的时候独立使用
   devConsole(FastTextHidden.name + '----install----')
+  if (ElInput) {
+    Vue.use(ElInput)
+  }
   Vue.component(FastTextHidden.name, FastTextHidden)
 }
 export default FastTextHidden

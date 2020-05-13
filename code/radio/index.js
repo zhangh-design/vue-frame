@@ -8,6 +8,8 @@ import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
 import _omit from 'lodash/omit'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastRadio = {
   name: 'FastRadio',
@@ -58,18 +60,28 @@ const FastRadio = {
   },
   computed: {
     radioItems () {
-      return this.options.map(option => {
+      const nodes = []
+      for (let i = 0; i < this.options.length; i++) {
+        const option = this.options[i]
+        const node = this.$createElement(
+          'el-radio',
+          {
+            props: _assign({}, _omit(option, 'value'), { label: option.value })
+          },
+          [option.label]
+        )
+        nodes.push(node)
+      }
+      return nodes
+      /* return this.options.map(option => {
         return this.$createElement(
           'el-radio',
           {
-            props: {
-              ..._omit(option, 'value'),
-              label: option['value']
-            }
+            props: _assign({}, _omit(option, 'value'), { label: option.value })
           },
-          [option['label']]
+          [option.label]
         )
-      })
+      }) */
     }
   },
   watch: {
@@ -90,7 +102,7 @@ const FastRadio = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -106,7 +118,7 @@ const FastRadio = {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'radioChange')
+        _has(this.listeners, 'radioChange')
       ) {
         this.listeners.radioChange(value)
         return
@@ -120,7 +132,7 @@ const FastRadio = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {}))
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -134,10 +146,7 @@ const FastRadio = {
         attrs: {
           id: this.$attrs.id
         },
-        props: {
-          ...this.$attrs,
-          value: this.vValue
-        },
+        props: _assign({}, this.$attrs, { value: this.vValue }),
         on: {
           change: this._changeEvent,
           input: value => {
@@ -150,9 +159,12 @@ const FastRadio = {
     )
   }
 }
-FastRadio.install = function (Vue) {
+FastRadio.install = function (Vue, ElRadio) {
   // 用于按需加载的时候独立使用
   devConsole(FastRadio.name + '----install----')
+  if (ElRadio) {
+    Vue.use(ElRadio)
+  }
   Vue.component(FastRadio.name, FastRadio)
 }
 export default FastRadio

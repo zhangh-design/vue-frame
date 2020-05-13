@@ -7,6 +7,8 @@ import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastDatePicker = {
   name: 'FastDatePicker',
@@ -75,7 +77,7 @@ const FastDatePicker = {
     _blurEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'blur')
+        _has(this.listeners, 'blur')
       ) {
         this.listeners.blur(event)
         return
@@ -90,7 +92,7 @@ const FastDatePicker = {
     _focusEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'focus')
+        _has(this.listeners, 'focus')
       ) {
         this.listeners.focus(event)
         return
@@ -105,7 +107,7 @@ const FastDatePicker = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -121,7 +123,7 @@ const FastDatePicker = {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'dateChange')
+        _has(this.listeners, 'dateChange')
       ) {
         this.listeners.dateChange(value)
         return
@@ -139,15 +141,15 @@ const FastDatePicker = {
   },
   render (h) {
     // v-if
-    if (_isEqual(this.isRender, false)) {
+    if (!this.isRender) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {})) // { ..._get(this.$props, 'ctStyle', {}) }
     if (this.width !== 'auto') {
       style.width = this.width
     }
     // v-show
-    if (_isEqual(this.isDisplay, false)) {
+    if (!this.isDisplay) {
       _set(style, 'display', 'none')
     }
     return h(
@@ -159,12 +161,17 @@ const FastDatePicker = {
         attrs: {
           id: this.$attrs.id
         },
-        props: {
+        props: _assign({}, this.$attrs, {
+          type: this.type,
+          format: this.format,
+          value: this.vValue
+        }),
+        /* props: {
           ...this.$attrs,
           type: this.type,
           format: this.format,
           value: this.vValue
-        },
+        }, */
         on: {
           change: this._changeEvent,
           blur: this._blurEvent,
@@ -180,9 +187,12 @@ const FastDatePicker = {
     )
   }
 }
-FastDatePicker.install = function (Vue) {
+FastDatePicker.install = function (Vue, ELDatePicker) {
   // 用于按需加载的时候独立使用
   devConsole(FastDatePicker.name + '----install----')
+  if (ELDatePicker) {
+    Vue.use(ELDatePicker)
+  }
   Vue.component(FastDatePicker.name, FastDatePicker)
 }
 export default FastDatePicker

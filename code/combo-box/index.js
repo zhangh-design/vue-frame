@@ -9,6 +9,7 @@ import _set from 'lodash/set'
 import _isEqual from 'lodash/isEqual'
 import _isEmpty from 'lodash/isEmpty'
 import _assign from 'lodash/assign'
+import _has from 'lodash/has'
 
 const FastComboBox = {
   name: 'FastComboBox',
@@ -84,15 +85,27 @@ const FastComboBox = {
     }
   },
   data () {
-    this.vQueryParams = (_isEmpty(this.api)) ? {} : { ...this.queryParams };
-    this.vValue = this.multiple ? [...this.value] : this.value;
+    this.vQueryParams = (_isEmpty(this.api)) ? {} : _assign({}, this.queryParams);
+    this.vValue = this.multiple ? _assign([], this.value) : this.value;
     return {
-      vOptions: (_isEmpty(this.api)) ? [...this.options] : []
+      vOptions: (_isEmpty(this.api)) ? _assign([], this.options) : []
     }
   },
   computed: {
     elOptions () {
-      const elOptions = this.vOptions.map(option => {
+      const elOptions = []
+      for (let i = 0; i < this.vOptions.length; i++) {
+        const option = this.vOptions[i]
+        elOptions.push(this.$createElement('el-option', {
+          props: {
+            key: option[this.valueField],
+            label: option[this.displayField],
+            value: option[this.valueField],
+            disabled: option.disabled
+          }
+        }))
+      }
+      /* const elOptions = this.vOptions.map(option => {
         return this.$createElement('el-option', {
           props: {
             key: option[this.valueField],
@@ -101,17 +114,23 @@ const FastComboBox = {
             disabled: option.disabled
           }
         })
-      })
+      }) */
       return elOptions
     },
     slotElement () {
       const nodes = []
       if (!_isEmpty(this.slotNode)) {
-        for (let [key, elem] of Object.entries(this.slotNode)) {
+        for (const key in this.slotNode) {
+          const elem = this.slotNode[key]
           nodes.push(this.$createElement('template', { slot: key }, [
             this.$createElement('span', { domProps: { innerHTML: elem.template } })
           ]))
         }
+        /* for (const [key, elem] of Object.entries(this.slotNode)) {
+          nodes.push(this.$createElement('template', { slot: key }, [
+            this.$createElement('span', { domProps: { innerHTML: elem.template } })
+          ]))
+        } */
       }
       return nodes
     }
@@ -153,10 +172,10 @@ const FastComboBox = {
      * @param {Array} value - 选中项
      */
     _changeEvent (value) {
-      const v = (this.multiple) ? [...value] : value;
+      const v = (this.multiple) ? _assign([], value) : value;
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(v)
         return
@@ -171,7 +190,7 @@ const FastComboBox = {
     _visibleChangeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'visible-change')
+        _has(this.listeners, 'visible-change')
       ) {
         this.listeners['visible-change'](value)
         return
@@ -186,7 +205,7 @@ const FastComboBox = {
     _removeTag (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'remove-tag')
+        _has(this.listeners, 'remove-tag')
       ) {
         this.listeners['remove-tag'](value)
         return
@@ -200,7 +219,7 @@ const FastComboBox = {
     _clearEvent () {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'clear')
+        _has(this.listeners, 'clear')
       ) {
         this.listeners.clear()
         return
@@ -215,7 +234,7 @@ const FastComboBox = {
     _blurEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'blur')
+        _has(this.listeners, 'blur')
       ) {
         this.listeners.blur(event)
         return
@@ -230,7 +249,7 @@ const FastComboBox = {
     _focusEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'focus')
+        _has(this.listeners, 'focus')
       ) {
         this.listeners.focus(event)
         return
@@ -243,10 +262,10 @@ const FastComboBox = {
      * @param {Array} value - 选中项
      */
     _selectChangeEvent (value) {
-      const v = (this.multiple) ? [...value] : value;
+      const v = (this.multiple) ? _assign([], value) : value;
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'selectChange')
+        _has(this.listeners, 'selectChange')
       ) {
         this.listeners.selectChange(v)
         return
@@ -271,7 +290,7 @@ const FastComboBox = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {})) // { ..._get(this.$props, 'ctStyle', {}) }
     if (this.width !== 'auto') {
       style.width = this.width
     }
@@ -288,7 +307,7 @@ const FastComboBox = {
         attrs: {
           id: this.$attrs.id
         },
-        props: { ...this.$attrs, value: this.vValue },
+        props: _assign({}, this.$attrs, { value: this.vValue }), // { ...this.$attrs, value: this.vValue },
         on: {
           change: this._changeEvent,
           'visible-change': this._visibleChangeEvent,
@@ -307,9 +326,12 @@ const FastComboBox = {
     )
   }
 }
-FastComboBox.install = function (Vue) {
+FastComboBox.install = function (Vue, ELSelect) {
   // 用于按需加载的时候独立使用
   devConsole(FastComboBox.name + '----install----')
+  if (ELSelect) {
+    Vue.use(ELSelect)
+  }
   Vue.component(FastComboBox.name, FastComboBox)
 }
 export default FastComboBox

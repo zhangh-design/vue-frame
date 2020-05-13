@@ -3,12 +3,12 @@
  * @desc input 输入框控件
  */
 import { devConsole } from '../helper/util.js'
-import _get from 'lodash/get'
-import _set from 'lodash/set'
-import _isNil from 'lodash/isNil'
-import _isEqual from 'lodash/isEqual'
-import _isEmpty from 'lodash/isEmpty'
 import _omit from 'lodash/omit'
+import _includes from 'lodash/includes'
+import _has from 'lodash/has'
+import _keys from 'lodash/keys'
+import _assign from 'lodash/assign'
+import _isEmpty from 'lodash/isEmpty'
 
 const FastTextInput = {
   name: 'FastTextInput',
@@ -29,7 +29,7 @@ const FastTextInput = {
       type: String,
       default: 'both',
       validator: function (value) {
-        return ['none', 'both', 'horizontal', 'vertical'].includes(value)
+        return _includes(['none', 'both', 'horizontal', 'vertical'], value)
       }
     },
     width: {
@@ -60,7 +60,7 @@ const FastTextInput = {
       type: String,
       default: 'prepend',
       validator: function (value) {
-        return ['prefix', 'suffix', 'prepend', 'append'].includes(value)
+        return _includes(['prefix', 'suffix', 'prepend', 'append'], value)
       }
     },
     slotNode: {
@@ -95,8 +95,8 @@ const FastTextInput = {
      */
     _blurEvent (event) {
       if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'blur')
+        this.listeners &&
+        _has(this.listeners, 'blur')
       ) {
         this.listeners.blur(event)
         return
@@ -110,8 +110,8 @@ const FastTextInput = {
      */
     _focusEvent (event) {
       if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'focus')
+        this.listeners &&
+        _has(this.listeners, 'focus')
       ) {
         this.listeners.focus(event)
         return
@@ -125,8 +125,8 @@ const FastTextInput = {
      */
     _changeEvent (value) {
       if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        this.listeners &&
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -139,8 +139,8 @@ const FastTextInput = {
      */
     _clearEvent () {
       if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'clear')
+        this.listeners &&
+        _has(this.listeners, 'clear')
       ) {
         this.listeners.clear()
         return
@@ -155,8 +155,8 @@ const FastTextInput = {
     _inputChangeEvent (value) {
       // 事件监听
       if (
-        _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'inputChange')
+        this.listeners &&
+        _has(this.listeners, 'inputChange')
       ) {
         this.listeners.inputChange(value)
         return
@@ -193,38 +193,49 @@ const FastTextInput = {
     _createChildSlotElement (h) {
       const nodes = []
       const appendSlotNode = function (b) {
-        for (const [key, elem] of Object.entries(b)) {
+        for (const key in b) {
+          const elem = b[key]
           nodes.push(
             h('template', { slot: key }, [
               h('div', { domProps: { innerHTML: elem.template } })
             ])
           )
         }
+        /* for (const [key, elem] of Object.entries(b)) {
+          nodes.push(
+            h('template', { slot: key }, [
+              h('div', { domProps: { innerHTML: elem.template } })
+            ])
+          )
+        } */
       }
       const appendSlot = function (b) {
-        for (const [key, vNode] of Object.entries(b)) {
+        for (const key in b) {
+          const vNode = b[key]
           nodes.push(h('template', { slot: key }, vNode))
         }
+        /* for (const [key, vNode] of Object.entries(b)) {
+          nodes.push(h('template', { slot: key }, vNode))
+        } */
       }
       if (
         _isEmpty(this.$slots) &&
         _isEmpty(this.slotNode) &&
-        _isEqual(_isEmpty(this.label), false)
+        !_isEmpty(this.label)
       ) {
         nodes.push(h('template', { slot: this.slotType }, this.label))
         return nodes
       }
       if (
-        _isEqual(_isEmpty(this.$slots), false) &&
-        _isEqual(_isEmpty(this.slotNode), false)
+        !_isEmpty(this.$slots) && !_isEmpty(this.slotNode)
       ) {
         appendSlot(this.$slots)
-        appendSlotNode(_omit(this.slotNode, Object.keys(this.$slots)))
+        appendSlotNode(_omit(this.slotNode, _keys(this.$slots)))
       }
-      if (_isEmpty(this.$slots) && _isEqual(_isEmpty(this.slotNode), false)) {
+      if (_isEmpty(this.$slots) && !_isEmpty(this.slotNode)) {
         appendSlotNode(this.slotNode)
       }
-      if (_isEmpty(this.slotNode) && _isEqual(_isEmpty(this.$slots), false)) {
+      if (_isEmpty(this.slotNode) && !_isEmpty(this.$slots)) {
         appendSlot(this.$slots)
       }
       return nodes
@@ -232,31 +243,31 @@ const FastTextInput = {
   },
   render (h) {
     // v-if
-    if (_isEqual(this.isRender, false)) {
+    if (!this.isRender) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}), width: this.width }
+    // const style = { ...this.$props.ctStyle, width: this.width }
+    const style = _assign({}, this.$props.ctStyle, { width: this.width })
     // v-show
-    if (_isEqual(this.isDisplay, false)) {
-      _set(style, 'display', 'none')
+    if (!this.isDisplay) {
+      style.display = 'none'
     }
     return h(
       'el-input',
       {
         ref: `${this._uid}-el-input-ref`,
-        class: _get(this.$props, 'ctCls', {}),
+        class: this.$props.ctCls || {},
         style,
         attrs: {
           id: this.$attrs.id,
           autofocus: this.$attrs.autofocus,
           placeholder: this.$attrs.placeholder
         },
-        props: {
-          ...this.$attrs,
+        props: _assign({}, this.$attrs, {
           type: this.type,
           resize: this.resize,
           value: this.vValue
-        },
+        }),
         on: {
           blur: this._blurEvent,
           focus: this._focusEvent,
@@ -273,9 +284,13 @@ const FastTextInput = {
     )
   }
 }
-FastTextInput.install = function (Vue) {
+
+FastTextInput.install = function (Vue, ElInput) {
   // 用于按需加载的时候独立使用
   devConsole(FastTextInput.name + '----install----')
+  if (ElInput) {
+    Vue.use(ElInput)
+  }
   Vue.component(FastTextInput.name, FastTextInput)
 }
 export default FastTextInput

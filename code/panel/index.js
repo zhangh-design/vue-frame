@@ -8,6 +8,7 @@ import _set from 'lodash/set'
 import _isEqual from 'lodash/isEqual'
 import _isArray from 'lodash/isArray'
 import _isEmpty from 'lodash/isEmpty'
+import _assign from 'lodash/assign'
 
 const FastPanel = {
   name: 'FastPanel',
@@ -47,8 +48,7 @@ const FastPanel = {
     }
   },
   mounted () {
-    console.info('aaaaaa ', this.layout)
-    console.info('slot.north', this.$slots)
+    // console.info('slot.north', this.$slots)
   },
   methods: {
     /**
@@ -64,18 +64,31 @@ const FastPanel = {
      */
     add (panels = []) {
       const nodes = _isArray(panels) ? panels : [panels]
-      for (let panel of nodes.values()) {
+      for (let i = 0; i < nodes.length; i++) {
+        const panel = nodes[i]
         this.childElements.push(
           this.$createElement(_get(panel, 'component', null),
             {
               class: _get(panel, 'class', {}),
-              style: { ..._get(panel, 'style', {}), height: '100%' },
+              style: _assign({}, _get(panel, 'style', {}), { height: '100%' }),
               props: _get(panel, 'props', {}),
               slot: _get(panel, 'slot', 'default')
             },
             _has(panel, 'children') ? _get(panel, 'children', []) : []
           ))
       }
+      /* for (const panel of nodes.values()) {
+        this.childElements.push(
+          this.$createElement(_get(panel, 'component', null),
+            {
+              class: _get(panel, 'class', {}),
+              style: _assign({}, _get(panel, 'style', {}), { height: '100%' }),
+              props: _get(panel, 'props', {}),
+              slot: _get(panel, 'slot', 'default')
+            },
+            _has(panel, 'children') ? _get(panel, 'children', []) : []
+          ))
+      } */
       if (!_isEmpty(nodes)) {
         this.$forceUpdate()
       }
@@ -106,9 +119,14 @@ const FastPanel = {
     )
   }
 }
-FastPanel.install = function (Vue) {
+FastPanel.install = function (Vue, ElComponents) {
   // 用于按需加载的时候独立使用
   devConsole(FastPanel.name + '----install----')
+  if (ElComponents) {
+    for (let i = 0; i < ElComponents.length; i++) {
+      Vue.use(ElComponents[i])
+    }
+  }
   Vue.component(FastPanel.name, FastPanel)
 }
 export default FastPanel

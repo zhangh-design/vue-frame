@@ -7,6 +7,8 @@ import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastColor = {
   name: 'FastColor',
@@ -65,7 +67,7 @@ const FastColor = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-    Reflect.has(this.listeners, 'change')
+    _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -80,7 +82,7 @@ const FastColor = {
     _activeChangeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-  Reflect.has(this.listeners, 'active-change')
+  _has(this.listeners, 'active-change')
       ) {
         this.listeners['active-change'](value)
         return
@@ -96,7 +98,7 @@ const FastColor = {
     // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-      Reflect.has(this.listeners, 'colorChange')
+      _has(this.listeners, 'colorChange')
       ) {
         this.listeners.colorChange(value)
         return
@@ -110,7 +112,7 @@ const FastColor = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {})) // { ..._get(this.$props, 'ctStyle', {}) }
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -122,7 +124,7 @@ const FastColor = {
       attrs: {
         id: this.$attrs.id
       },
-      props: { ...this.$attrs, value: this.vValue },
+      props: _assign({}, this.$attrs, { value: this.vValue }), // { ...this.$attrs, value: this.vValue },
       on: {
         change: this._changeEvent,
         'active-change': this._activeChangeEvent,
@@ -136,9 +138,12 @@ const FastColor = {
   }
 }
 
-FastColor.install = function (Vue) {
+FastColor.install = function (Vue, ELColorPicker) {
   // 用于按需加载的时候独立使用
   devConsole(FastColor.name + '----install----')
+  if (ELColorPicker) {
+    Vue.use(ELColorPicker)
+  }
   Vue.component(FastColor.name, FastColor)
 }
 export default FastColor

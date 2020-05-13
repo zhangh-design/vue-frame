@@ -7,6 +7,7 @@ import _get from 'lodash/get'
 import _isEqual from 'lodash/isEqual'
 import _isEmpty from 'lodash/isEmpty'
 import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastGridPagination = {
   name: 'FastGridPagination',
@@ -63,7 +64,8 @@ const FastGridPagination = {
      */
     createPagingItemsNodes () {
       const nodes = []
-      for (let item of this.pagingItems.values()) {
+      for (let i = 0; i < this.pagingItems.length; i++) {
+        const item = this.pagingItems[i]
         const h = this.$createElement(
           'span',
           {
@@ -76,6 +78,19 @@ const FastGridPagination = {
         )
         nodes.push(h)
       }
+      /* for (const item of this.pagingItems.values()) {
+        const h = this.$createElement(
+          'span',
+          {
+            style: { 'font-size': (_has(item, 'icon') && !_isEmpty(item.icon)) ? '16px' : '12px', cursor: 'pointer' },
+            class: { [_get(item, 'icon', '')]: true },
+            attrs: { title: _get(item, 'text', '') },
+            on: _get(item, 'listeners', {})
+          },
+          (_has(item, 'icon') && !_isEmpty(item.icon)) ? null : item.text
+        )
+        nodes.push(h)
+      } */
       return nodes
     },
     /**
@@ -120,13 +135,12 @@ const FastGridPagination = {
       'el-pagination',
       {
         style,
-        props: {
-          ...this.paginationAttributes,
+        props: _assign({}, this.paginationAttributes, {
           layout: this.layout,
           total: this.total,
           currentPage: this.currentPage,
           pageSize: this.pageSize
-        },
+        }),
         on: {
           'size-change': this._sizeChangeEvent,
           'current-change': this._currentChangeEvent

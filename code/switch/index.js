@@ -7,6 +7,8 @@ import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _isEqual from 'lodash/isEqual'
 import _isNil from 'lodash/isNil'
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
 
 const FastSwitch = {
   name: 'FastSwitch',
@@ -67,7 +69,7 @@ const FastSwitch = {
     _changeEvent (value) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'change')
+        _has(this.listeners, 'change')
       ) {
         this.listeners.change(value)
         return
@@ -83,7 +85,7 @@ const FastSwitch = {
       // 事件监听
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, 'switchChange')
+        _has(this.listeners, 'switchChange')
       ) {
         this.listeners.switchChange(value)
         return
@@ -104,7 +106,7 @@ const FastSwitch = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ..._get(this.$props, 'ctStyle', {}) }
+    const style = _assign({}, _get(this.$props, 'ctStyle', {}))
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
@@ -116,7 +118,7 @@ const FastSwitch = {
       attrs: {
         id: this.$attrs.id
       },
-      props: { ...this.$attrs, value: this.vValue },
+      props: _assign({}, this.$attrs, { value: this.vValue }),
       on: {
         input: val => {
           this.vValue = val
@@ -127,9 +129,12 @@ const FastSwitch = {
     })
   }
 }
-FastSwitch.install = function (Vue) {
+FastSwitch.install = function (Vue, ELSwitch) {
   // 用于按需加载的时候独立使用
   devConsole(FastSwitch.name + '----install----')
+  if (ELSwitch) {
+    Vue.use(ELSwitch)
+  }
   Vue.component(FastSwitch.name, FastSwitch)
 }
 export default FastSwitch

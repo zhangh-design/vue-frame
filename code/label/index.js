@@ -5,6 +5,8 @@ import { devConsole } from '../helper/util.js'
 import _isNil from 'lodash/isNil'
 import _isEqual from 'lodash/isEqual'
 import _set from 'lodash/set'
+import _assign from 'lodash/assign'
+import _has from 'lodash/has'
 
 const FastLabel = {
   name: 'FastLabel',
@@ -50,7 +52,7 @@ const FastLabel = {
    * @param {*} event
    */
     _clickEvent (event) {
-      if (_isEqual(_isNil(this.listeners), false) && Reflect.has(this.listeners, 'click')) {
+      if (_isEqual(_isNil(this.listeners), false) && _has(this.listeners, 'click')) {
         this.listeners.click(event)
         return
       }
@@ -62,7 +64,7 @@ const FastLabel = {
     if (_isEqual(this.isRender, false)) {
       return h()
     }
-    const style = { ...this.labelStyle }
+    const style = _assign({}, this.labelStyle)
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')

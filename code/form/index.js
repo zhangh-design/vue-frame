@@ -151,9 +151,12 @@ const FastForm = {
     )
   }
 }
-FastForm.install = function (Vue) {
+FastForm.install = function (Vue, ELForm) {
   // 用于按需加载的时候独立使用
   devConsole(FastForm.name + '----install----')
+  if (ELForm) {
+    Vue.use(ELForm)
+  }
   Vue.component(FastForm.name, FastForm)
 }
 export default FastForm

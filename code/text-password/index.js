@@ -14,9 +14,12 @@ const FastTextPassword = {
     }
   }
 }
-FastTextPassword.install = function (Vue) {
+FastTextPassword.install = function (Vue, ElInput) {
   // 用于按需加载的时候独立使用
   devConsole(FastTextPassword.name + '----install----')
+  if (ElInput) {
+    Vue.use(ElInput)
+  }
   Vue.component(FastTextPassword.name, FastTextPassword)
 }
 export default FastTextPassword

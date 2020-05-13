@@ -2,46 +2,50 @@
 /**
  * Button 按钮
  */
-import { devConsole } from "../helper/util.js";
-import _get from "lodash/get";
-import _set from "lodash/set";
-import _isNil from "lodash/isNil";
-import _isEqual from "lodash/isEqual";
-import _isEmpty from "lodash/isEmpty";
+import { devConsole } from '../helper/util.js';
+import _get from 'lodash/get';
+import _set from 'lodash/set';
+import _isNil from 'lodash/isNil';
+import _isEqual from 'lodash/isEqual';
+import _isEmpty from 'lodash/isEmpty';
+import _has from 'lodash/has'
+import _assign from 'lodash/assign'
+import _includes from 'lodash/includes'
 
 const FastButton = {
-  name: "FastButton",
+  name: 'FastButton',
   inheritAttrs: false,
   props: {
     text: {
       type: String,
-      default: ""
+      default: ''
     },
     width: {
       type: String,
-      default: "auto"
+      default: 'auto'
     },
     ctStyle: {
       type: Object,
-      default() {
+      default () {
         return {};
       }
     },
     ctCls: {
       type: Object,
-      default() {
+      default () {
         return {};
       }
     },
     icon: {
       type: String,
-      default: ""
+      default: ''
     },
     iconPosition: {
       type: String,
-      default: "left",
-      validator: function(value) {
-        return ["left", "right"].includes(value);
+      default: 'left',
+      validator: function (value) {
+        return _includes(['left', 'right'], value)
+        // return ['left', 'right'].includes(value);
       }
     },
     slotNode: {
@@ -61,8 +65,8 @@ const FastButton = {
       default: () => {}
     }
   },
-  data() {
-    this.events = { afterClickHandler: "afterClickHandler" };
+  data () {
+    this.events = { afterClickHandler: 'afterClickHandler' };
     return {};
   },
   methods: {
@@ -71,14 +75,14 @@ const FastButton = {
      * @event FastButton#_nativeClickEvent
      * @param {*} event
      */
-    _nativeClickEvent(event) {
+    _nativeClickEvent (event) {
       if (
         _isEqual(_isNil(this.listeners), false) &&
-        Reflect.has(this.listeners, "click")
+        _has(this.listeners, 'click')
       ) {
         this.listeners.click(event);
       } else {
-        this.$emit("click", event);
+        this.$emit('click', event);
       }
       this.$emit(this.events.afterClickHandler, event);
     },
@@ -87,30 +91,30 @@ const FastButton = {
      * @param {*} h - 渲染函数
      * @method
      */
-    _createChildSlotElement(h) {
+    _createChildSlotElement (h) {
       const nodes = [];
       if (
         _isEmpty(this.slotNode) &&
         _isEmpty(this.$slots) &&
         !_isEmpty(this.text)
       ) {
-        nodes.push(h("span", this.text))
+        nodes.push(h('span', this.text))
       } else if (
         _isEmpty(this.$slots) &&
         _isEqual(_isEmpty(this.slotNode), false)
       ) {
         nodes.push(
-          h("span", { domProps: { innerHTML: this.slotNode.template } })
+          h('span', { domProps: { innerHTML: this.slotNode.template } })
         );
       } else if (_isEqual(_isEmpty(this.$slots), false)) {
-        nodes.push(h("span", { slot: "default" }, this.$slots.default));
+        nodes.push(h('span', { slot: 'default' }, this.$slots.default));
       }
-      if (this.iconPosition === "right") {
+      if (this.iconPosition === 'right') {
         nodes.push(
-          h("li", {
+          h('li', {
             class: {
               [this.icon]: true,
-              "el-icon--right": true
+              'el-icon--right': true
             }
           })
         );
@@ -118,32 +122,33 @@ const FastButton = {
       return nodes;
     }
   },
-  render(h) {
+  render (h) {
     // v-if
-    if (_isEqual(this.isRender, false)) {
+    if (!this.isRender) {
       return h();
     }
-    const style = { ..._get(this.$props, "ctStyle", {}) };
-    if (this.width !== "auto") {
+    const style = _assign({}, _get(this.$props, 'ctStyle', {})) // { ..._get(this.$props, 'ctStyle', {}) };
+    if (this.width !== 'auto') {
       style.width = this.width;
     }
     // v-show
-    if (_isEqual(this.isDisplay, false)) {
-      _set(style, "display", "none");
+    if (!this.isDisplay) {
+      _set(style, 'display', 'none');
     }
     return h(
-      "el-button",
+      'el-button',
       {
         ref: `${this._uid}-el-button-ref`,
-        class: _get(this.$props, "ctCls", {}),
+        class: _get(this.$props, 'ctCls', {}),
         style,
         attrs: {
           id: this.$attrs.id
         },
-        props: {
+        props: _assign({}, this.$attrs, { icon: this.iconPosition === 'right' ? null : this.icon }),
+        /* props: {
           ...this.$attrs,
-          icon: this.iconPosition === "right" ? null : this.icon
-        },
+          icon: this.iconPosition === 'right' ? null : this.icon
+        }, */
         nativeOn: {
           click: this._nativeClickEvent
         }
@@ -153,9 +158,12 @@ const FastButton = {
   }
 };
 
-FastButton.install = function(Vue) {
+FastButton.install = function (Vue, ELButton) {
   // 用于按需加载的时候独立使用
-  devConsole(FastButton.name + "----install----");
+  devConsole(FastButton.name + '----install----');
+  if (ELButton) {
+    Vue.use(ELButton)
+  }
   Vue.component(FastButton.name, FastButton);
 };
 
