@@ -30,6 +30,7 @@ import FastForm from './form/index.js'
 // 布局组件
 import FastBorderLayout from './border-layout/index.js'
 import FastFitLayout from './fit-layout/index.js'
+import FastDoubleWingLayout from './double-wing/index.js'
 
 // 数据表格组件
 import FastGrid from './grid/index.js'
@@ -55,6 +56,7 @@ const allComponents = {
   FastForm,
   FastBorderLayout,
   FastFitLayout,
+  FastDoubleWingLayout,
   FastGrid,
   FastPanel
 }
