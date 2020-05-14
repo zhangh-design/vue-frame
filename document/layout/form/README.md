@@ -12,7 +12,7 @@ FormLayout（表单布局）
 
 示例显示效果图：
 
-![image](http://m.qpic.cn/psc?/V12UXEll2JjLTU/S1G4*2hi*D5aPIJug2nMa.JTbTSnJc3bOHJjH8BR89be704igzdGdnCOw*P0GdFxb5jLNep10nu*8f39A6gYtdr2XKwpTpUSgCt1.p6780g!/b&bo=IwNGAQAAAAARB1c!&rf=viewer_4&t=5)
+![image](./3.jpg)
 
 #### FormLayout表单布局-单项数据流（props）
 
