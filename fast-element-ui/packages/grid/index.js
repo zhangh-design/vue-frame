@@ -11,6 +11,7 @@ import _has from 'lodash/has'
 import _get from 'lodash/get'
 import _set from 'lodash/set'
 import _omit from 'lodash/omit'
+import _merge from 'lodash/merge'
 
 const FastGrid = {
   name: 'FastGrid',
@@ -460,15 +461,38 @@ const FastGrid = {
     )
   }
 }
-FastGrid.install = function (Vue, ELComponents = []) {
+/**
+ * @typedef {Object} options - 选项配置对象
+ * @property {Object} globalOptions - 框架全局配置对象
+ */
+/**
+ * @desc 用于按需加载的时候独立使用
+ * @param {Object} Vue
+ * @param {options} [options={globalOptions: {}}] - 选项配置
+ * @param {Array} ELComponents - element 组件
+ * @example
+ * Vue.use(FastGrid, [Table, TableColumn], {globalOptions: { grid: { page: 'page', size: 'size', total: 'total' } }})
+ */
+FastGrid.install = function (Vue, ELComponents = [], options = { globalOptions: {} }) {
   // TableColumn，Table，Pagination
-  // 用于按需加载的时候独立使用
   devConsole(FastGrid.name + '----install----')
   if (ELComponents && ELComponents.length > 0) {
     for (let i = 0; i < ELComponents.length; i++) {
       Vue.use(ELComponents[i])
     }
   }
+  // 全局配置参数
+  const defaultGlobalOptions = {
+    grid: {
+      page: 'page',
+      size: 'size',
+      total: 'total',
+      data: 'data'
+    }
+  }
+  Object.defineProperty(Vue.prototype, '$fast-global-options', {
+    value: _merge({}, defaultGlobalOptions, _get(options, 'globalOptions', {}))
+  })
   Vue.component(FastGrid.name, FastGrid)
 }
 export default FastGrid
