@@ -445,16 +445,16 @@ const FastGrid = {
                 }
               },
               [
-                this.$scopedSlots.contextMenuScope({
+                _has(this.$scopedSlots, 'contextMenuScope') ? this.$scopedSlots.contextMenuScope({
                   row: this.contextMenuRow,
                   column: this.contextMenuColumn
-                })
+                }) : null
               ]
             ),
-            h(
+            _has(this.$scopedSlots, 'detailScope') ? h(
               'div',
               [this.$scopedSlots.detailScope(this.currentRow)]
-            )
+            ) : null
           ]
         )
       ]
