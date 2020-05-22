@@ -74,6 +74,7 @@ const allComponents = {
  */
 function install (Vue, options = { globalOptions: {} }) {
   // 组件
+  console.info('全局安装组件');
   for (const key in allComponents) {
     devConsole('all import ' + key)
     Vue.component(key, allComponents[key])
@@ -93,9 +94,9 @@ function install (Vue, options = { globalOptions: {} }) {
   })
 }
 
-export const exportComponent = _assign({}, install, allComponents) // { install, ...allComponents }
+export const exportComponent = _assign({}, { install: install }, allComponents) // { install, ...allComponents }
 
-export default _assign({}, install, allComponents)
+export default _assign({}, { install: install }, allComponents)
 /* {
   install,
   ...allComponents
