@@ -117,4 +117,23 @@ export default {
   /* height: 500px; */
   /* background-color: pink; */
 }
+/* .fast-g2-grid .el-tabs {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.fast-g2-grid .el-tabs .el-tabs__content{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.el-tabs--border-card>.el-tabs__content{
+  padding: 0px;
+}
+.fast-g2-grid .el-tabs .el-tabs__content .el-tab-pane{
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+} */
 </style>
