@@ -93,7 +93,7 @@ const FastGrid = {
     // 边框
     border: {
       type: Boolean,
-      default: true
+      default: false
     },
     // 是否显示分页数量选择器
     isShowPagination: {
