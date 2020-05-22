@@ -9,7 +9,7 @@
     >
       <slot name="north" />
     </el-header>
-    <el-container style="height: 100%">
+    <el-container :style="{height: this.middleHeight}">
       <el-aside
         :width="westWidth"
         :style="{padding}"
@@ -73,7 +73,22 @@ export default {
   },
   data () {
     this.desc = 'border布局，将容器分为五个区域：east、south、west、north、center'
-    return {}
+    return {
+      middleHeight: '100%'
+    }
+  },
+  created () {
+    setTimeout(() => {
+      var southHeight = 0
+      var northHeight = 0
+      if (this.$slots.south) {
+        southHeight = this.$slots.south[0].elm.offsetHeight
+      }
+      if (this.$slots.north) {
+        northHeight = this.$slots.north[0].elm.offsetHeight
+      }
+      this.middleHeight = `${this.$el.offsetHeight - southHeight - northHeight}px`
+    })
   },
   computed: {
     drawBorder () {
