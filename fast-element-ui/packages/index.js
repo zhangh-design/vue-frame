@@ -35,7 +35,7 @@ import FastDoubleWingLayout from './double-wing/index.js'
 
 // 数据表格组件
 import FastGrid from './grid/index.js'
-
+import FastG2Grid from './g2-grid/index.js'
 // 面板
 import FastPanel from './panel/index.js'
 
@@ -60,7 +60,8 @@ const allComponents = {
   FastDoubleWingLayout,
   FastGrid,
   FastPanel,
-  FastDropdown
+  FastDropdown,
+  FastG2Grid
 }
 /**
  * @typedef {Object} options - 选项配置对象
