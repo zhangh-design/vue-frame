@@ -35,7 +35,7 @@ import FastDoubleWingLayout from './double-wing/index.js'
 
 // 数据表格组件
 import FastGrid from './grid/index.js'
-
+import FastG2Grid from './g2-grid/index.js'
 // 面板
 import FastPanel from './panel/index.js'
 
@@ -60,7 +60,8 @@ const allComponents = {
   FastDoubleWingLayout,
   FastGrid,
   FastPanel,
-  FastDropdown
+  FastDropdown,
+  FastG2Grid
 }
 /**
  * @typedef {Object} options - 选项配置对象
@@ -73,6 +74,7 @@ const allComponents = {
  */
 function install (Vue, options = { globalOptions: {} }) {
   // 组件
+  console.info('全局安装组件');
   for (const key in allComponents) {
     devConsole('all import ' + key)
     Vue.component(key, allComponents[key])
@@ -92,9 +94,9 @@ function install (Vue, options = { globalOptions: {} }) {
   })
 }
 
-export const exportComponent = _assign({}, install, allComponents) // { install, ...allComponents }
+export const exportComponent = _assign({}, { install: install }, allComponents) // { install, ...allComponents }
 
-export default _assign({}, install, allComponents)
+export default _assign({}, { install: install }, allComponents)
 /* {
   install,
   ...allComponents
