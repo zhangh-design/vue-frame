@@ -9,7 +9,7 @@
     >
       <slot name="north" />
     </el-header>
-    <el-container :style="{height: this.middleHeight}">
+    <el-container :style="{height: middleHeight}">
       <el-aside
         :width="westWidth"
         :style="{padding}"
@@ -88,7 +88,7 @@ export default {
         northHeight = this.$slots.north[0].elm.offsetHeight
       }
       this.middleHeight = `${this.$el.offsetHeight - southHeight - northHeight}px`
-    })
+    }, 0)
   },
   computed: {
     drawBorder () {
