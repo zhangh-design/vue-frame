@@ -9,6 +9,8 @@ import _set from 'lodash/set'
 import _isEqual from 'lodash/isEqual'
 import _omit from 'lodash/omit'
 import _has from 'lodash/has'
+import _includes from 'lodash/includes'
+import _isEmpty from 'lodash/isEmpty'
 
 const FastTree = {
   name: 'FastTree',
@@ -104,6 +106,12 @@ const FastTree = {
       default () {
         return null
       }
+    },
+    // 是否自动展开第一层树的节点 相当于设置 :default-expanded-keys="[0]"
+    // 如果设置了 default-expanded-keys 同时 isExpandFirstPath 为 true 的话会在 default-expanded-keys 中自动添加 0
+    isExpandFirstPath: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -151,33 +159,36 @@ const FastTree = {
         if (!this.api) {
           return
         }
-        console.info('node', node)
         const params = _assign(
           {},
           this.queryParams,
           { [this.nodeKey]: _get(node, `data.${[this.nodeKey]}`) },
           this.curQueryParams
         )
-        console.info('params', params)
         this.$api[this.api]({ params: params })
           .then(resList => {
             if (this.loadFilter) {
               resList = this.loadFilter(resList)
             }
             const resData = []
+            const checkedNodes = []
             for (let i = 0; i < resList.data.length; i++) {
               const element = resList.data[i]
               element[this.props.label] = element[this.displayField]
               element[this.props.value] = element[this.valueField]
-              element.nodeIndex = i
-              element.superIndex = i
-              // element.leaf = true
+              // 设置需要默认选中的节点
+              if (_has(element, 'check') && element.check) {
+                const node = _set({}, this.nodeKey, element[this.nodeKey])
+                checkedNodes.push(node)
+              }
               resData.push(element)
             }
-            console.info('resData ', resData)
-            setTimeout(() => {
-              // 默认勾选的节点 Array
-            }, 0)
+            if (checkedNodes.length > 0) {
+              setTimeout(() => {
+                // 默认勾选的节点 Array
+                this.getTree().setCheckedNodes(checkedNodes)
+              }, 0)
+            }
             resolve(resData)
           })
           .catch(error => {
@@ -202,17 +213,67 @@ const FastTree = {
       return this.$refs[`${this._uid}-el-tree-ref`]
     },
     /**
+     * @desc 刷新某个节点
+     * @param {*} nodeData
+     * @method
+     * @private
+     */
+    refreshNode (nodeData) {
+
+    },
+    /**
+     * @desc 刷新整棵树
+     * @method
+     *
+     */
+    refresh () {
+      let node = this.getTree().getNode(0)
+      node.loading = true
+      this.loadStore(node)
+        .then(resData => {
+          this.getTree().updateKeyChildren(node.data.id, resData)
+        }).catch(error => {
+          throw new Error(error)
+        }).finally(() => {
+          node.loading = false
+        })
+    },
+    /**
+     * @desc 通过 keys 设置目前勾选的节点
+     * @method
+     * @example
+     * this.$refs['fast-tree'].setCheckedKeys([2, 5])
+     */
+    setCheckedKeys (keys = []) {
+      const defaultCheckNodes = this.getCheckedNodes()
+      if (!_isEmpty(defaultCheckNodes)) {
+        for (let i = 0; i < defaultCheckNodes.length; i++) {
+          keys.push(_get(defaultCheckNodes[i], this.nodeKey))
+        }
+      }
+      this.getTree().setCheckedKeys(keys)
+    },
+    /**
      * @desc 若节点可被选择,则返回目前被选中的节点所组成的数组
      * @method
+     * @return Array
      */
     getCheckedNodes () {
       return this.getTree().getCheckedNodes()
+    },
+    /**
+     * @desc 清空选中的节点
+     * @method
+     */
+    clearChecked () {
+      this.getTree().setCheckedKeys([])
     },
     /**
      * @desc 节点被点击时的回调
      * @param {Object} record
      * @param {*} node
      * @param {*} tree
+     * @event
      */
     nodeClick (record, node, tree) {
       if (_has(this.listeners, 'nodeClick')) {
@@ -220,6 +281,58 @@ const FastTree = {
         return
       }
       this.$emit('nodeClick', record, node, tree)
+    },
+    /**
+     * @desc 节点选中状态发生变化时的回调
+     * @param {Object} record - 节点记录
+     * @param {Boolean} checked - 节点本身是否被选中
+     * @param {Array} childCheckNodes - 节点的子树中是否有被选中的节点
+     * @event
+     */
+    checkChange (record, checked, childCheckNodes) {
+      if (_has(this.listeners, 'checkChange')) {
+        this.listeners.checkChange(record, checked, childCheckNodes)
+        return
+      }
+      this.$emit('checkChange', record, checked, childCheckNodes)
+    },
+    /**
+     * @desc 当复选框被点击的时候触发
+     * @param {Object} node - 节点对象
+     * @param {Object} treeCheckedNode - 树目前的选中状态对象
+     * @event
+     */
+    nodeBoxCheck (node, treeCheckedNode) {
+      if (_has(this.listeners, 'checkChange')) {
+        this.listeners.check(node, treeCheckedNode)
+        return
+      }
+      this.$emit('check', node, treeCheckedNode)
+    },
+    /**
+     * @desc 当前选中节点变化时触发的事件 点击节点，并不是复选框
+     * @param {Object} record - 当前节点的数据
+     * @param {Object} node - 当前节点的 Node 对象
+     * @event
+     */
+    currentChange (record, node) {
+      if (_has(this.listeners, 'currentChange')) {
+        this.listeners.currentChange(node, record, node)
+        return
+      }
+      this.$emit('currentChange', record, node)
+      // 触发v-model input事件
+      this.$emit('treeChange', record)
+    },
+    /**
+     * @desc 当某一节点被鼠标右键点击时会触发该事件
+     * @param {*} event
+     * @param {*} nodeData
+     * @param {*} node
+     */
+    nodeContextmenu (event, record, node, nodeElement) {
+      this.$emit('nodeContextmenu', event, record, node, nodeElement)
+      event.preventDefault()
     }
   },
   render (h) {
@@ -231,6 +344,18 @@ const FastTree = {
     // v-show
     if (_isEqual(this.isDisplay, false)) {
       _set(style, 'display', 'none')
+    }
+    // 自动展开第一层节点
+    let defaultExpandedKeys = []
+    if (this.isExpandFirstPath || _has(this.$attrs, 'default-expanded-keys')) {
+      if (_has(this.$attrs, 'default-expanded-keys')) {
+        defaultExpandedKeys = _assign([], this.$attrs['default-expanded-keys'])
+        if (!_includes(defaultExpandedKeys, 0)) {
+          defaultExpandedKeys.push(0)
+        }
+      } else {
+        defaultExpandedKeys = [0]
+      }
     }
     return h(
       'el-tree',
@@ -247,9 +372,16 @@ const FastTree = {
             'expand-on-click-node': false,
             'node-key': this.nodeKey
           },
-          this.$attrs
+          this.$attrs,
+          { defaultExpandedKeys }
         ),
-        on: _assign({}, this.$listeners, { 'node-click': this.nodeClick })
+        on: _assign({}, this.$listeners, {
+          'node-click': this.nodeClick, // 节点被点击时的回调
+          'check-change': this.checkChange, // 节点选中状态发生变化时的回调
+          'check': this.nodeBoxCheck, // 当复选框被点击的时候触发
+          'current-change': this.currentChange, // 当前选中节点变化时触发的事件 点击节点，并不是复选框
+          'node-contextmenu': this.nodeContextmenu // 当某一节点被鼠标右键点击时会触发该事件
+        })
       },
       []
     )
