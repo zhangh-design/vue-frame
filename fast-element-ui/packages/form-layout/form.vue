@@ -22,6 +22,7 @@
           :show-message="col.showMessage"
           :inline-message="col.inlineMessage"
           :size="col.size"
+          :class="col.itemCtCls"
         >
           <template
             v-slot:label
@@ -95,7 +96,7 @@ export default {
     rowsData () {
       const rows = []
       for (let n = 0, length = this.detail.length; n < length; n++) {
-        const row = [this.detail[n]]
+        let row = [this.detail[n]]
         let b = parseInt(this.detail[n].span)
         if (b >= this.columns) {
           // (b > this.columns) && (this.detail[m].span = b - this.columns);
@@ -112,7 +113,7 @@ export default {
           }
         }
         rows.push(row)
-        if (row.length === length || row[row.length - 1].name === this.detail[this.detail.length - 1].name) {
+        if (row.length === length || row[row.length - 1]['name'] === this.detail[this.detail.length - 1]['name']) {
           break;
         }
       }
@@ -134,7 +135,7 @@ export default {
      * @param {String} error='' - rules中定义的当前控件的验证 message 信息
      */
     _renderErrorHtml (callback = function () {}, error = '') {
-      this.$slots.default = callback(this.$createElement, error)
+      this.$slots[ 'default' ] = callback(this.$createElement, error)
     },
     /**
      * @desc 获取指定的全局表单控件
