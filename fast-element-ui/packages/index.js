@@ -25,6 +25,9 @@ import FastCheckbox from './checkbox/index.js'
 import FastButton from './button/index.js'
 import FastDropdown from './dropdown/index.js'
 
+// 树控件
+import FastTree from './tree/index.js'
+
 // 表单
 import FastForm from './form/index.js'
 
@@ -61,7 +64,8 @@ const allComponents = {
   FastGrid,
   FastPanel,
   FastDropdown,
-  FastG2Grid
+  FastG2Grid,
+  FastTree
 }
 /**
  * @typedef {Object} options - 选项配置对象

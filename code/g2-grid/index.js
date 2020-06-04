@@ -35,16 +35,16 @@ const FastG2Grid = {
           props: _assign({}, _get(slotTabs[0].data, 'attrs', {}), this.$attrs),
           on: {
             'tab-click': (tab) => {
-              this.$listeners['tabClick'](tab)
+              this.$listeners.tabClick(tab)
             },
             'tab-remove': (name) => {
-              this.$listeners['tabRemove'](name)
+              this.$listeners.tabRemove(name)
             },
             'tab-add': () => {
-              this.$listeners['tabAdd']()
+              this.$listeners.tabAdd()
             },
-            'edit': (targetName, action) => {
-              this.$listeners['edit'](targetName, action)
+            edit: (targetName, action) => {
+              this.$listeners.edit(targetName, action)
             },
             input: (value) => {
               this.$emit('input', value)
