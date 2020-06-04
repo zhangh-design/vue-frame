@@ -12,10 +12,6 @@ const FastForm = {
   name: 'FastForm',
   inheritAttrs: false,
   props: {
-    labelWidth: {
-      type: String,
-      default: '60px'
-    },
     border: {
       type: Boolean,
       default: false
