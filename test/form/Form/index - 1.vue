@@ -1,19 +1,16 @@
 <template>
-  <div style="margin: 10px 10px 10px 10px;">
-    <!-- inline-message 错误提示和控件在一行上显示，如果表单组件设置了 slotNode.error 则需要手动在样式中添加 el-form-item__error--inline -->
+  <div>
     <fast-form
       :detail="createDetail()"
       :model="form"
       :columns="columns"
       :colon="colon"
       :rules="rules"
-      :border="true"
-      :inline-message="true"
       ref="ruleForm"
-      label-width="70px"
-      label-position="right"
-      size="mini"
+      label-width="80px"
+      label-position="left"
       @validate="validateEvent"
+      size="mini"
     />
     <p />
     <button @click="doTestResponsiveMode">
@@ -39,11 +36,11 @@
 </template>
 
 <script>
-// import FastForm from '../common/form/index.js'
+import FastForm from '../common/form/index.js'
 
 export default {
   components: {
-    // FastForm
+    FastForm
   },
   data () {
     this.columns = 2
@@ -52,13 +49,7 @@ export default {
       options: [
         { label: '苹果', value: '01' },
         { label: '香蕉', value: '02' },
-        { label: '桃子', value: '03' },
-        { label: '草莓', value: '04' },
-        { label: '木瓜', value: '05' },
-        { label: '椰子', value: '06' },
-        { label: '柿子', value: '07' },
-        { label: '枇杷', value: '08' },
-        { label: '橄榄', value: '09' }
+        { label: '桃子', value: '03' }
       ]
     }
     this.comboBox = {
@@ -107,15 +98,14 @@ export default {
       // name 必须要唯一
       return [
         {
-          span: 1,
+          span: 2,
           name: 'name',
           label: '活动',
           labelHtml: '<em>活动</em>',
           type: 'TextInput',
           placeholder: '活动',
           clearable: true,
-          inlineMessage: true,
-          itemCtCls: 'name-el-form-item',
+          inlineMessage: false,
           rules: [{ required: true, message: '请输入活动', trigger: 'blur' }],
           slotNode: {
             /**
@@ -124,9 +114,8 @@ export default {
              * @param {String} error - 错误提示 比如：`请输入活动`
              * @returns {Object} - render 函数创建的虚拟节点
              */
-            // el-form-item__error--inline 和控件在一行上显示错误提示，这里自定义的错误只设置 inlineMessage: true 是不能满足错误提示一行上显示的还需要手动添加该样式
             error: function (h, error) {
-              return h('div', { class: 'el-form-item__error el-form-item__error--inline', domProps: { innerHTML: `<span style="color: green;">${error}</span>` } })
+              return h('div', { class: 'el-form-item__error', domProps: { innerHTML: `<span style="color: green;">${error}</span>` } })
             }
           }
         },
@@ -136,15 +125,13 @@ export default {
           label: '地址',
           type: 'TextInput',
           placeholder: '地址',
-          disabled: false,
-          itemCtCls: 'address-el-form-item'
+          disabled: false
         },
         {
           span: 1,
           name: 'time',
           label: '时间',
           type: 'DatePicker',
-          width: '150px',
           placeholder: '时间',
           disabled: true,
           listeners: {
@@ -154,7 +141,7 @@ export default {
           }
         },
         {
-          span: 1,
+          span: 2,
           name: 'distance',
           label: '路程',
           type: 'TextInput',
@@ -230,22 +217,4 @@ export default {
 }
 </script>
 
-<style scoped>
-/* >>> .name-el-form-item .el-form-item__error{
-    position: absolute;
-    top: 30%;
-    left: 100px;
-}
->>> .address-el-form-item .el-form-item__error{
-    position: absolute;
-    top: 30%;
-    left: 40%;
-} */
->>> .el-col{
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
->>> .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
-  margin-bottom: 0px;
-}
-</style>
+<style></style>
