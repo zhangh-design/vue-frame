@@ -164,6 +164,10 @@ const FastTextInput = {
       // v-model
       this.$emit('inputChange', value)
     },
+    // input 原生native click事件
+    click (event) {
+      ('click' in this.listeners) && this.listeners.click(event)
+    },
     /**
      * @desc 使 input 获取焦点
      * @method
@@ -184,6 +188,11 @@ const FastTextInput = {
      */
     select () {
       this.$refs[`${this._uid}-el-input-ref`].select()
+    },
+    // 设置文本域的值
+    setTextValue (text) {
+      this.vValue = text
+      this.$emit('inputChange', text)
     },
     /**
      * @desc 创建 el-input 控件的 slot 插槽
@@ -278,6 +287,9 @@ const FastTextInput = {
             this.vValue = value
             this._inputChangeEvent(this.vValue)
           }
+        },
+        nativeOn: {
+          click: this.click
         }
       },
       this._createChildSlotElement(h)
