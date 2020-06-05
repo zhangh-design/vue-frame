@@ -162,7 +162,7 @@ const FastTree = {
         const params = _assign(
           {},
           this.queryParams,
-          { [this.nodeKey]: _get(node, `data.${[this.nodeKey]}`) },
+          { [this.nodeKey]: node.data[this.nodeKey] },
           this.curQueryParams
         )
         this.$api[this.api]({ params: params })
