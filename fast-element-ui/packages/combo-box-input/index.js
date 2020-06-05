@@ -46,6 +46,10 @@ const FastComboBoxInput = {
     value: {
       type: [String, Number]
     },
+    size: {
+      type: String,
+      default: 'medium'
+    },
     // 显示字段
     displayField: {
       type: String,
@@ -95,7 +99,8 @@ const FastComboBoxInput = {
           class: 'user-input',
           attrs: {
             readonly: this.readonly,
-            placeholder: this.emptyText
+            placeholder: this.emptyText,
+            size: this.size
           },
           props: {
             width: this.width,
