@@ -24,6 +24,7 @@ import FastTextPassword from './text-password/index.js'
 import FastCheckbox from './checkbox/index.js'
 import FastButton from './button/index.js'
 import FastDropdown from './dropdown/index.js'
+import FastComboBoxInput from './combo-box-input/index.js'
 
 // 树控件
 import FastTree from './tree/index.js'
@@ -65,7 +66,8 @@ const allComponents = {
   FastPanel,
   FastDropdown,
   FastG2Grid,
-  FastTree
+  FastTree,
+  FastComboBoxInput
 }
 /**
  * @typedef {Object} options - 选项配置对象
