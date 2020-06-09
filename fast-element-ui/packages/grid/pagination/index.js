@@ -135,8 +135,7 @@ const FastGridPagination = {
       'el-pagination',
       {
         style,
-        props: _assign({}, this.paginationAttributes, {
-          layout: this.layout,
+        props: _assign({ layout: this.layout }, this.paginationAttributes, {
           total: this.total,
           currentPage: this.currentPage,
           pageSize: this.pageSize
