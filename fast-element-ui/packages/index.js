@@ -25,6 +25,7 @@ import FastCheckbox from './checkbox/index.js'
 import FastButton from './button/index.js'
 import FastDropdown from './dropdown/index.js'
 import FastComboBoxInput from './combo-box-input/index.js'
+import FastComboGrid from './combo-grid/index.js'
 
 // 树控件
 import FastTree from './tree/index.js'
@@ -67,7 +68,8 @@ const allComponents = {
   FastDropdown,
   FastG2Grid,
   FastTree,
-  FastComboBoxInput
+  FastComboBoxInput,
+  FastComboGrid
 }
 /**
  * @typedef {Object} options - 选项配置对象
