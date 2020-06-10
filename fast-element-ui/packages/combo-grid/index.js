@@ -117,73 +117,78 @@ const FastComboGrid = {
      * @desc 创建 grid 列表节点
      */
     createTreeNode () {
-      return this.$createElement('fast-grid', {
-        class: 'combogrid-panel-content-cls',
-        ref: `${this._uid}-fast-grid-ref`,
-        attrs: {},
-        props: {
-          api: this.api,
-          // 初始化查询参数
-          queryParams: this.queryParams,
-          columns: this.columns,
-          selectMode: !!this.multiple,
-          isReloadGrid: true,
-          isSelectedFirstRow: false,
-          loadFilter: this.loadFilter,
-          tableAttributes: {
-            size: 'mini',
-            border: true
-          },
-          paginationAttributes: {
-            layout: 'prev, pager, next, sizes, slot, ->, total',
-            pageSize: 6,
-            pageSizes: [3, 6, 8, 12]
-          }
-        },
-        on: {
-          'row-click': (row, column, event) => {
-            // 单选，没有复选框
-            if (!this.multiple) {
-              this.curSelectValue = row[this.displayField]
-              this.$emit('comboGridChange', row[this.valueField])
+      return this.$createElement(
+        'fast-grid',
+        {
+          class: 'combogrid-panel-content-cls',
+          ref: `${this._uid}-fast-grid-ref`,
+          attrs: {},
+          props: {
+            api: this.api,
+            // 初始化查询参数
+            queryParams: this.queryParams,
+            columns: this.columns,
+            selectMode: !!this.multiple,
+            isReloadGrid: true,
+            isSelectedFirstRow: false,
+            loadFilter: this.loadFilter,
+            tableAttributes: {
+              size: 'mini',
+              border: true
+            },
+            paginationAttributes: {
+              layout: 'prev, pager, next, ->, total',
+              pageSize: 8,
+              pageSizes: [8, 10, 15, 20]
             }
-            event.stopPropagation() // js 阻止事件冒泡
           },
-          select: (selection, row) => {
-            // 当用户手动勾选数据行的 Checkbox 时触发的事件
-            const values = _assign([], this.value)
-            const displayValues = _assign([], this.curSelectValues)
-            for (let i = 0, length = selection.length; i < length; i++) {
-              if (!_includes(values, selection[i][this.valueField])) {
+          on: {
+            'row-click': (row, column, event) => {
+              // 单选，没有复选框
+              if (!this.multiple) {
+                this.curSelectValue = row[this.displayField]
+                this.$emit('comboGridChange', row[this.valueField])
+              }
+              event.stopPropagation() // js 阻止事件冒泡
+            },
+            select: (selection, row) => {
+              // 当用户手动勾选数据行的 Checkbox 时触发的事件
+              const values = _assign([], this.value)
+              const displayValues = _assign([], this.curSelectValues)
+              for (let i = 0, length = selection.length; i < length; i++) {
+                if (!_includes(values, selection[i][this.valueField])) {
+                  values.push(selection[i][this.valueField])
+                  displayValues.push(selection[i][this.displayField])
+                }
+              }
+              if (_includes(this.value, row[this.valueField])) {
+                // 取消选中
+                const index = this.value.findIndex(
+                  val => val === row[this.valueField]
+                )
+                if (index !== -1) {
+                  values.splice(index, 1)
+                  displayValues.splice(index, 1)
+                }
+              }
+              this.curSelectValues = displayValues
+              this.$emit('comboGridChange', values)
+            },
+            'select-all': selection => {
+              // 当用户手动勾选全选 Checkbox 时触发的事件
+              const values = []
+              const displayValues = []
+              for (let i = 0, length = selection.length; i < length; i++) {
                 values.push(selection[i][this.valueField])
                 displayValues.push(selection[i][this.displayField])
               }
-            }
-            if (_includes(this.value, row[this.valueField])) {
-              // 取消选中
-              const index = this.value.findIndex(val => val === row[this.valueField])
-              if (index !== -1) {
-                values.splice(index, 1)
-                displayValues.splice(index, 1)
-              }
-            }
-            this.curSelectValues = displayValues
-            this.$emit('comboGridChange', values)
-          },
-          'select-all': selection => {
-            // 当用户手动勾选全选 Checkbox 时触发的事件
-            const values = []
-            const displayValues = []
-            for (let i = 0, length = selection.length; i < length; i++) {
-              values.push(selection[i][this.valueField])
-              displayValues.push(selection[i][this.displayField])
-            }
-            this.curSelectValues = displayValues
-            this.$emit('comboGridChange', values)
-          },
-          onLoadSuccess: this.afterDataLoadHandler
+              this.curSelectValues = displayValues
+              this.$emit('comboGridChange', values)
+            },
+            onLoadSuccess: this.afterDataLoadHandler
+          }
         }
-      })
+      )
     },
     afterDataLoadHandler () {
       // 翻页时如果当前页有要选中的行那么设置选中效果
@@ -194,6 +199,12 @@ const FastComboGrid = {
         }
         this.$refs[`${this._uid}-fast-grid-ref`].selectRows(selectRows)
       }, 0)
+    },
+    /**
+     * @desc 获取 grid 对象
+     */
+    getGrid () {
+      return this.$refs[`${this._uid}-fast-grid-ref`]
     }
   },
   render (h) {
@@ -214,10 +225,10 @@ const FastComboGrid = {
         return h(
           'el-option',
           {
-            class: 'combogrid-panel-cls',
+            class: 'fast-combogrid-panel-cls',
             style: {
               width: this.gridWidth,
-              height: '280px',
+              height: '212px',
               'background-color': '#fff',
               padding: '0px'
               // overflow: 'hidden'
@@ -228,7 +239,6 @@ const FastComboGrid = {
               value: option.value
             }
           },
-          // [h('div', { style: { height: '100%', 'background-color': '#FFCE44' } })]
           [this.createTreeNode()]
         )
       })[0]
@@ -276,11 +286,13 @@ const FastComboGrid = {
             }
             const removeAfterSelectRow = removeAfterValue.splice(index, 1)
             this.$emit('comboGridChange', removeAfterValue)
-            this.$refs[`${this._uid}-fast-grid-ref`].selectRows([{ field: this.valueField, value: removeAfterSelectRow[0] }])
+            this.$refs[`${this._uid}-fast-grid-ref`].selectRows([
+              { field: this.valueField, value: removeAfterSelectRow[0] }
+            ])
           }
         }
       },
-      elOptions
+      [this.$slots.search, elOptions]
     )
   }
 }
