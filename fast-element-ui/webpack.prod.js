@@ -47,7 +47,7 @@ module.exports = {
     chunkFilename: '[name].chunk.js',
     path: path.resolve(__dirname, './lib'),
     library: 'FastElementUI', // 指定库的全局变量
-    libraryExport: 'default', // 默认即使用LoaderApiLibrary为插件的全局变量名
+    libraryExport: 'default', // 默认即使用FastElementUI为插件的全局变量名
     libraryTarget: 'umd' // 支持库引入的方式 AMD、CJS、EM module、CDN
   },
   resolve: {
